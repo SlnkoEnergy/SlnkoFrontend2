@@ -10,8 +10,8 @@ import './App.css';
 // import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';
 // import UpdatePurchaseOrder from './Components/update_purchasse_order';
-// import AddProject from './Components/add_project';
-import AddBillForm from './Components/add_bill';
+import AddProject from './Components/add_project';
+// import AddBillForm from './Components/add_bill';
 
 
 function App() {
@@ -24,8 +24,8 @@ function App() {
      {/* <AddPurchaseOrder/> */}
      {/* < AddVendor/> */}
      {/* <UpdatePurchaseOrder/> */}
-     {/* <AddProject/> */}
-     <AddBillForm/>
+     <AddProject/>
+     {/* <AddBillForm/> */}
     </div>
   );
 }

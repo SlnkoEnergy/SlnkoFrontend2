@@ -7,6 +7,7 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
+import Img10 from '../Assets/pay-request.png'
 
 const AddBillForm = () => {
   const [formValues, setFormValues] = useState({
@@ -66,11 +67,11 @@ const AddBillForm = () => {
         }}
       >
         <Box textAlign="center" mb={3}>
-          <img
-            src="assets/img/pay-request.png"
-            alt="logo-icon"
-            style={{ width: "100px" }}
-          />
+        <img
+          src={Img10}
+          alt="logo-icon"
+          style={{ height: "50px", marginBottom: "10px" }}
+        />
           <Typography
             variant="h4"
             sx={{
