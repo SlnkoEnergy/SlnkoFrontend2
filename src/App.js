@@ -7,11 +7,12 @@ import './App.css';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/Add Payment/add_payment_request';
 // import AddMoneyForm from './Components/add_money';
-// import AddPurchaseOrder from './Components/add_purchase_order';
+import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';
 // import UpdatePurchaseOrder from './Components/update_purchasse_order';
-import AddProject from './Components/add_project';
+// import AddProject from './Components/add_project';
 // import AddBillForm from './Components/add_bill';
+// import PaymentRequestSummary from './Components/payment_request_summary';
 
 
 function App() {
@@ -20,12 +21,13 @@ function App() {
       {/* <Login /> */}
       {/* <ForgotPassword /> */}
      {/* < PaymentRequestForm/> */}
-     {/* < AddMoneyForm/> */}
-     {/* <AddPurchaseOrder/> */}
+     {/* {/* < AddMoneyForm/> */}
+     <AddPurchaseOrder/>
      {/* < AddVendor/> */}
      {/* <UpdatePurchaseOrder/> */}
-     <AddProject/>
+     {/* <AddProject/> */}
      {/* <AddBillForm/> */}
+     {/* <PaymentRequestSummary/> */}
     </div>
   );
 }

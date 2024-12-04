@@ -407,6 +407,14 @@ const AddProject = () => {
             <Button type="submit" variant="contained">
               Submit
             </Button>
+            <Button
+            variant="outlined"
+            color="secondary"
+            href="po_dashboard.php"
+            sx={{ ml: 2 }}
+          >
+            Back
+          </Button>
           </Box>
 
           {responseMessage && (
