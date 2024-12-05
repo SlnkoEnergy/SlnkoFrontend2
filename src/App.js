@@ -13,6 +13,7 @@ import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddProject from './Components/add_project';
 // import AddBillForm from './Components/add_bill';
 // import PaymentRequestSummary from './Components/payment_request_summary';
+// import UpdateProject from './Components/edit_project';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
      {/* <AddProject/> */}
      {/* <AddBillForm/> */}
      {/* <PaymentRequestSummary/> */}
+     {/* <UpdateProject/> */}
     </div>
   );
 }

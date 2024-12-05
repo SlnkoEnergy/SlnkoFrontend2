@@ -39,24 +39,7 @@ const PaymentRequestSummary = () => {
     fetchProjectData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchItemData = async () => {
-  //     try {
-  //       const itemResponse = await axios.get(
-  //         "https://backendslnko.onrender.com/v1/get-item"
-  //       );
-  //       console.log("Full Item Response:", itemResponse.data);
-  //       setItemData(itemResponse.data?.data?.[0] || {}); // Adjust based on actual response
-  //     } catch (err) {
-  //       console.error("Error fetching item data:", err);
-  //       setError((prev) => ({ ...prev, item: "Failed to fetch item data" }));
-  //     } finally {
-  //       setLoading((prev) => ({ ...prev, item: false }));
-  //     }
-  //   };
-  
-  //   fetchItemData();
-  // }, []);
+ 
   
   useEffect(() => {
     const fetchPayRequestData = async () => {
