@@ -10,21 +10,31 @@ import {
 
 const UpdateProject = () => {
   const [formData, setFormData] = useState({
-    code: "",
-    customername: "",
+    p_id: "",
+    code:"",
+    customer: "",
     name: "",
-    group: "",
+    p_group: "",
     email: "",
     number: "",
-    alt_number: "",
-    village: "",
-    s_village: "",
+    alternate_mobile_number: "",
+    billing_address: {
+      village_name: "",
+      district_name: "",
+    },
+    site_address: {
+      village_name: "",
+      district_name: "",
+    },
     state: "",
-    category: "",
-    kwh: "",
+    project_category: "",
+    project_kwp: "",
     distance: "",
     tariff: "",
-    land: "",
+    land: { 
+      type: "", 
+      acres: "",
+    },
     service: "",
   });
 
@@ -71,10 +81,10 @@ const UpdateProject = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Customer Name"
-                  name="customername"
+                  name="customer"
                   fullWidth
                   required
-                  value={formData.customername}
+                  value={formData.customer}
                   onChange={handleChange}
                 />
               </Grid>
@@ -94,9 +104,9 @@ const UpdateProject = () => {
               <Grid item xs={12}>
                 <TextField
                   label="Project Group"
-                  name="group"
+                  name="p_group"
                   fullWidth
-                  value={formData.group}
+                  value={formData.p_group}
                   onChange={handleChange}
                 />
               </Grid>
@@ -130,10 +140,10 @@ const UpdateProject = () => {
               <Grid item xs={12}>
                 <TextField
                   label="Alternate Mobile Number"
-                  name="alt_number"
+                  name="alternate_mobile_number"
                   type="number"
                   fullWidth
-                  value={formData.alt_number}
+                  value={formData.alternate_mobile_number}
                   onChange={handleChange}
                 />
               </Grid>

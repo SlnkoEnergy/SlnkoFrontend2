@@ -49,6 +49,7 @@ const landTypes = ["Leased", "Owned"];
 
 const AddProject = () => {
   const [formData, setFormData] = useState({
+    code:"",
     p_id: "",
     customer: "",
     name: "",
@@ -132,6 +133,7 @@ const AddProject = () => {
       // Reset the form
       setFormData({
         p_id: "",
+        code:"",
         customer: "",
         name: "",
         p_group: "",
@@ -186,8 +188,8 @@ const AddProject = () => {
             <Grid item xs={12} md={6}>
               <TextField
                 label="Project ID"
-                name="p_id"
-                value={formData.p_id}
+                name="code"
+                value={formData.code}
                 onChange={handleChange}
                 fullWidth
                 required
