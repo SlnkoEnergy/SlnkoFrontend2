@@ -42,8 +42,6 @@ function App() {
      {/* <CreateLeadForm /> */}
      {/* <CustomerPaymentSummary/> */}
      {/* <EditUserForm/> */}
-
-     
      <PaymentDetail/>
      
     </div>
