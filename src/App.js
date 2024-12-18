@@ -16,7 +16,10 @@ import './App.css';
 // import UpdateProject from './Components/edit_project';
 // import StandbySummaryForm from './Components/standBy_sumary';
 // import AddUserForm from './Components/add_user';
-// import CreateLead from './Components/create_lead';
+// import CreateLeadForm from './Components/create_lead';
+// import CustomerPaymentSummary from './Components/customer_pay_summary';
+// import EditUserForm from './Components/edit_user';
+import PaymentDetail from './Components/payment_details';
 
 
 
@@ -36,7 +39,10 @@ function App() {
      {/* <UpdateProject/> */}
      {/* <StandbySummaryForm/> */}
      {/* <AddUserForm/> */}
-     {/* <CreateLead/> */}
+     {/* <CreateLeadForm /> */}
+     {/* <CustomerPaymentSummary/> */}
+     {/* <EditUserForm/> */}
+     <PaymentDetail/>
      
     </div>
   );
