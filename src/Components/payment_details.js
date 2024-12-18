@@ -14,31 +14,47 @@ import {
   Paper,
 } from "@mui/material";
 
-const App = () => {
+const PaymentDetail = () => {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      console.log("Starting data fetch using axios...");
+    const fetchPaymentData = async () => {
+      console.log("Fetching payment data...");
       try {
-        // Replace with your actual API endpoint
         const response = await axios.get("https://backendslnko.onrender.com/v1/get-pay-summary");
+        const rawData = response.data;
 
-        console.log("Data fetched successfully:", response.data);
-        setData(response.data);
+        if (rawData && Array.isArray(rawData)) {
+          const structuredData = rawData.map((item) => ({
+            id: item.id || Math.random(), // Add a unique key if not provided
+            debitAccount:  "123458888",
+            acc_number: item.acc_number || "",
+            benificiary: item.benificiary || "",
+            amount_paid: item.amount_paid || 0,
+            pay_mod: item.amount_paid > 100000 ? "R" : "N",
+            dbt_date: item.dbt_date ? new Date(item.dbt_date).toLocaleDateString("en-GB") : "",
+            ifsc: item.ifsc || "",
+            comment: item.comment || "",
+          }));
+
+          console.log("Structured payment data:", structuredData);
+          setData(structuredData);
+        } else {
+          console.error("Invalid data format received:", rawData);
+          setError("Invalid data format. Unable to load payment details.");
+        }
       } catch (err) {
-        console.error("Error while fetching data:", err.message);
-        setError(err.message);
+        console.error("Error fetching payment data:", err.message);
+        setError("Failed to fetch payment data. Please try again later.");
       } finally {
-        console.log("Data fetch process completed.");
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchPaymentData();
   }, []);
 
   const handleCheckboxChange = (id) => {
@@ -53,9 +69,61 @@ const App = () => {
     const selectedData = data.filter((row) => selectedRows.includes(row.id));
     console.log("Selected rows data:", selectedData);
 
-    const csvContent = selectedData
-      .map((row) => Object.values(row).join(","))
-      .join("\n");
+    const headers = [
+      "Debit Ac No",
+      "Beneficiary Ac No",
+      "Beneficiary Name",
+      "Amt",
+      "Pay Mod",
+      "Date",
+      "IFSC",
+      "Payable Location",
+      "Print Location",
+      "Bene Mobile No.",
+      "Bene Email ID",
+      "Bene add1",
+      "Bene add2",
+      "Bene add3",
+      "Bene add4",
+      "Add Details 1",
+      "Add Details 2",
+      "Add Details 3",
+      "Add Details 4",
+      "Add Details 5",
+      "Remarks",
+    ];
+
+    const csvContent =
+      [headers.join(",")] +
+      "\n" +
+      selectedData
+        .map((row) =>
+          [
+            row.debitAccount,
+            row.acc_number,
+            row.benificiary,
+            row.amount_paid,
+            row.pay_mod,
+            row.dbt_date,
+            row.ifsc,
+            row.payable_location,
+            row.print_location,
+            row.bene_mobile_no,
+            row.bene_email_id,
+            row.bene_add1,
+            row.bene_add2,
+            row.bene_add3,
+            row.bene_add4,
+            row.add_details_1,
+            row.add_details_2,
+            row.add_details_3,
+            row.add_details_4,
+            row.add_details_5,
+            row.comment,
+          ].join(",")
+        )
+        .join("\n");
+
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
     const link = document.createElement("a");
@@ -127,29 +195,27 @@ const App = () => {
                     onChange={() => handleCheckboxChange(row.id)}
                   />
                 </TableCell>
-                <TableCell>{row.Debit_Ac_No}</TableCell>
-                <TableCell>{row.Beneficiary_Ac_No}</TableCell>
-                <TableCell>{row.Beneficiary_Name}</TableCell>
-                <TableCell>{row.Amt}</TableCell>
-                <TableCell>{row.Pay_Mod}</TableCell>
-                <TableCell>
-                  {new Date(row.Date).toLocaleDateString("en-GB")}
-                </TableCell>
-                <TableCell>{row.IFSC}</TableCell>
-                <TableCell>{row.Payable_Location}</TableCell>
-                <TableCell>{row.Print_Location}</TableCell>
-                <TableCell>{row.Bene_Mobile_No}</TableCell>
-                <TableCell>{row.Bene_Email_ID}</TableCell>
-                <TableCell>{row.Bene_add1}</TableCell>
-                <TableCell>{row.Bene_add2}</TableCell>
-                <TableCell>{row.Bene_add3}</TableCell>
-                <TableCell>{row.Bene_add4}</TableCell>
-                <TableCell>{row.Add_Details_1}</TableCell>
-                <TableCell>{row.Add_Details_2}</TableCell>
-                <TableCell>{row.Add_Details_3}</TableCell>
-                <TableCell>{row.Add_Details_4}</TableCell>
-                <TableCell>{row.Add_Details_5}</TableCell>
-                <TableCell>{row.Remarks}</TableCell>
+                <TableCell>{row.debitAccount}</TableCell>
+                <TableCell>{row.acc_number}</TableCell>
+                <TableCell>{row.benificiary}</TableCell>
+                <TableCell>{row.amount_paid}</TableCell>
+                <TableCell>{row.pay_mod}</TableCell>
+                <TableCell>{row.dbt_date}</TableCell>
+                <TableCell>{row.ifsc}</TableCell>
+                <TableCell>{row.payable_location}</TableCell>
+                <TableCell>{row.print_location}</TableCell>
+                <TableCell>{row.bene_mobile_no}</TableCell>
+                <TableCell>{row.bene_email_id}</TableCell>
+                <TableCell>{row.bene_add1}</TableCell>
+                <TableCell>{row.bene_add2}</TableCell>
+                <TableCell>{row.bene_add3}</TableCell>
+                <TableCell>{row.bene_add4}</TableCell>
+                <TableCell>{row.add_details_1}</TableCell>
+                <TableCell>{row.add_details_2}</TableCell>
+                <TableCell>{row.add_details_3}</TableCell>
+                <TableCell>{row.add_details_4}</TableCell>
+                <TableCell>{row.add_details_5}</TableCell>
+                <TableCell>{row.comment}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -159,4 +225,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default PaymentDetail;
