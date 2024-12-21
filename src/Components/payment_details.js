@@ -20,6 +20,17 @@ const PaymentDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("Fetching data...");
@@ -45,8 +56,7 @@ const PaymentDetail = () => {
               benificiary: item.benificiary || "",
               amount_paid: item.amount_paid || 0,
               pay_mod: item.amount_paid > 100000 ? "R" : "N",
-              dbt_date: item.dbt_date ? new Date(item.dbt_date).toLocaleDateString("en-GB") : "",
-              ifsc: item.ifsc || "",
+              dbt_date: formatDate(item.dbt_date),              ifsc: item.ifsc || "",
               comment: remarks,
             };
           });
