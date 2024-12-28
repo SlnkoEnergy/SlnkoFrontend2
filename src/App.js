@@ -19,7 +19,8 @@ import './App.css';
 // import CreateLeadForm from './Components/create_lead';
 // import CustomerPaymentSummary from './Components/customer_pay_summary';
 // import EditUserForm from './Components/edit_user';
-import PaymentDetail from './Components/payment_details';
+// import PaymentDetail from './Components/payment_details';
+import PaymentRequest from './Components/paymentApproved';
 
 
 
@@ -42,7 +43,8 @@ function App() {
      {/* <CreateLeadForm /> */}
      {/* <CustomerPaymentSummary/> */}
      {/* <EditUserForm/> */}
-     <PaymentDetail/>
+     {/* <PaymentDetail/> */}
+     <PaymentRequest/>
      
     </div>
   );
