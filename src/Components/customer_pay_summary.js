@@ -1,11 +1,22 @@
 import React, { useState,useEffect } from 'react';
-import { Container, Box, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, Checkbox, Divider, TextField } from '@mui/material';
-import { Paper } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Divider,
+  Input,
+  Checkbox,
+} from '@mui/joy';
+import { jsPDF } from 'jspdf';
+import { saveAs } from 'file-saver';
 import Img12 from '../Assets/slnko_blue_logo.png';
-import axios from 'axios';
+import axios from "axios";
 
-const CustomerPaymentSummary = () => {
-  // Example data to replace PHP variables
+
+
+const Customer_Payment_Summary = () => {
   const [error, setError] = useState("");
   const [projectData, setProjectData] = useState({
     code: "",
@@ -16,6 +27,53 @@ const CustomerPaymentSummary = () => {
     project_kwp: "",
   });
 
+   
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+    const handleDownloadPDF = () => {
+      const doc = new jsPDF();
+      doc.html(document.body, {
+        callback: function (doc) {
+          doc.save('CustomerPaymentSummary.pdf');
+        },
+        x: 10,
+        y: 10,
+      });
+    };
+
+    const today = new Date();
+
+  const dayOptions = { weekday: 'long' };
+  const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+
+  const currentDay = today.toLocaleDateString('en-US', dayOptions);
+  const currentDate = today.toLocaleDateString('en-US', dateOptions);
+
+    const handleExportCSV = () => {
+      const csvData = [
+        ["S.No.", "Balance Summary", "Value"],
+        ["1", "Total Received", crAmtNum],
+        ["2", "Total Return", totalReturn],
+        ["3", "Net Balance [(1)-(2)]", netBalance],
+        ["4", "Total Advance Paid to vendors", totalAdvanceValue],
+        ["5", "Balance With Slnko [(3)-(4)]", balanceSlnko],
+        ["6", "Total PO Value", totalPoValue],
+        ["7", "Total Billed Value", totalBilled],
+        ["8", "Net Advance Paid [(4)-(7)]", netAdvance],
+        ["9", "Balance Payable to vendors [(6)-(7)-(8)]", balancePayable],
+        ["10", "TCS as applicable", tcs],
+        ["11", "Balance Required [(5)-(9)-(10)]", balanceRequired],
+      ];
+  
+      const csvContent = csvData.map((row) => row.join(",")).join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      saveAs(blob, "CustomerPaymentSummary.csv");
+    };
+   
+    
  
   const creditHistory = [
     {
@@ -80,7 +138,6 @@ const CustomerPaymentSummary = () => {
      adjTotal : "50",
   }];
 
-   // Extract values from balanceSummary
    const { crAmt, totalReturn, totalAdvanceValue, totalPoValue, totalBilled, dbAmt, adjTotal } = balanceSummary[0];
 
 
@@ -105,6 +162,8 @@ const adjTotalNum = Number(adjTotal);
   const [debitSearch, setDebitSearch] = useState('');
   const [selectedDebits, setSelectedDebits] = useState([]);
   const [filteredDebits, setFilteredDebits] = useState(debitHistory);
+
+  const totalCredited = creditHistory.reduce((sum, item) => sum + item.cr_amount, 0);
 
   const totalDebited = debitHistory.reduce((sum, item) => sum + item.amount_paid, 0);
 
@@ -137,6 +196,10 @@ const adjTotalNum = Number(adjTotal);
     }
   };
 
+  const handleDelete = () => {
+    // Logic to delete selected items
+    console.log("Deleting selected adjustments", selectedAdjustments);
+  };
 
   const handleCheckboxChange = (id) => {
     setSelectedCredits((prev) =>
@@ -164,12 +227,12 @@ const adjTotalNum = Number(adjTotal);
     );
   };
 
-
+  // Fetch Project Details API
   useEffect(() => {
       const fetchProjectData = async () => {
         try {
          
-          const response = await axios.get("https://backendslnko.onrender.com/v1/get-all-project");
+          const response = await axios.get("http://147.93.20.206:8080/v1/get-all-project");
           const data = response.data?.data?.[0];
   
           if (data) {
@@ -197,21 +260,21 @@ const adjTotalNum = Number(adjTotal);
     }, []);
 
   return (
-    <Container maxWidth="xl" style={{ border: '1px solid black', padding: '20px' }}>
+    <Container sx={{ border: '1px solid black', padding: '20px', marginLeft:{xl:'15%', lg:'20%', md:'27%', sm:'0%' }, maxWidth:{md:'75%', lg:'80%', sm:'100%', xl:"85%"}}}>
       {/* Header Section */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
           <img src={Img12 }style={{ }} />
         </Box>
-        <Typography variant="h4" fontFamily="Playfair Display" fontWeight={600}>
+        <Typography variant="h4" fontSize={'2.5rem'} fontFamily="Playfair Display" fontWeight={600}>
           Customer Payment Summary
         </Typography>
         <Box textAlign="center">
-          <Typography variant="subtitle1" fontFamily="Bona Nova SC">
-            Monday
+          <Typography variant="subtitle1" fontFamily="Bona Nova SC" fontWeight={300}>
+            {currentDay}
           </Typography>
-          <Typography variant="subtitle1" fontFamily="Bona Nova SC">
-            December 12, 2024
+          <Typography variant="subtitle1" fontFamily="Bona Nova SC" fontWeight={300}>
+            {currentDate}
           </Typography>
         </Box>
       </Box>
@@ -223,340 +286,490 @@ const adjTotalNum = Number(adjTotal);
       <Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
 
       <form>
+        
         <Box mb={3}>
-          <Box display="flex" justifyContent="space-between" mb={2}>
-            <TextField
-              fullWidth
-              label="Project ID"
-              value={projectData.code}
-              InputProps={{ readOnly: true }}
-              style={{ marginRight: '10px' }}
-            />
-            <TextField
-              fullWidth
-              label="Project Name"
-              value={projectData.name}
-              InputProps={{ readOnly: true }}
-              style={{ marginRight: '10px' }}
-            />
-            <TextField
-              fullWidth
-              label="Client Name"
-              value={projectData.customer}
-              InputProps={{ readOnly: true }}
-            />
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <TextField
-              fullWidth
-              label="Group Name"
-              value={projectData.p_group}
-              InputProps={{ readOnly: true }}
-              style={{ marginRight: '10px' }}
-            />
-            <TextField
-              fullWidth
-              label="Plant Location"
-              value={projectData.billing_address}
-              InputProps={{ readOnly: true }}
-              style={{ marginRight: '10px' }}
-            />
-            <TextField
-              fullWidth
-              label="Plant Capacity"
-              value={projectData.project_kwp}
-              InputProps={{ readOnly: true }}
-            />
-          </Box>
+        <Box display="flex" justifyContent="space-between" mb={2}>
+          <Input fullWidth value={projectData.code} readOnly label="Project ID" sx={{ mr: 2 }} />
+          <Input fullWidth value={projectData.name} readOnly label="Project Name" sx={{ mr: 2 }} />
+          <Input fullWidth value={projectData.customer} readOnly label="Client Name" />
+        </Box>
+        <Box display="flex" justifyContent="space-between">
+          <Input fullWidth value={projectData.p_group} readOnly label="Group Name" sx={{ mr: 2 }} />
+          <Input fullWidth value={projectData.billing_address} readOnly label="Plant Location" sx={{ mr: 2 }} />
+          <Input fullWidth value={projectData.project_kwp} readOnly label="Plant Capacity" />
+        </Box>
         </Box>
       </form>
 
       {/* Credit History Section */}
+      <Box>
+      
       <Typography variant="h5" fontFamily="Playfair Display" fontWeight={600} mt={4} mb={2}>
         Credit History
       </Typography>
       <Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
 
+      
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6">Credit History</Typography>
-        <Button variant="contained" color="error">
+        <Button variant="contained" color="danger" onClick={() => console.log('Delete Selected')}>
           Delete Selected
         </Button>
       </Box>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Credit Date</TableCell>
-            <TableCell>Credit Mode</TableCell>
-            <TableCell>Credited Amount (₹)</TableCell>
-            <TableCell>
-              <Checkbox
-                color="primary"
-                onChange={handleSelectAll}
-                checked={selectedCredits.length === creditHistory.length}
-              />
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {creditHistory.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{new Date(row.cr_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</TableCell>
-              <TableCell>{row.cr_mode}</TableCell>
-              <TableCell>₹ {row.cr_amount.toLocaleString('en-IN')}</TableCell>
-              <TableCell>
-                <Checkbox
-                  color="primary"
-                  checked={selectedCredits.includes(row.id)}
-                  onChange={() => handleCheckboxChange(row.id)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow>
-            <TableCell colSpan={4} align="right">
-              <Typography variant="h6" color="success.main">
-                Total Credited: 
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      {/* Table Header */}
+      <Box
+        display="grid"
+        gridTemplateColumns="2fr 2fr 2fr auto"
+        fontWeight={600}
+        backgroundColor="#f5f5f5"
+        padding="12px"
+        borderRadius="8px 8px 0 0"
+        border="1px solid #ddd"
+      >
+        <Box>Credit Date</Box>
+        <Box>Credit Mode</Box>
+        <Box>Credited Amount (₹)</Box>
+        <Box>
+          <Checkbox
+            color="primary"
+            onChange={handleSelectAll}
+            checked={selectedCredits.length === creditHistory.length}
+          />
+        </Box>
+      </Box>
+
+      {/* Table Body */}
+      {creditHistory.map((row, index) => (
+        <Box
+          key={row.id}
+          display="grid"
+          gridTemplateColumns="2fr 2fr 2fr auto"
+          padding="12px"
+          borderBottom="1px solid #ddd"
+          backgroundColor={index % 2 === 0 ? '#fff' : '#f9f9f9'}
+        >
+          <Box>
+            {new Date(row.cr_date).toLocaleDateString('en-IN', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            })}
+          </Box>
+          <Box>{row.cr_mode}</Box>
+          <Box>₹ {row.cr_amount.toLocaleString('en-IN')}</Box>
+          <Box>
+            <Checkbox
+              color="primary"
+              checked={selectedCredits.includes(row.id)}
+              onChange={() => handleCheckboxChange(row.id)}
+            />
+          </Box>
+        </Box>
+      ))}
+
+      {/* Total Row */}
+      <Box
+        display="grid"
+        gridTemplateColumns="6fr 2fr"
+        fontWeight={600}
+        backgroundColor="#f5f5f5"
+        padding="12px"
+        borderTop="1px solid #ddd"
+        borderRadius="0 0 8px 8px"
+      >
+        <Box textAlign="right">Total Credited:</Box>
+        <Box>₹ {totalCredited.toLocaleString('en-IN')}</Box>
+      </Box>
+    </Box>
 
       {/* Debit History Section */}
       <Typography variant="h5" fontFamily="Playfair Display" fontWeight={600} mt={4} mb={2}>
-        Debit History
-      </Typography>
-      <Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
+  Debit History
+</Typography>
+<Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
 
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <TextField
-          label="Search Paid For"
-          value={debitSearch}
-          onChange={handleSearch}
-          style={{ width: '250px' }}
-        />
-        <Button variant="contained" color="error" disabled={selectedDebits.length === 0}>
-          Delete Selected
-        </Button>
-      </Box>
+<Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Input
+    label="Search Paid For"
+    value={debitSearch}
+    onChange={handleSearch}
+    style={{ width: '250px' }}
+  />
+  <Button
+    variant="contained"
+    color="error"
+    disabled={selectedDebits.length === 0}
+    onClick={handleDelete}
+  >
+    Delete Selected
+  </Button>
+</Box>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Debit Date</TableCell>
-            <TableCell>Debit Mode</TableCell>
-            <TableCell>Paid For</TableCell>
-            <TableCell>Paid To</TableCell>
-            <TableCell>Debited Amount (₹)</TableCell>
-            <TableCell>UTR</TableCell>
-            <TableCell>
-              <Checkbox
-                color="primary"
-                onChange={handleSelectAllDebits}
-                checked={selectedDebits.length === filteredDebits.length && filteredDebits.length > 0}
-              />
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredDebits.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>
-                {new Date(row.dbt_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-              </TableCell>
-              <TableCell>{row.pay_mode}</TableCell>
-              <TableCell>{row.paid_for}</TableCell>
-              <TableCell>{row.vendor}</TableCell>
-              <TableCell>₹ {row.amount_paid.toLocaleString('en-IN')}</TableCell>
-              <TableCell>{row.utr}</TableCell>
-              <TableCell>
-                <Checkbox
-                  color="primary"
-                  checked={selectedDebits.includes(row.id)}
-                  onChange={() => handleDebitCheckboxChange(row.id)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow>
-            <TableCell colSpan={6} align="right">
-              <Typography variant="h6" color="error.main">
-                Total Debited: ₹ {totalDebited.toLocaleString('en-IN')}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+<div style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+  {/* Table Header */}
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr 2fr 1fr 1fr 1fr', backgroundColor: '#f5f5f5', padding: '10px' }}>
+    <div>Debit Date</div>
+    <div>Debit Mode</div>
+    <div>Paid For</div>
+    <div>Paid To</div>
+    <div>Amount (₹)</div>
+    <div>UTR</div>
+    <div>Select</div>
+  </div>
+
+  {/* Table Body */}
+  <div>
+    {filteredDebits.map((row) => (
+      <div
+        key={row.id}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 2fr 2fr 1fr 1fr 1fr',
+          padding: '10px',
+          borderBottom: '1px solid #ddd',
+        }}
+      >
+        <div>
+          {new Date(row.dbt_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+        </div>
+        <div>{row.pay_mode}</div>
+        <div>{row.paid_for}</div>
+        <div>{row.vendor}</div>
+        <div>₹ {row.amount_paid.toLocaleString('en-IN')}</div>
+        <div>{row.utr}</div>
+        <div>
+          <Checkbox
+            color="primary"
+            checked={selectedDebits.includes(row.id)}
+            onChange={() => handleDebitCheckboxChange(row.id)}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Total Amount Row */}
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+      padding: '10px',
+      backgroundColor: '#f5f5f5',
+      fontWeight: 'bold',
+      borderTop: '2px solid #ddd',
+    }}
+  >
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div style={{ color: 'red' }}>
+      Total Debited: ₹ {totalDebited.toLocaleString('en-IN')}
+    </div>
+  </div>
+</div>
+
 
       {/*Adjustment History Section */}
-       <Typography variant="h5" fontFamily="Playfair Display" fontWeight={600} mt={4} mb={2}>
-        Adjustment History
-      </Typography>
-      <Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
+      <Typography variant="h5" fontFamily="Playfair Display" fontWeight={600} mt={4} mb={2}>
+  Adjustment History
+</Typography>
+<Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
 
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Button variant="contained" color="error" disabled={selectedAdjustments.length === 0}>
-          Delete Selected
-        </Button>
-      </Box>
+<Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Button
+    variant="contained"
+    color="error"
+    disabled={selectedAdjustments.length === 0}
+    onClick={handleDelete}
+  >
+    Delete Selected
+  </Button>
+</Box>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Adjustment Date</TableCell>
-            <TableCell>Adjusted From</TableCell>
-            <TableCell>Adjusted For</TableCell>
-            <TableCell>Credit (₹)</TableCell>
-            <TableCell>Debit (₹)</TableCell>
-            <TableCell>
-              <Checkbox
-                color="primary"
-                onChange={handleSelectAllAdjustments}
-                checked={
-                  selectedAdjustments.length === adjustmentHistory.length && adjustmentHistory.length > 0
-                }
-              />
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {adjustmentHistory.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>
-                {new Date(row.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-              </TableCell>
-              <TableCell>{row.adjusted_from}</TableCell>
-              <TableCell>{row.adjusted_for}</TableCell>
-              <TableCell>{row.value > 0 ? `₹ ${row.value.toLocaleString('en-IN')}` : ''}</TableCell>
-              <TableCell>{row.value < 0 ? `₹ ${Math.abs(row.value).toLocaleString('en-IN')}` : ''}</TableCell>
-              <TableCell>
-                <Checkbox
-                  color="primary"
-                  checked={selectedAdjustments.includes(row.id)}
-                  onChange={() => handleAdjustmentCheckboxChange(row.id)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow>
-            <TableCell colSpan={6} align="right">
-              <Typography variant="h6" color="primary.main">
-                Total Adjustment: ₹ {totalAdjustment.toLocaleString('en-IN')}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+<div style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+  {/* Table Header */}
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 1fr 1fr 1fr', backgroundColor: '#f5f5f5', padding: '10px' }}>
+    <div>Adjustment Date</div>
+    <div>Adjusted From</div>
+    <div>Adjusted For</div>
+    <div>Credit (₹)</div>
+    <div>Debit (₹)</div>
+    <div>Select</div>
+  </div>
+
+  {/* Table Body */}
+  <div>
+    {adjustmentHistory.map((row) => (
+      <div
+        key={row.id}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 2fr 2fr 1fr 1fr 1fr',
+          padding: '10px',
+          borderBottom: '1px solid #ddd',
+        }}
+      >
+        <div>
+          {new Date(row.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+        </div>
+        <div>{row.adjusted_from}</div>
+        <div>{row.adjusted_for}</div>
+        <div>{row.value > 0 ? `₹ ${row.value.toLocaleString('en-IN')}` : ''}</div>
+        <div>{row.value < 0 ? `₹ ${Math.abs(row.value).toLocaleString('en-IN')}` : ''}</div>
+        <div>
+          <Checkbox
+            color="primary"
+            checked={selectedAdjustments.includes(row.id)}
+            onChange={() => handleAdjustmentCheckboxChange(row.id)}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Total Adjustment Row */}
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+      padding: '10px',
+      backgroundColor: '#f5f5f5',
+      fontWeight: 'bold',
+      borderTop: '2px solid #ddd',
+    }}
+  >
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div style={{ color: 'green' }}>
+      Total Adjustment: ₹ {totalAdjustment.toLocaleString('en-IN')}
+    </div>
+  </div>
+</div>
+
+<Typography variant="h5" fontFamily="Playfair Display" fontWeight={600} mt={4} mb={2}>
+  Client History
+</Typography>
+<Divider style={{ borderWidth: '2px', marginBottom: '20px' }} />
+
+<Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Input
+    label="Search Paid For"
+    value={debitSearch}
+    onChange={handleSearch}
+    style={{ width: '250px' }}
+  />
+  <Button
+    variant="contained"
+    color="error"
+    disabled={selectedDebits.length === 0}
+    onClick={handleDelete}
+  >
+    Delete Selected
+  </Button>
+</Box>
+
+<div style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+  {/* Table Header */}
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr', backgroundColor: '#f5f5f5', padding: '10px' }}>
+    <div>PO No.</div>
+    <div>Vendor</div>
+    <div>Item Name</div>
+    <div>Po value with Gst</div>
+    <div>Advance Paid (₹)</div>
+    <div>Remaining Amount</div>
+    <div>Total Billed Value</div>
+    <div>Select</div>
+  </div>
+
+  {/* Table Body */}
+  <div>
+    {filteredDebits.map((row) => (
+      <div
+        key={row.id}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr',
+          padding: '10px',
+          borderBottom: '1px solid #ddd',
+        }}
+      >
+        <div>{row.po_number}</div>
+        <div>{row.vendor}</div>
+        <div>{row.paid_for}</div>
+        <div>{row.po_value || '0'}</div>
+        <div>{row.amount_paid.toLocaleString('en-IN')}</div>
+        <div>{row.po_value}-{row.amount_paid}</div>
+        <div>{row.totalbilled}</div>
+        <div>
+          <Checkbox
+            color="primary"
+            checked={selectedDebits.includes(row.id)}
+            onChange={() => handleDebitCheckboxChange(row.id)}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Total Amount Row */}
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+      padding: '10px',
+      backgroundColor: '#f5f5f5',
+      fontWeight: 'bold',
+      borderTop: '2px solid #ddd',
+    }}
+  >
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+    <div style={{ color: 'red' }}>
+      Total Debited: ₹ {totalDebited.toLocaleString('en-IN')}
+    </div>
+  </div>
+</div>
+
+
       <hr />
         {/* Balance Summary and Amount Available Section */}
-<Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={4}>
-  {/* Balance Summary Table */}
-  <Table component={Paper} style={{ width: '48%' }}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>S.No.</TableCell>
-          <TableCell>Balance Summary</TableCell>
-          <TableCell>Value</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell><strong>Total Received:</strong></TableCell>
-          <TableCell>{crAmtNum}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>2</TableCell>
-          <TableCell><strong>Total Return:</strong></TableCell>
-          <TableCell>{totalReturn}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>3</TableCell>
-          <TableCell style={{ backgroundColor: '#C8C8C6' }}><strong>Net Balance[(1)-(2)]:</strong></TableCell>
-          <TableCell style={{ backgroundColor: '#C8C8C6' }}>{netBalance}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>4</TableCell>
-          <TableCell><strong>Total Advance Paid to vendors:</strong></TableCell>
-          <TableCell>{totalAdvanceValue}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>5</TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6' }}><strong>Balance With Slnko [(3)-(4)]:</strong></TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6', fontWeight: 'bold' }}>{balanceSlnko}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>6</TableCell>
-          <TableCell><strong>Total PO Value:</strong></TableCell>
-          <TableCell>{totalPoValue}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>7</TableCell>
-          <TableCell><strong>Total Billed Value:</strong></TableCell>
-          <TableCell>{totalBilled}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>8</TableCell>
-          <TableCell><strong>Net Advance Paid [(4)-(7)]:</strong></TableCell>
-          <TableCell>{netAdvance}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>9</TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6' }}><strong>Balance Payable to vendors [(6)-(7)-(8)]:</strong></TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6', fontWeight: 'bold' }}>{balancePayable}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>10</TableCell>
-          <TableCell><strong>TCS as applicable:</strong></TableCell>
-          <TableCell>{tcs}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>11</TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6' }}><strong>Balance Required [(5)-(9)-(10)]:</strong></TableCell>
-          <TableCell style={{ backgroundColor: '#B6F4C6', color: balanceRequired >= 0 ? 'green' : 'red' }}><strong>{balanceRequired}</strong></TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </Table>
+    <Box sx={{ marginBottom: '30px' }}>
+      <Grid container spacing={2}>
+        {/* Balance Summary Section */}
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
+            <Typography level="h5" sx={{ fontWeight: 'bold', marginBottom: '12px' }}>Balance Summary</Typography>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{ fontWeight: 'bold', padding: '8px', borderBottom: '1px solid #ddd' }}>#</th>
+                  <th style={{ fontWeight: 'bold', padding: '8px', borderBottom: '1px solid #ddd' }}>Description</th>
+                  <th style={{ fontWeight: 'bold', padding: '8px', borderBottom: '1px solid #ddd' }}>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: '8px' }}>1</td>
+                  <td style={{ padding: '8px' }}><strong>Total Received:</strong></td>
+                  <td style={{ padding: '8px' }}>{crAmtNum}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>2</td>
+                  <td style={{ padding: '8px' }}><strong>Total Return:</strong></td>
+                  <td style={{ padding: '8px' }}>{totalReturn}</td>
+                </tr>
+                <tr style={{ backgroundColor: '#C8C8C6' }}>
+                  <td style={{ padding: '8px' }}>3</td>
+                  <td style={{ padding: '8px' }}><strong>Net Balance[(1)-(2)]:</strong></td>
+                  <td style={{ padding: '8px' }}>{netBalance}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>4</td>
+                  <td style={{ padding: '8px' }}><strong>Total Advance Paid to vendors:</strong></td>
+                  <td style={{ padding: '8px' }}>{totalAdvanceValue}</td>
+                </tr>
+                <tr style={{ backgroundColor: '#B6F4C6', fontWeight: 'bold' }}>
+                  <td style={{ padding: '8px' }}>5</td>
+                  <td style={{ padding: '8px' }}><strong>Balance With Slnko [(3)-(4)]:</strong></td>
+                  <td style={{ padding: '8px' }}>{balanceSlnko}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>6</td>
+                  <td style={{ padding: '8px' }}><strong>Total PO Value:</strong></td>
+                  <td style={{ padding: '8px' }}>{totalPoValue}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>7</td>
+                  <td style={{ padding: '8px' }}><strong>Total Billed Value:</strong></td>
+                  <td style={{ padding: '8px' }}>{totalBilled}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>8</td>
+                  <td style={{ padding: '8px' }}><strong>Net Advance Paid [(4)-(7)]:</strong></td>
+                  <td style={{ padding: '8px' }}>{netAdvance}</td>
+                </tr>
+                <tr style={{ backgroundColor: '#B6F4C6', fontWeight: 'bold' }}>
+                  <td style={{ padding: '8px' }}>9</td>
+                  <td style={{ padding: '8px' }}><strong>Balance Payable to vendors [(6)-(7)-(8)]:</strong></td>
+                  <td style={{ padding: '8px' }}>{balancePayable}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '8px' }}>10</td>
+                  <td style={{ padding: '8px' }}><strong>TCS as applicable:</strong></td>
+                  <td style={{ padding: '8px' }}>{tcs}</td>
+                </tr>
+                <tr style={{ backgroundColor: '#B6F4C6', fontWeight: 'bold', color: balanceRequired >= 0 ? 'green' : 'red' }}>
+                  <td style={{ padding: '8px' }}>11</td>
+                  <td style={{ padding: '8px' }}><strong>Balance Required [(5)-(9)-(10)]:</strong></td>
+                  <td style={{ padding: '8px' }}>{balanceRequired}</td>
+                </tr>
+              </tbody>
+            </table>
+          </Box>
+        </Grid>
 
-  {/* Amount Available (Old) Table */}
-  <Table component={Paper} style={{ width: '48%', alignItems: 'center' }}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Amount Available (Old)</TableCell>
-          <TableCell>Credit - Debit + Adjust</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell></TableCell>
-          <TableCell>
-            <Typography variant="h5" component="div">
-              <strong className="text-success">{crAmt}</strong> - 
-              <strong className="text-danger">{dbAmtNum}</strong> + 
-              <strong className="text-primary">{adjTotalNum}</strong>
-            </Typography>
-          </TableCell>
-        </TableRow>
-        <TableRow style={{ backgroundColor: '#fff' }}>
-          <TableCell><strong>Total</strong></TableCell>
-          <TableCell>
-            <Typography variant="h5" component="div">
-              <strong className={totalAmount >= 0 ? 'text-success' : 'text-danger'}>{totalAmount}</strong>
-            </Typography>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </Table>
-</Box>
+        {/* Amount Available (Old) Section */}
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
+            <Typography level="h5" sx={{ fontWeight: 'bold', marginBottom: '12px' }}>Amount Available (Old)</Typography>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{ fontWeight: 'bold', padding: '8px', borderBottom: '1px solid #ddd' }}>Description</th>
+                  <th style={{ fontWeight: 'bold', padding: '8px', borderBottom: '1px solid #ddd' }}>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: '8px' }}><strong>Credit - Debit + Adjust</strong></td>
+                  <td style={{ padding: '8px' }}>
+                    <strong className="text-success">{crAmt}</strong> - 
+                    <strong className="text-danger">{dbAmtNum}</strong> + 
+                    <strong className="text-primary">{adjTotalNum}</strong>
+                  </td>
+                </tr>
+                <tr style={{ backgroundColor: '#fff' }}>
+                  <td style={{ padding: '8px' }}><strong>Total</strong></td>
+                  <td style={{ padding: '8px' }}>
+                    <strong className={totalAmount >= 0 ? 'text-success' : 'text-danger'}>{totalAmount}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+ 
+
+
+
+ {/* Balance Summary Section */}
+ <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+        <Button variant="solid" color="primary" onClick={handlePrint}>
+          Print
+        </Button>
+        <Button variant="solid" color="primary" onClick={handleDownloadPDF}>
+          Download PDF
+        </Button>
+        <Button variant="solid" color="primary" onClick={handleExportCSV}>
+          Export to CSV
+        </Button>
+      </Box>
 
     </Container>
   );
 };
 
-export default CustomerPaymentSummary;
+export default Customer_Payment_Summary;
