@@ -5,7 +5,7 @@ import './App.css';
 
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
-// import PaymentRequestForm from './Components/Add Payment/add_payment_request';
+import PaymentRequestForm from './Components/add_payment_request';
 // import AddMoneyForm from './Components/add_money';
 // import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';
@@ -20,7 +20,7 @@ import './App.css';
 // import CustomerPaymentSummary from './Components/customer_pay_summary';
 // import EditUserForm from './Components/edit_user';
 // import PaymentDetail from './Components/payment_details';
-import PaymentRequest from './Components/paymentApproved';
+// import PaymentRequest from './Components/paymentApproved';
 
 
 
@@ -29,7 +29,7 @@ function App() {
     <div>
       {/* <Login /> */}
       {/* <ForgotPassword /> */}
-     {/* < PaymentRequestForm/> */}
+     < PaymentRequestForm/>
      {/* {/* < AddMoneyForm/> */}
      {/* <AddPurchaseOrder/> */}
      {/* < AddVendor/> */}
@@ -44,7 +44,7 @@ function App() {
      {/* <CustomerPaymentSummary/> */}
      {/* <EditUserForm/> */}
      {/* <PaymentDetail/> */}
-     <PaymentRequest/>
+     {/* <PaymentRequest/> */}
      
     </div>
   );
