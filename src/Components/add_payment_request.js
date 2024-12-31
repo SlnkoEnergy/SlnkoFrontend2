@@ -25,12 +25,12 @@ function PaymentRequestForm() {
     name: "",
     customer: "",
     p_group: "",
-    paymentID: "",
-    paymentType: "",
+    pay_id: "",
+    pay_type: "",
     po_number: "",
     amountRequested: "",
-    amountForCustomers: "",
-    requestDate: "",
+    amt_for_customer: "",
+    dbt_date: "",
     item: "",
     vendor: "",
     paymentDescription: "",
@@ -95,8 +95,8 @@ function PaymentRequestForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-// Handle conditional logic for paymentType
-if (name === "paymentType") {
+// Handle conditional logic for pay_type
+if (name === "pay_type") {
   if (value === "adjustment") {
     // Update requestedFor when payment type is Adjustment
     setFormData((prev) => ({
@@ -169,6 +169,22 @@ if (name === "paymentType") {
         console.warn("PO number not found in the list:", value);
       }
     }
+
+ // If Amount Requested changes, validate that it does not exceed Current PO Balance
+ if (name === "amountRequested") {
+  const amountRequested = parseFloat(value);
+  const currentPoBalance = parseFloat(formData.currentPoBalance);
+
+  if (amountRequested > currentPoBalance) {
+    // You can show an alert or message to the user
+    alert("Amount Requested cannot be greater than Current PO Balance!");
+    // Reset the value to the previous one or set it to the maximum allowed
+    setFormData((prev) => ({
+      ...prev,
+      amountRequested: currentPoBalance,
+    }));
+  }
+}
 
     if (name === "projectID" && value) {
       const selectedProject = projectIDs.find((project) => project.code === value);
@@ -286,7 +302,7 @@ if (name === "paymentType") {
               <Grid xs={12} sm={4}>
                 <Input
                   name="paymentID"
-                  value={formData.paymentID}
+                  value={formData.pay_id}
                   onChange={handleChange}
                   placeholder="Payment ID"
                   required
@@ -295,10 +311,10 @@ if (name === "paymentType") {
 
               <Grid xs={12} sm={4}>
                 <Select
-                  name="paymentType"
-                  value={formData.paymentType}
+                  name="pay_type"
+                  value={formData.pay_type}
                   onChange={(e, value) =>
-                    handleChange({ target: { name: "paymentType", value } })
+                    handleChange({ target: { name: "pay_type", value } })
                   }
                   placeholder="Payment Type"
                   required
@@ -316,7 +332,7 @@ if (name === "paymentType") {
     value={formData.po_number}
     onChange={(e, value) => handleChange({ target: { name: "po_number", value } })}
     placeholder="PO Number"
-    disabled={formData.paymentType === "adjustment"} // Disable if payment type is adjustment
+    disabled={formData.pay_type === "adjustment"} // Disable if payment type is adjustment
   >
     {poNumbers.map((po) => (
       <Option key={po._id} value={po.po_number}>
@@ -324,7 +340,7 @@ if (name === "paymentType") {
       </Option>
     ))}
     {/* If PO number is set to N/A, show that as an option */}
-    {formData.paymentType === "adjustment" && (
+    {formData.pay_type === "adjustment" && (
       <Option value="N/A">N/A</Option>
     )}
   </Select>
@@ -346,7 +362,7 @@ if (name === "paymentType") {
                 <Input
                   type="number"
                   name="amountForCustomers"
-                  value={formData.amountForCustomers}
+                  value={formData.amt_for_customer}
                   onChange={handleChange}
                   placeholder="Amount for Customers (INR)"
                 />
@@ -356,7 +372,7 @@ if (name === "paymentType") {
                 <Input
                   type="date"
                   name="requestDate"
-                  value={formData.requestDate}
+                  value={formData.dbt_date}
                   onChange={handleChange}
                   placeholder="Request Date"
                   required
