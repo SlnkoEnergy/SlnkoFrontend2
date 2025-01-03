@@ -5,7 +5,7 @@ import './App.css';
 
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
-// import PaymentRequestForm from './Components/add_payment_request';
+import PaymentRequestForm from './Components/add_payment_request';
 // import AddMoneyForm from './Components/add_money';
 // import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';

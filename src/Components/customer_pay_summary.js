@@ -102,33 +102,7 @@ const [selectedClients, setSelectedClients] = useState([]);
     },
   ];
 
-  const balanceSummary = [{
-     crAmt : "300",
-     totalReturn : "100",
-     totalAdvanceValue : "140",
-     totalPoValue : "500",
-     totalBilled : "350",
-     dbAmt : "150",
-     adjTotal : "50",
-  }];
-
-   const { crAmt, totalReturn, totalAdvanceValue, totalPoValue, totalBilled, dbAmt, adjTotal } = balanceSummary[0];
-
-
-  const netBalance = crAmt - totalReturn;
-  const balanceSlnko = netBalance - totalAdvanceValue;
-  const netAdvance = totalAdvanceValue - totalBilled;
-  const balancePayable = totalPoValue - totalBilled - netAdvance;
-
-  // TCS Calculation (if applicable)
-  const tcs = netBalance > 5000000 ? (netBalance - 5000000) * 0.001 : 0;
-  const balanceRequired = balanceSlnko - balancePayable - tcs;
-
-  // Final calculation of available balance
-  const crAmtNum = Number(crAmt);
-const dbAmtNum = Number(dbAmt);
-const adjTotalNum = Number(adjTotal);
-  const totalAmount = (crAmtNum - dbAmtNum) + adjTotalNum;
+  
   
 
   const [selectedCredits, setSelectedCredits] = useState([]);
@@ -144,6 +118,7 @@ const adjTotalNum = Number(adjTotal);
   const [selectedAdjustments, setSelectedAdjustments] = useState([]);
 
   const totalAdjustment = adjustmentHistory.reduce((sum, item) => sum + item.value, 0);
+  
 
   const handleSearchDebit = (event) => {
     const searchValue = event.target.value.toLowerCase();
@@ -389,8 +364,54 @@ const adjTotalNum = Number(adjTotal);
         fetchClientHistory();
       }
     }, [projectData.code]);
+
+
+    const clientSummary = {
+      totalPOValue: filteredClients.reduce((sum, client) => sum + parseFloat(client.po_value || 0), 0),
+      totalAmountPaid: filteredClients.reduce((sum, client) => sum + parseFloat(client.amount_paid || 0), 0),
+      totalBalance: filteredClients.reduce((sum, client) => sum + parseFloat((client.po_value || 0) - (client.amount_paid || 0)), 0),
+      totalBilledValue: filteredClients.reduce((sum, client) => sum + parseFloat(client.billedValue || 0), 0),
+    };
+
+    const debitHistorySummary = {
+      totalCustomerAdjustment: filteredClients.reduce((sum, client) => {
+        return sum + (client.customer_adjustment || 0); // Assuming 'customer_adjustment' holds the relevant amount
+      }, 0).toLocaleString('en-IN')
+    };
+
+
+        // ***Balance Summary***
+
+    const balanceSummary = [{
+      crAmt : totalCredited,
+      totalReturn : debitHistorySummary.totalCustomerAdjustment,
+      totalAdvanceValue : clientSummary.totalAmountPaid,
+      totalPoValue : clientSummary.totalPOValue,
+      totalBilled : clientSummary.totalBilledValue,
+      dbAmt : totalDebited,
+      adjTotal : "0",
+   }];
+ 
+    const { crAmt, totalReturn, totalAdvanceValue, totalPoValue, totalBilled, dbAmt, adjTotal } = balanceSummary[0];
+ 
+ 
+   const netBalance = crAmt - totalReturn;
+   const balanceSlnko = netBalance - totalAdvanceValue;
+   const netAdvance = totalAdvanceValue - totalBilled;
+   const balancePayable = totalPoValue - totalBilled - netAdvance;
+ 
+   // TCS Calculation (if applicable)
+   const tcs = netBalance > 5000000 ? (netBalance - 5000000) * 0.001 : 0;
+   const balanceRequired = balanceSlnko - balancePayable - tcs;
+ 
+   // Final calculation of available balance
+   const crAmtNum = Number(crAmt);
+ const dbAmtNum = Number(dbAmt);
+ const adjTotalNum = Number(adjTotal);
+   const totalAmount = (crAmtNum - dbAmtNum) + adjTotalNum;
     
-    
+  
+  
 
   return (
     <Container sx={{ border: '1px solid black', padding: '20px', marginLeft:{xl:'15%', lg:'20%', md:'27%', sm:'0%' }, maxWidth:{md:'75%', lg:'80%', sm:'100%', xl:"85%"}}}>
@@ -777,10 +798,10 @@ const adjTotalNum = Number(adjTotal);
     <div>Total</div>
     <div />
     <div />
-    <div>₹ {filteredClients.reduce((sum, client) => sum + parseFloat(client.po_value || 0), 0).toLocaleString('en-IN')}</div>
-    <div>₹ {filteredClients.reduce((sum, client) => sum + parseFloat(client.amount_paid || 0), 0).toLocaleString('en-IN')}</div>
-    <div>₹ {filteredClients.reduce((sum, client) => sum + parseFloat((client.po_value || 0) - (client.amount_paid || 0)), 0).toLocaleString('en-IN')}</div>
-    <div>₹ {filteredClients.reduce((sum, client) => sum + parseFloat(client.billedValue || 0), 0).toLocaleString('en-IN')}</div>
+    <div>₹{clientSummary.totalPOValue}</div>
+    <div>₹{clientSummary.totalAmountPaid}</div>
+    <div>₹{clientSummary.totalBalance}</div>
+    <div>₹{clientSummary.totalBilledValue}</div>
   </div>
 </div>
 
