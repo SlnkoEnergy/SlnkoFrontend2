@@ -47,7 +47,7 @@ const AddUserForm = () => {
 
     try {
       const response = await axios.post(
-        "https://backendslnko.onrender.com/v1/user-registration",
+        "http://147.93.20.206:8080/v1/user-registration",
         payload,
         {
           headers: {
