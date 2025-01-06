@@ -1,236 +1,443 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Box,
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Container,
+  Grid,
+  Input,
+  Sheet,
+  Skeleton,
   Typography,
-  Checkbox,
 } from "@mui/joy";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const PaymentDetail = () => {
-  const [data, setData] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
+const UpdateProject = () => {
+  const [formData, setFormData] = useState({
+    _id: "",
+    code: "",
+    customer: "",
+    name: "",
+    p_group: "",
+    email: "",
+    number: "",
+    alt_number: "",
+    billing_address: {
+      village_name: "",
+      district_name: "",
+    },
+    site_address: {
+      village_name: "",
+      district_name: "",
+    },
+    state: "",
+    project_category: "",
+    project_kwp: "",
+    distance: "",
+    tarrif: "",
+    land: {
+      type: "",
+      acres: "",
+    },
+    service: "",
+    status: "incomplete",
+  });
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = date.toLocaleString("default", { month: "short" });
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
+  // Enhanced useEffect with Debugging
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProjectData = async () => {
+      console.log("Initializing data fetch...");
+  
       try {
-        const [paySummaryRes, projectRes] = await Promise.all([
-          axios.get("https://backendslnko.onrender.com/v1/get-pay-summary"),
-          axios.get("https://backendslnko.onrender.com/v1/get-all-project"),
-        ]);
-
-        const paySummary = paySummaryRes.data?.data || [];
-        const projects = projectRes.data?.data || [];
-
-        if (Array.isArray(paySummary) && Array.isArray(projects)) {
-          const structuredData = paySummary.map((item) => {
-            const project = projects.find((proj) => proj.p_id === item.p_id);
-            const remarks = `${item.paid_for || ""} / ${item.vendor || ""} / ${project?.code || ""}`;
-
-            return {
-              id: item.id || Math.random(),
-              debitAccount: "025305008971",
-              acc_number: item.acc_number || "",
-              benificiary: item.benificiary || "",
-              amount_paid: item.amount_paid || 0,
-              pay_mod: item.amount_paid > 100000 ? "R" : "N",
-              dbt_date: formatDate(item.dbt_date),
-              ifsc: item.ifsc || "",
-              comment: remarks,
-            };
+        setLoading(true);
+        setError("");
+  
+        // Check LocalStorage for project ID
+        console.log("LocalStorage contents:", localStorage);
+        let project = localStorage.getItem("idd");
+  
+        if (!project) {
+          console.error("No project ID found in localStorage. Setting a dummy ID for testing.");
+          setError("Project ID is missing. Please ensure it is set in localStorage.");
+          localStorage.setItem("idd", "1"); // Dummy value for testing
+          project = "1"; // Set a default for fallback
+        }
+  
+        project = Number.parseInt(project);
+        console.log("Parsed Project ID after retrieval:", project);
+  
+        if (isNaN(project)) {
+          console.error("Project ID from localStorage is invalid.");
+          setError("Invalid Project ID. Please check your input.");
+          return;
+        }
+  
+        console.log("Sending API request to fetch projects...");
+        const response = await axios.get("http://147.93.20.206:8080/v1/get-all-project");
+        console.log("API Response:", response);
+  
+        if (!response || !response.data || !response.data.data) {
+          console.error("Invalid API response structure.");
+          setError("No project data available. Please add projects first.");
+          return;
+        }
+  
+        const projects = response.data.data;
+        console.log("Projects Fetched:", projects);
+  
+        const matchingItem = projects.find(
+          (item) => String(item._id) === String(project) // Compare _id from DB with stored project ID
+        );
+  
+        if (matchingItem) {
+          console.log("Matching Project Data Found:", matchingItem);
+          setFormData({
+            ...formData,
+            _id: matchingItem._id || "",
+            code: matchingItem.code || "",
+            name: matchingItem.name || "",
+            customer: matchingItem.customer || "",
+            p_group: matchingItem.p_group || "",
+            email: matchingItem.email || "",
+            number: matchingItem.number || "",
+            alt_number: matchingItem.alt_number || "",
+            billing_address: matchingItem.billing_address || "",
+            site_address: matchingItem.site_address || "",
+            state: matchingItem.state || "",
+            project_category: matchingItem.project_category || "",
+            project_kwp: matchingItem.project_kwp || "",
+            distance: matchingItem.distance || "",
+            tarrif: matchingItem.tarrif || "",
+            land: matchingItem.land || "",
+            service: matchingItem.service || "",
           });
-
-          setData(structuredData);
         } else {
-          setError("Invalid data format. Unable to load payment details.");
+          console.error("No matching project found for the given ID.");
+          setError("No matching project found for the given ID.");
         }
       } catch (err) {
-        setError("Failed to fetch data. Please try again later.");
+        console.error("Error fetching project data:", err);
+        setError("Failed to fetch project data. Please try again later.");
       } finally {
+        console.log("Data fetch completed. Setting loading to false.");
         setLoading(false);
       }
     };
-
-    fetchData();
+  
+    fetchProjectData();
   }, []);
 
-  const handleCheckboxChange = (id) => {
-    setSelectedRows((prev) =>
-      prev.includes(id) ? prev.filter((row) => row !== id) : [...prev, id]
-    );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`Field "${name}" changed to:`, value);
+
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
+
+      setFormData((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const downloadSelectedRows = () => {
-    const selectedData = data.filter((row) => selectedRows.includes(row.id));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting form with data:", formData);
 
-    const headers = [
-      "Debit Ac No",
-      "Beneficiary Ac No",
-      "Beneficiary Name",
-      "Amt",
-      "Pay Mod",
-      "Date",
-      "IFSC",
-      "Payable Location",
-      "Print Location",
-      "Bene Mobile No.",
-      "Bene Email ID",
-      "Bene add1",
-      "Bene add2",
-      "Bene add3",
-      "Bene add4",
-      "Add Details 1",
-      "Add Details 2",
-      "Add Details 3",
-      "Add Details 4",
-      "Add Details 5",
-      "Remarks",
-    ];
-
-    const csvContent =
-      [headers.join(",")] +
-      "\n" +
-      selectedData
-        .map((row) =>
-          [
-            row.debitAccount,
-            row.acc_number,
-            row.benificiary,
-            row.amount_paid,
-            row.pay_mod,
-            row.dbt_date,
-            row.ifsc,
-            row.payable_location,
-            row.print_location,
-            row.bene_mobile_no,
-            row.bene_email_id,
-            row.bene_add1,
-            row.bene_add2,
-            row.bene_add3,
-            row.bene_add4,
-            row.add_details_1,
-            row.add_details_2,
-            row.add_details_3,
-            row.add_details_4,
-            row.add_details_5,
-            row.comment,
-          ].join(",")
-        )
-        .join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "selected_rows.csv";
-    link.click();
+    try {
+      const response = await axios.put(
+        `http://147.93.20.206:8080/v1/update-project/${formData._id}`,
+        formData
+      );
+      console.log("Update response:", response);
+      if (response.status === 200) {
+        alert("Project updated successfully!");
+      } else {
+        alert("Failed to update project. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during project update:", error);
+      alert("Error during project update. Please try again later.");
+    }
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
-    <Box>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        padding={2}
-        bgcolor="neutral.softBg"
-      >
-        <Typography level="h4" textAlign="center" style={{ flex: 1 }}>
-          Payment Detail
-        </Typography>
-        <Button
-          variant="solid"
-          color="success"
-          onClick={downloadSelectedRows}
+    <Box
+      sx={{
+        backgroundColor: "neutral.softBg",
+        minHeight: "100vh",
+        width: "100%",
+        py: 4,
+      }}
+    >
+      <Container maxWidth="md">
+        <Sheet
+          variant="outlined"
+          sx={{
+            p: 4,
+            borderRadius: "md",
+            boxShadow: "sm",
+            backgroundColor: "neutral.surface",
+          }}
         >
-          Download CSV File
-        </Button>
-      </Box>
-
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Select</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Debit Ac No</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Beneficiary Ac No</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Beneficiary Name</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Amt</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Pay Mod</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Date</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>IFSC</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Payable Location</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Print Location</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene Mobile No.</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene Email ID</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene add1</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene add2</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene add3</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Bene add4</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Add Details 1</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Add Details 2</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Add Details 3</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Add Details 4</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Add Details 5</TableCell>
-                <TableCell style={{ fontSize: "1.2rem", fontWeight: "500", padding: "8px" }}>Remarks</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={selectedRows.includes(row.id)}
-                    onChange={() => handleCheckboxChange(row.id)}
+          <Typography level="h3" fontWeight="bold" mb={2} textAlign="center">
+            Update Project
+          </Typography>
+          {error && (
+            <Typography color="danger" mb={2} textAlign="center">
+              {error}
+            </Typography>
+          )}
+          {loading ? (
+            <Skeleton variant="rectangular" height={400} />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Project ID
+                  </Typography>
+                  <Input
+                    placeholder="Enter Project ID"
+                    name="code"
+                    required
+                    fullWidth
+                    value={formData.code || ""} // Ensures value is always a string
+                    onChange={handleChange}
                   />
-                </TableCell>
-                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.debitAccount}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.acc_number}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.benificiary}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.amount_paid}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.pay_mod}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.dbt_date}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.ifsc}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.payable_location}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.print_location}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_mobile_no}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_email_id}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_add1}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_add2}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_add3}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.bene_add4}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.add_details_1}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.add_details_2}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.add_details_3}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.add_details_4}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.add_details_5}</TableCell>
-                                <TableCell  style={{ fontSize: "1rem", fontWeight: "300"}}>{row.comment}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Customer Name
+                  </Typography>
+                  <Input
+                    placeholder="Enter Customer Name"
+                    name="customer"
+                    required
+                    fullWidth
+                    value={formData.customer || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Project Name
+                  </Typography>
+                  <Input
+                    placeholder="Enter Project Name"
+                    name="name"
+                    fullWidth
+                    value={formData.name || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Project Group
+                  </Typography>
+                  <Input
+                    placeholder="Enter Project Group"
+                    name="p_group"
+                    fullWidth
+                    value={formData.p_group || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Email ID
+                  </Typography>
+                  <Input
+                    placeholder="Enter Email ID"
+                    name="email"
+                    type="email"
+                    fullWidth
+                    value={formData.email || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Mobile Number
+                  </Typography>
+                  <Input
+                    placeholder="Enter Mobile Number"
+                    name="number"
+                    type="number"
+                    required
+                    fullWidth
+                    value={formData.number || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Alternate Mobile Number
+                  </Typography>
+                  <Input
+                    placeholder="Enter Alternate Mobile Number"
+                    name="alt_number"
+                    type="number"
+                    fullWidth
+                    value={formData.alt_number || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Billing Address (Village Name)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Billing Village Name"
+                    name="billing_address.village_name"
+                    required
+                    fullWidth
+                    value={formData.billing_address.village_name || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Site Address (Village Name)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Site Village Name"
+                    name="site_address.village_name"
+                    required
+                    fullWidth
+                    value={formData.site_address.village_name || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    State
+                  </Typography>
+                  <Input
+                    placeholder="State"
+                    name="state"
+                    required
+                    fullWidth
+                    value={formData.state || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Category
+                  </Typography>
+                  <Input
+                    placeholder="Enter Project Category"
+                    name="project_category"
+                    required
+                    fullWidth
+                    value={formData.project_category || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Project Capacity (MW)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Capacity in MW"
+                    name="project_kwp"
+                    type="number"
+                    required
+                    fullWidth
+                    value={formData.project_kwp || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={6}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Substation Distance (KM)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Distance in KM"
+                    name="distance"
+                    type="number"
+                    required
+                    fullWidth
+                    value={formData.distance || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Tariff (per Unit)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Tariff"
+                    name="tarrif"
+                    fullWidth
+                    value={formData.tarrif || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Land Available (Acres)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Land Area in Acres"
+                    name="land"
+                    fullWidth
+                    required
+                    value={formData.land.acres || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Typography level="body1" fontWeight="bold" mb={1}>
+                    Service Charges (incl. GST)
+                  </Typography>
+                  <Input
+                    placeholder="Enter Service Charges"
+                    name="service"
+                    type="number"
+                    required
+                    fullWidth
+                    value={formData.service || ""} // Ensures value is always a string
+                    onChange={handleChange}
+                  />
+                </Grid>
+
+                <Grid xs={12}>
+                  <Button type="submit" fullWidth color="primary" sx={{ mt: 2 }}>
+                    Update Project
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          )}
+        </Sheet>
+      </Container>
     </Box>
   );
 };
 
-export default PaymentDetail;
+export default UpdateProject;
