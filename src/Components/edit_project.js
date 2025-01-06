@@ -90,8 +90,10 @@ const UpdateProject = () => {
 
         if (matchingItem) {
           console.log("Matching Project Data Found:", matchingItem);
+          // Store the _id in the state
           setFormData({
             ...formData,
+            _id: matchingItem._id, // Add _id here to make sure it's used in the PUT request
             p_id: matchingItem.p_id || "",
             code: matchingItem.code || "",
             name: matchingItem.name || "",
@@ -145,28 +147,38 @@ const UpdateProject = () => {
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      console.log("Submitting form with data:", formData);
-  
-      try {
-        setLoading(true);
-        setError("");
-  
-        const response = await axios.put(`http://147.93.20.206:8080/v1/update-project/${formData._id}`, formData);
-        console.log("API Response:", response);
-  
-        if (response && response.data) {
-          // Handle successful update
-          console.log("Project updated successfully:", response.data);
-          alert("Project updated successfully.");
-        }
-      } catch (err) {
-        console.error("Error during project update:", err);
-        setError("Failed to update project. Please try again later.");
-      } finally {
-        setLoading(false);
+    e.preventDefault();
+    console.log("Submitting form with data:", formData);
+
+    try {
+      setLoading(true);
+      setError("");
+
+      // Ensure we have the correct ID before sending the request
+      if (!formData._id) {
+        setError("Project ID is missing. Cannot update project.");
+        return;
       }
-    };
+
+      // Send the PUT request to update the project
+      const response = await axios.put(
+        `http://147.93.20.206:8080/v1/update-project/${formData._id}`,
+        formData
+      );
+      console.log("API Response:", response);
+
+      if (response && response.data) {
+        // Handle successful update
+        console.log("Project updated successfully:", response.data);
+        alert("Project updated successfully.");
+      }
+    } catch (err) {
+      console.error("Error during project update:", err);
+      setError("Failed to update project. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box
@@ -426,12 +438,7 @@ const UpdateProject = () => {
                       </Grid>
                 
                 <Grid xs={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    color="primary"
-                    sx={{ mt: 2 }}
-                  >
+                  <Button type="submit" fullWidth color="primary" sx={{ mt: 2 }}>
                     Update Project
                   </Button>
                 </Grid>
