@@ -37,8 +37,8 @@ const PaymentDetail = () => {
   
       try {
         const [paySummaryRes, projectRes] = await Promise.all([
-          axios.get("https://backendslnko.onrender.com/v1/get-pay-summary"),
-          axios.get("https://backendslnko.onrender.com/v1/get-all-project"),
+          axios.get("http://147.93.20.206:8080/v1/get-pay-summary"),
+          axios.get("http://147.93.20.206:8080/v1/get-all-project"),
         ]);
   
         const paySummary = paySummaryRes.data?.data || [];

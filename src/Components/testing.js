@@ -1,443 +1,268 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Box,
-  Button,
-  Container,
   Grid,
-  Input,
-  Sheet,
-  Skeleton,
   Typography,
+  Input,
+  Button,
+  Autocomplete,
 } from "@mui/joy";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import Img10 from '../Assets/pay-request.png';
 
-const UpdateProject = () => {
-  const [formData, setFormData] = useState({
-    _id: "",
-    code: "",
-    customer: "",
-    name: "",
-    p_group: "",
-    email: "",
-    number: "",
-    alt_number: "",
-    billing_address: {
-      village_name: "",
-      district_name: "",
-    },
-    site_address: {
-      village_name: "",
-      district_name: "",
-    },
-    state: "",
-    project_category: "",
-    project_kwp: "",
-    distance: "",
-    tarrif: "",
-    land: {
-      type: "",
-      acres: "",
-    },
-    service: "",
-    status: "incomplete",
+
+const AddBillForm = () => {
+  const [formValues, setFormValues] = useState({
+    p_id: "",
+    po_number: "",
+    vendor: "",
+    date: "",
+    item: "",
+    po_value: "",
+    bill_number: "",
+    bill_date: "",
+    bill_value: "",
+    bill_type: "",
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Enhanced useEffect with Debugging
+  const billTypes = [
+    { label: "Final", value: "Final" },
+    { label: "Partial", value: "Partial" },
+  ];
+
   useEffect(() => {
-    const fetchProjectData = async () => {
-      console.log("Initializing data fetch...");
-  
+    const fetchData = async () => {
       try {
         setLoading(true);
-        setError("");
-  
-        // Check LocalStorage for project ID
-        console.log("LocalStorage contents:", localStorage);
-        let project = localStorage.getItem("idd");
-  
-        if (!project) {
-          console.error("No project ID found in localStorage. Setting a dummy ID for testing.");
-          setError("Project ID is missing. Please ensure it is set in localStorage.");
-          localStorage.setItem("idd", "1"); // Dummy value for testing
-          project = "1"; // Set a default for fallback
-        }
-  
-        project = Number.parseInt(project);
-        console.log("Parsed Project ID after retrieval:", project);
-  
-        if (isNaN(project)) {
-          console.error("Project ID from localStorage is invalid.");
-          setError("Invalid Project ID. Please check your input.");
-          return;
-        }
-  
-        console.log("Sending API request to fetch projects...");
-        const response = await axios.get("http://147.93.20.206:8080/v1/get-all-project");
-        console.log("API Response:", response);
-  
-        if (!response || !response.data || !response.data.data) {
-          console.error("Invalid API response structure.");
-          setError("No project data available. Please add projects first.");
-          return;
-        }
-  
-        const projects = response.data.data;
-        console.log("Projects Fetched:", projects);
-  
-        const matchingItem = projects.find(
-          (item) => String(item._id) === String(project) // Compare _id from DB with stored project ID
+        const response = await axios.get(
+          "http://147.93.20.206:8080/v1/get-all-po"
         );
-  
-        if (matchingItem) {
-          console.log("Matching Project Data Found:", matchingItem);
-          setFormData({
-            ...formData,
-            _id: matchingItem._id || "",
-            code: matchingItem.code || "",
-            name: matchingItem.name || "",
-            customer: matchingItem.customer || "",
-            p_group: matchingItem.p_group || "",
-            email: matchingItem.email || "",
-            number: matchingItem.number || "",
-            alt_number: matchingItem.alt_number || "",
-            billing_address: matchingItem.billing_address || "",
-            site_address: matchingItem.site_address || "",
-            state: matchingItem.state || "",
-            project_category: matchingItem.project_category || "",
-            project_kwp: matchingItem.project_kwp || "",
-            distance: matchingItem.distance || "",
-            tarrif: matchingItem.tarrif || "",
-            land: matchingItem.land || "",
-            service: matchingItem.service || "",
-          });
-        } else {
-          console.error("No matching project found for the given ID.");
-          setError("No matching project found for the given ID.");
+        const data = response.data?.data?.[0]; // Assuming the first PO is needed
+        if (data) {
+          setFormValues((prev) => ({
+            ...prev,
+            p_id: data.p_id || "",
+            po_number: data.po_number || "",
+            vendor: data.vendor || "",
+            date: data.date || "",
+            item: data.item || "",
+            po_value: data.po_value || "",
+          }));
         }
       } catch (err) {
-        console.error("Error fetching project data:", err);
-        setError("Failed to fetch project data. Please try again later.");
+        console.error("Error fetching PO data:", err);
+        setError("Failed to fetch PO data.");
       } finally {
-        console.log("Data fetch completed. Setting loading to false.");
         setLoading(false);
       }
     };
-  
-    fetchProjectData();
+
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Field "${name}" changed to:`, value);
+    setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
 
-    if (name.includes(".")) {
-      const [parent, child] = name.split(".");
-
-      setFormData((prev) => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent],
-          [child]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+  const handleAutocompleteChange = (_, newValue) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      bill_type: newValue?.value || "",
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form with data:", formData);
+
+    const dataToPost = {
+      po_number: formValues.po_number,
+      bill_number: formValues.bill_number,
+      bill_date: formValues.bill_date,
+      bill_value: formValues.bill_value,
+      bill_type: formValues.bill_type,
+    };
 
     try {
-      const response = await axios.put(
-        `http://147.93.20.206:8080/v1/update-project/${formData._id}`,
-        formData
+      const response = await axios.post(
+        "http://147.93.20.206:8080/v1/add-bill",
+        dataToPost
       );
-      console.log("Update response:", response);
-      if (response.status === 200) {
-        alert("Project updated successfully!");
-      } else {
-        alert("Failed to update project. Please try again.");
-      }
+      console.log("Data posted successfully:", response.data);
     } catch (error) {
-      console.error("Error during project update:", error);
-      alert("Error during project update. Please try again later.");
+      console.error("Error posting data:", error);
     }
   };
 
   return (
     <Box
       sx={{
-        backgroundColor: "neutral.softBg",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         minHeight: "100vh",
-        width: "100%",
-        py: 4,
+        backgroundColor: "background.level1",
+        padding: "20px",
       }}
     >
-      <Container maxWidth="md">
-        <Sheet
-          variant="outlined"
-          sx={{
-            p: 4,
-            borderRadius: "md",
-            boxShadow: "sm",
-            backgroundColor: "neutral.surface",
-          }}
-        >
-          <Typography level="h3" fontWeight="bold" mb={2} textAlign="center">
-            Update Project
+      <Box
+        sx={{
+          maxWidth: 900,
+          width: "100%",
+          padding: "30px",
+          boxShadow: "md",
+          borderRadius: "sm",
+          backgroundColor: "background.surface",
+        }}
+      >
+        <Box textAlign="center" mb={3}>
+        <img
+            src={Img10}
+            alt="logo-icon"
+            style={{ height: "50px", marginBottom: "10px" }}
+          />
+          <Typography level="h4" fontWeight="bold" color="primary">
+            Add Bill
           </Typography>
-          {error && (
-            <Typography color="danger" mb={2} textAlign="center">
-              {error}
-            </Typography>
-          )}
-          {loading ? (
-            <Skeleton variant="rectangular" height={400} />
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Project ID
-                  </Typography>
-                  <Input
-                    placeholder="Enter Project ID"
-                    name="code"
-                    required
-                    fullWidth
-                    value={formData.code || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
+        </Box>
 
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Customer Name
-                  </Typography>
-                  <Input
-                    placeholder="Enter Customer Name"
-                    name="customer"
-                    required
-                    fullWidth
-                    value={formData.customer || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Project Name
-                  </Typography>
-                  <Input
-                    placeholder="Enter Project Name"
-                    name="name"
-                    fullWidth
-                    value={formData.name || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Project Group
-                  </Typography>
-                  <Input
-                    placeholder="Enter Project Group"
-                    name="p_group"
-                    fullWidth
-                    value={formData.p_group || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Email ID
-                  </Typography>
-                  <Input
-                    placeholder="Enter Email ID"
-                    name="email"
-                    type="email"
-                    fullWidth
-                    value={formData.email || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Mobile Number
-                  </Typography>
-                  <Input
-                    placeholder="Enter Mobile Number"
-                    name="number"
-                    type="number"
-                    required
-                    fullWidth
-                    value={formData.number || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Alternate Mobile Number
-                  </Typography>
-                  <Input
-                    placeholder="Enter Alternate Mobile Number"
-                    name="alt_number"
-                    type="number"
-                    fullWidth
-                    value={formData.alt_number || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Billing Address (Village Name)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Billing Village Name"
-                    name="billing_address.village_name"
-                    required
-                    fullWidth
-                    value={formData.billing_address.village_name || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Site Address (Village Name)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Site Village Name"
-                    name="site_address.village_name"
-                    required
-                    fullWidth
-                    value={formData.site_address.village_name || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    State
-                  </Typography>
-                  <Input
-                    placeholder="State"
-                    name="state"
-                    required
-                    fullWidth
-                    value={formData.state || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Category
-                  </Typography>
-                  <Input
-                    placeholder="Enter Project Category"
-                    name="project_category"
-                    required
-                    fullWidth
-                    value={formData.project_category || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Project Capacity (MW)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Capacity in MW"
-                    name="project_kwp"
-                    type="number"
-                    required
-                    fullWidth
-                    value={formData.project_kwp || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={6}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Substation Distance (KM)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Distance in KM"
-                    name="distance"
-                    type="number"
-                    required
-                    fullWidth
-                    value={formData.distance || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Tariff (per Unit)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Tariff"
-                    name="tarrif"
-                    fullWidth
-                    value={formData.tarrif || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Land Available (Acres)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Land Area in Acres"
-                    name="land"
-                    fullWidth
-                    required
-                    value={formData.land.acres || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Typography level="body1" fontWeight="bold" mb={1}>
-                    Service Charges (incl. GST)
-                  </Typography>
-                  <Input
-                    placeholder="Enter Service Charges"
-                    name="service"
-                    type="number"
-                    required
-                    fullWidth
-                    value={formData.service || ""} // Ensures value is always a string
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid xs={12}>
-                  <Button type="submit" fullWidth color="primary" sx={{ mt: 2 }}>
-                    Update Project
-                  </Button>
-                </Grid>
+        {loading ? (
+          <Typography textAlign="center">Loading...</Typography>
+        ) : error ? (
+          <Typography textAlign="center" color="danger">
+            {error}
+          </Typography>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {/* Row 1 */}
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="Project ID"
+                  name="p_id"
+                  value={formValues.p_id}
+                  onChange={handleChange}
+                />
               </Grid>
-            </form>
-          )}
-        </Sheet>
-      </Container>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="PO Number"
+                  name="po_number"
+                  value={formValues.po_number}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="Vendor"
+                  name="vendor"
+                  value={formValues.vendor}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+
+              {/* Row 2 */}
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  type="date"
+                  placeholder="PO Date"
+                  name="date"
+                  value={formValues.date}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="Item Name"
+                  name="item"
+                  value={formValues.item}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="PO Value (with GST)"
+                  name="po_value"
+                  value={formValues.po_value}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+
+              {/* Row 3 */}
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="Bill Number"
+                  name="bill_number"
+                  value={formValues.bill_number}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  type="date"
+                  placeholder="Bill Date"
+                  name="bill_date"
+                  value={formValues.bill_date}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Input
+                  fullWidth
+                  placeholder="Bill Value"
+                  name="bill_value"
+                  value={formValues.bill_value}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+
+              {/* Row 4 */}
+              <Grid xs={12}>
+                <Autocomplete
+                  options={billTypes}
+                  getOptionLabel={(option) => option.label}
+                  value={
+                    billTypes.find((type) => type.value === formValues.bill_type) || null
+                  }
+                  onChange={handleAutocompleteChange}
+                  placeholder="Type of Bill"
+                />
+              </Grid>
+
+              {/* Submit Button */}
+              <Grid xs={12} textAlign="center">
+                <Button type="submit" color="primary" sx={{ mx: 1 }}>
+                  Submit
+                </Button>
+                <Button variant="soft" color="neutral" href="po_dashboard.php">
+                  Back
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Box>
     </Box>
   );
 };
 
-export default UpdateProject;
+export default AddBillForm;

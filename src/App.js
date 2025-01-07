@@ -11,9 +11,9 @@ import './App.css';
 // import AddVendor from './Components/add_vendor';
 // import UpdatePurchaseOrder from './Components/update_purchasse_order';
 // import AddProject from './Components/add_project';
-// import AddBillForm from './Components/add_bill';
+import AddBillForm from './Components/add_bill';
 // import PaymentRequestSummary from './Components/payment_request_summary';
-import UpdateProject from './Components/edit_project';
+// import UpdateProject from './Components/edit_project';
 // import StandbySummaryForm from './Components/standBy_sumary';
 // import AddUserForm from './Components/add_user';
 // import CreateLeadForm from './Components/create_lead';
@@ -22,7 +22,7 @@ import UpdateProject from './Components/edit_project';
 // import PaymentDetail from './Components/payment_details';
 // import PaymentRequest from './Components/paymentApproved';
 // import CustomerPaymentSummary from './Components/view_details';
-
+//  import PaymentRequest from './Components/payment_approval';
 
 
 function App() {
@@ -36,9 +36,9 @@ function App() {
      {/* < AddVendor/> */}
      {/* <UpdatePurchaseOrder/> */}
      {/* <AddProject/> */}
-     {/* <AddBillForm/> */}
+     <AddBillForm/>
      {/* <PaymentRequestSummary/> */}
-     <UpdateProject/>
+     {/* <UpdateProject/> */}
      {/* <StandbySummaryForm/> */}
      {/* <AddUserForm/> */}
      {/* <CreateLeadForm /> */}
@@ -46,7 +46,7 @@ function App() {
      {/* <EditUserForm/> */}
      {/* <PaymentDetail/> */}
      {/* <PaymentRequest/> */}
-     
+     {/* <PaymentRequest/> */}
     </div>
   );
 }
