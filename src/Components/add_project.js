@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Box,
@@ -49,7 +48,7 @@ const landTypes = ["Leased", "Owned"];
 
 const AddProject = () => {
   const [formData, setFormData] = useState({
-    code:"",
+    code: "",
     p_id: "",
     customer: "",
     name: "",
@@ -70,8 +69,8 @@ const AddProject = () => {
     project_kwp: "",
     distance: "",
     tariff: "",
-    land: { 
-      type: "", 
+    land: {
+      type: "",
       acres: "",
     },
     service: "",
@@ -94,19 +93,12 @@ const AddProject = () => {
     }));
   };
 
-  // const handleNestedChange2 = (field, key, value) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [field]: { ...prev[field], [key]: value },
-  //   }));
-  // };
-
   const handleAutocompleteChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-   // Convert the land object to a string
-   const payload = {
+  // Convert the land object to a string
+  const payload = {
     ...formData,
     land: JSON.stringify(formData.land), // Stringify the land object
   };
@@ -125,40 +117,41 @@ const AddProject = () => {
       const response = await axios.post(
         "https://backendslnko.onrender.com/v1/add-new-project",
         payload
-        
       );
-      setResponseMessage("Project added successfully!");
-      console.log("Response from server:", response.data);
 
-      // Reset the form
-      setFormData({
-        p_id: "",
-        code:"",
-        customer: "",
-        name: "",
-        p_group: "",
-        email: "",
-        number: "",
-        alternate_mobile_number: "",
-        billing_address: { village_name: "", district_name: "" },
-        site_address: { village_name: "", district_name: "" },
-        state: "",
-        project_category: "",
-        project_kwp: "",
-        distance: "",
-        tariff: "",
-        land: { type: "", acres: "" },
-        service: "",
-      });
+      // Check if the _id is generated in the response
+      if (response.data.success && response.data.data._id) {
+        setResponseMessage("Project added successfully!");
+        console.log("Generated _id:", response.data.data._id);
+
+        // Reset the form
+        setFormData({
+          p_id: "",
+          code: "",
+          customer: "",
+          name: "",
+          p_group: "",
+          email: "",
+          number: "",
+          alternate_mobile_number: "",
+          billing_address: { village_name: "", district_name: "" },
+          site_address: { village_name: "", district_name: "" },
+          state: "",
+          project_category: "",
+          project_kwp: "",
+          distance: "",
+          tariff: "",
+          land: { type: "", acres: "" },
+          service: "",
+        });
+      } else {
+        setResponseMessage("Failed to add project. No _id generated.");
+      }
     } catch (error) {
       console.error("Error adding project:", error.response?.data || error.message);
       setResponseMessage("Failed to add project. Please try again.");
     }
   };
-
-
-  
-
 
   return (
     <Box
@@ -360,7 +353,7 @@ const AddProject = () => {
               />
             </Grid>
             <Grid item xs={12}>
-            <TextField
+              <TextField
                 label="Land Acres"
                 name="acres"
                 value={formData.land.acres}
@@ -374,66 +367,33 @@ const AddProject = () => {
                 fullWidth
                 required
               />
-              
-                
-              </Grid>
-              <Grid item xs={12}>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <Autocomplete
-                
                 options={landTypes}
                 value={formData.land.type}
-                onChange={(e, value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    land: { ...prev.land, type: value },
-                  }))
-                }
-                renderInput={(params) => <TextField {...params} label="Land Type" required />}
+                onChange={(e, value) => handleLandChange("type", value)}
+                renderInput={(params) => <TextField {...params} label="Land Type" />}
                 fullWidth
               />
-              
             </Grid>
 
-            {/* Final Section */}
+            {/* Submit */}
             <Grid item xs={12}>
-              <TextField
-                label="SLnko Service Charges (incl. GST)"
-                name="service"
-                value={formData.service}
-                onChange={handleChange}
-                type="number"
-                fullWidth
-                required
-                variant="outlined"
-              />
+              <Button variant="contained" type="submit" fullWidth>
+                Add Project
+              </Button>
             </Grid>
           </Grid>
+        </Box>
 
-          <Box textAlign="center" sx={{ mt: 3 }}>
-            <Button type="submit" variant="contained">
-              Submit
-            </Button>
-            <Button
-            variant="outlined"
-            color="secondary"
-            href="po_dashboard.php"
-            sx={{ ml: 2 }}
-          >
-            Back
-          </Button>
-          </Box>
-
-          {responseMessage && (
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              align="center"
-              sx={{ mt: 2 }}
-            >
+        {responseMessage && (
+          <Box sx={{ mt: 2, textAlign: "center" }}>
+            <Typography variant="body1" color={responseMessage.includes("success") ? "green" : "red"}>
               {responseMessage}
             </Typography>
-          )}
-        </Box>
+          </Box>
+        )}
       </Paper>
     </Box>
   );

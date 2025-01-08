@@ -34,19 +34,19 @@ const AddPurchaseOrder = () => {
         console.log("Fetching data...");
 
         const projectsRes = await axios.get(
-          "https://backendslnko.onrender.com/v1/get-all-project"
+          "http://147.93.20.206:8080/v1/get-all-project"
         );
         console.log("Projects Response:", projectsRes.data.data);
         setProjectIDs(projectsRes.data.data || []);
 
         const vendorsRes = await axios.get(
-          "https://backendslnko.onrender.com/v1/get-all-vendor"
+          "http://147.93.20.206:8080/v1/get-all-vendor"
         );
         console.log("Vendors Response:", vendorsRes.data.data);
         setVendors(vendorsRes.data.data || []);
 
         const itemsRes = await axios.get(
-          "https://backendslnko.onrender.com/v1/get-item"
+          "http://147.93.20.206:8080/v1/get-item"
         );
         console.log("Items Response:", itemsRes.data);
 
@@ -71,22 +71,26 @@ const AddPurchaseOrder = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAutocompleteChange = (field, newValue) => {
-    console.log(`Autocomplete Field Changed: ${field}, Value: ${newValue}`);
+  const handleAutocompleteChange = (field, newValue, index) => {
+    console.log(`Autocomplete Field Changed: ${field}, Value: ${newValue}, Index: ${index}`);
     setFormData((prev) => ({
       ...prev,
       [field]: newValue || "",
       ...(field === "code" && {
         p_id: projectIDs.find((project) => project.code === newValue)?._id || "",
       }),
+      ...(field === "item" && {
+        itemIndex: index || "",  // Save the index as part of form data if necessary
+      }),
     }));
-
+  
     if (field === "item" && newValue === "Other") {
       setShowOtherItem(true);
     } else if (field === "item") {
       setShowOtherItem(false);
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,7 +109,7 @@ const AddPurchaseOrder = () => {
 
     try {
       const response = await axios.post(
-        "https://backendslnko.onrender.com/v1/Add-purchase-order",
+        "http://147.93.20.206:8080/v1/Add-purchase-order",
         dataToPost
       );
       console.log("Data posted successfully:", response.data);
@@ -188,19 +192,26 @@ const AddPurchaseOrder = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Autocomplete
-                options={vendors.map((vendor) => ({
-                  label: vendor.name,
-                }))}
-                getOptionLabel={(option) => option.label || ""}
-                value={formData.name ? { label: formData.name } : null}
-                onChange={(event, newValue) =>
-                  handleAutocompleteChange("name", newValue?.label || "")
-                }
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Vendor" required />
-                )}
-              />
+            <Autocomplete
+  options={vendors.map((vendor, index) => ({
+    label: vendor.name,
+    key: `${index}-${vendor.name}`, // Unique key for each option
+  }))}
+  getOptionLabel={(option) => option.label || ""}
+  value={formData.name ? { label: formData.name } : null}
+  onChange={(event, newValue) =>
+    handleAutocompleteChange("name", newValue?.label || "")
+  }
+  renderInput={(params) => (
+    <TextField {...params} label="Select Vendor" required />
+  )}
+  renderOption={(props, option) => (
+    <li {...props} key={option.key}>
+      {option.label}
+    </li>
+  )}
+/>
+
             </Grid>
 
             <Grid item xs={12} md={4}>
@@ -217,19 +228,27 @@ const AddPurchaseOrder = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Autocomplete
-                options={items.map((item) => ({
-                  label: typeof item === "object" ? item.item : item,
-                }))}
+            <Autocomplete
+                options={items.map((item, index) => ({
+                label: typeof item === "object" ? item.item : item,
+                key: `${index}-${typeof item === "object" ? item.item : item}`, // Make sure key is unique
+            }))}
                 getOptionLabel={(option) => option.label || ""}
                 value={formData.item ? { label: formData.item } : null}
-                onChange={(event, newValue) =>
-                  handleAutocompleteChange("item", newValue?.label || "")
-                }
+                onChange={(event, newValue) => {
+                  handleAutocompleteChange("item", newValue?.label || "", newValue?.index);
+                  }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Select Item" required />
+                 <TextField {...params} label="Select Item" required />
                 )}
-              />
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.key}>
+                      {option.label}
+                    </li>
+  )}
+/>
+
+
             </Grid>
 
             <Grid item xs={12} md={4}>
