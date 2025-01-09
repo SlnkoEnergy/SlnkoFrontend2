@@ -34,11 +34,13 @@ const AddPurchaseOrder = () => {
         const projectsRes = await axios.get(
           "http://147.93.20.206:8080/v1/get-all-project"
         );
+        console.log("Project Datas: ",projectsRes.data.data)
         setProjectIDs(projectsRes.data.data || []);
 
         const vendorsRes = await axios.get(
           "http://147.93.20.206:8080/v1/get-all-vendor"
         );
+        console.log("Vendor Datas: ",vendorsRes.data.data)
         setVendors(vendorsRes.data.data || []);
 
         const itemsRes = await axios.get(
@@ -46,6 +48,7 @@ const AddPurchaseOrder = () => {
         );
         const itemsData = itemsRes.data.Data || [];
         setItems([...itemsData, "Other"]);
+        console.log("Item Datas: ",itemsData.data.data)
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -76,8 +79,7 @@ const AddPurchaseOrder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToPost = {
-      p_id: formData.p_id,
-      code: formData.code,
+      p_id: formData.code, 
       po_number: formData.po_number,
       vendor: formData.name,
       date: formData.date,
@@ -91,6 +93,8 @@ const AddPurchaseOrder = () => {
         "https://api.slnkoprotrac.com/v1/Add-purchase-order",
         dataToPost
       );
+      console.log("Add Po:",response);
+      
       alert("PO added successfully!");
       setFormData({
         p_id: "",
