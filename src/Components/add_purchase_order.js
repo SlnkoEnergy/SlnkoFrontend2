@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Container,
-  Grid,
-  TextField,
+  Box,
   Button,
   Typography,
-  Box,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
+  Input,
+  Autocomplete,
+  Grid,
+  Container,
+  Divider,
+} from "@mui/joy";
 import Img7 from "../Assets/pay-request.png";
 
 const AddPurchaseOrder = () => {
@@ -27,37 +28,24 @@ const AddPurchaseOrder = () => {
   const [items, setItems] = useState([]);
   const [showOtherItem, setShowOtherItem] = useState(false);
 
-  // Fetch data sequentially
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching data...");
-
         const projectsRes = await axios.get(
           "http://147.93.20.206:8080/v1/get-all-project"
         );
-        console.log("Projects Response:", projectsRes.data.data);
         setProjectIDs(projectsRes.data.data || []);
 
         const vendorsRes = await axios.get(
           "http://147.93.20.206:8080/v1/get-all-vendor"
         );
-        console.log("Vendors Response:", vendorsRes.data.data);
         setVendors(vendorsRes.data.data || []);
 
         const itemsRes = await axios.get(
           "http://147.93.20.206:8080/v1/get-item"
         );
-        console.log("Items Response:", itemsRes.data);
-
         const itemsData = itemsRes.data.Data || [];
-        if (Array.isArray(itemsData)) {
-          setItems([...itemsData, "Other"]);
-          console.log("Items Data Processed:", itemsData);
-        } else {
-          console.warn("Unexpected structure for items:", itemsRes.data);
-          setItems(["Other"]); // Fallback to just "Other"
-        }
+        setItems([...itemsData, "Other"]);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -67,35 +55,26 @@ const AddPurchaseOrder = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Field Changed: ${name}, Value: ${value}`);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAutocompleteChange = (field, newValue, index) => {
-    console.log(`Autocomplete Field Changed: ${field}, Value: ${newValue}, Index: ${index}`);
     setFormData((prev) => ({
       ...prev,
       [field]: newValue || "",
       ...(field === "code" && {
-        p_id: projectIDs.find((project) => project.code === newValue)?._id || "",
-      }),
-      ...(field === "item" && {
-        itemIndex: index || "",  // Save the index as part of form data if necessary
+        p_id: projectIDs.find((project) => project.code === newValue)?.code || "",
       }),
     }));
-  
     if (field === "item" && newValue === "Other") {
       setShowOtherItem(true);
     } else if (field === "item") {
       setShowOtherItem(false);
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted with Data:", formData);
-
     const dataToPost = {
       p_id: formData.p_id,
       code: formData.code,
@@ -109,13 +88,10 @@ const AddPurchaseOrder = () => {
 
     try {
       const response = await axios.post(
-        "http://147.93.20.206:8080/v1/Add-purchase-order",
+        "https://api.slnkoprotrac.com/v1/Add-purchase-order",
         dataToPost
       );
-      console.log("Data posted successfully:", response.data);
       alert("PO added successfully!");
-
-      // Reset the form
       setFormData({
         p_id: "",
         code: "",
@@ -144,146 +120,116 @@ const AddPurchaseOrder = () => {
       }}
     >
       <Container
-        maxWidth="md"
-        sx={{ boxShadow: 3, p: 4, borderRadius: 2, backgroundColor: "#ffffff" }}
+        sx={{
+          boxShadow: "lg",
+          padding: 4,
+          borderRadius: "md",
+          backgroundColor: "background.surface",
+        }}
       >
         <Box textAlign="center" mb={3}>
-          <img
-            src={Img7}
-            alt="logo-icon"
-            style={{ height: "50px", marginBottom: "10px" }}
-          />
-          <Typography variant="h4" sx={{ fontWeight: 800, color: "#12263f" }}>
+          <img src={Img7} alt="logo-icon" style={{ height: "50px" }} />
+          <Typography level="h4" fontWeight="bold">
             Add Purchase Order
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
-            Add Purchase Order
+          <Typography level="body2" textColor="text.secondary">
+            Add Purchase Order Details
           </Typography>
-          <hr style={{ width: "50%", margin: "auto", marginTop: 10 }} />
+          <Divider sx={{ my: 2 }} />
         </Box>
 
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+          <Grid container spacing={2}>
+            <Grid xs={12} md={4}>
               <Autocomplete
                 options={projectIDs.map((project) => ({
                   label: project.code,
                 }))}
-                getOptionLabel={(option) => option.label || ""}
                 value={formData.code ? { label: formData.code } : null}
                 onChange={(event, newValue) =>
                   handleAutocompleteChange("code", newValue?.label || "")
                 }
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Project ID" required />
-                )}
+                placeholder="Select Project ID"
               />
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <TextField
+            <Grid xs={12} md={4}>
+              <Input
                 name="po_number"
-                label="PO Number"
+                placeholder="PO Number"
                 value={formData.po_number}
                 onChange={handleChange}
                 required
-                fullWidth
               />
             </Grid>
 
-            <Grid item xs={12} md={4}>
-            <Autocomplete
-  options={vendors.map((vendor, index) => ({
-    label: vendor.name,
-    key: `${index}-${vendor.name}`, // Unique key for each option
-  }))}
-  getOptionLabel={(option) => option.label || ""}
-  value={formData.name ? { label: formData.name } : null}
-  onChange={(event, newValue) =>
-    handleAutocompleteChange("name", newValue?.label || "")
-  }
-  renderInput={(params) => (
-    <TextField {...params} label="Select Vendor" required />
-  )}
-  renderOption={(props, option) => (
-    <li {...props} key={option.key}>
-      {option.label}
-    </li>
-  )}
-/>
-
+            <Grid xs={12} md={4}>
+              <Autocomplete
+                options={vendors.map((vendor) => ({
+                  label: vendor.name,
+                }))}
+                value={formData.name ? { label: formData.name } : null}
+                onChange={(event, newValue) =>
+                  handleAutocompleteChange("name", newValue?.label || "")
+                }
+                placeholder="Select Vendor"
+              />
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <TextField
+            <Grid xs={12} md={4}>
+              <Input
                 name="date"
                 type="date"
-                label="PO Date"
-                InputLabelProps={{ shrink: true }}
                 value={formData.date}
                 onChange={handleChange}
                 required
-                fullWidth
               />
             </Grid>
 
-            <Grid item xs={12} md={4}>
-            <Autocomplete
-                options={items.map((item, index) => ({
-                label: typeof item === "object" ? item.item : item,
-                key: `${index}-${typeof item === "object" ? item.item : item}`, // Make sure key is unique
-            }))}
-                getOptionLabel={(option) => option.label || ""}
+            <Grid xs={12} md={4}>
+              <Autocomplete
+                options={items.map((item) => ({
+                  label: typeof item === "object" ? item.item : item,
+                }))}
                 value={formData.item ? { label: formData.item } : null}
-                onChange={(event, newValue) => {
-                  handleAutocompleteChange("item", newValue?.label || "", newValue?.index);
-                  }}
-                renderInput={(params) => (
-                 <TextField {...params} label="Select Item" required />
-                )}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.key}>
-                      {option.label}
-                    </li>
-  )}
-/>
-
-
+                onChange={(event, newValue) =>
+                  handleAutocompleteChange("item", newValue?.label || "")
+                }
+                placeholder="Select Item"
+              />
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              <TextField
+            <Grid xs={12} md={4}>
+              <Input
                 name="po_value"
-                label="PO Value (with GST)"
                 type="number"
+                placeholder="PO Value (with GST)"
                 value={formData.po_value}
                 onChange={handleChange}
                 required
-                fullWidth
               />
             </Grid>
 
             {showOtherItem && (
-              <Grid item xs={12}>
-                <TextField
+              <Grid xs={12}>
+                <Input
                   name="other"
-                  label="Other Item Name"
+                  placeholder="Other Item Name"
                   value={formData.other}
                   onChange={handleChange}
                   required
-                  fullWidth
                 />
               </Grid>
             )}
           </Grid>
 
           <Box sx={{ mt: 3, textAlign: "center" }}>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" color="primary" variant="solid">
               Submit
             </Button>
             <Button
-              variant="outlined"
-              color="secondary"
+              color="neutral"
+              variant="soft"
               href="po_dashboard.php"
               sx={{ ml: 2 }}
             >

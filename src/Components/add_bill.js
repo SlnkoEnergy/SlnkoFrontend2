@@ -38,7 +38,7 @@ const AddBillForm = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://147.93.20.206:8080/v1/get-all-po"
+          "https://api.slnkoprotrac.com/v1/get-all-po"
         );
         const data = response.data?.data?.[1]; // Assuming the first PO is needed
         if (data) {
@@ -88,7 +88,7 @@ const AddBillForm = () => {
 
     try {
       const response = await axios.post(
-        "http://147.93.20.206:8080/v1/add-bill",
+        "https://api.slnkoprotrac.com/v1/add-bill",
         dataToPost
       );
       console.log("Data posted successfully:", response.data);
