@@ -7,8 +7,8 @@ import './App.css';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
 // import AddMoneyForm from './Components/add_money';
-import AddPurchaseOrder from './Components/add_purchase_order';
-// import AddVendor from './Components/add_vendor';
+// import AddPurchaseOrder from './Components/add_purchase_order';
+import AddVendor from './Components/add_vendor';
 // import UpdatePurchaseOrder from './Components/update_purchasse_order';
 // import AddProject from './Components/add_project';
 // import AddBillForm from './Components/add_bill';
@@ -32,8 +32,8 @@ function App() {
       {/* <ForgotPassword /> */}
      {/* < PaymentRequestForm/> */}
      {/* {/* < AddMoneyForm/> */}
-     <AddPurchaseOrder/>
-     {/* < AddVendor/> */}
+     {/* <AddPurchaseOrder/> */}
+     < AddVendor/>
      {/* <UpdatePurchaseOrder/> */}
      {/* <AddProject/> */}
      {/* <AddBillForm/> */}
