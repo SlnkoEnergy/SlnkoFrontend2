@@ -9,7 +9,7 @@ import './App.css';
 // import AddMoneyForm from './Components/add_money';
 // import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';
-import UpdatePurchaseOrder from './Components/update_purchasse_order';
+// import UpdatePurchaseOrder from './Components/update_purchasse_order';
 // import AddProject from './Components/add_project';
 // import AddBillForm from './Components/add_bill';
 // import PaymentRequestSummary from './Components/payment_request_summary';
@@ -23,6 +23,8 @@ import UpdatePurchaseOrder from './Components/update_purchasse_order';
 // import PaymentRequest from './Components/paymentApproved';
 // import CustomerPaymentSummary from './Components/view_details';
 //  import PaymentRequest from './Components/payment_approval';
+// import PoHistoryTable  from './Components/po_history';
+import BillHistoryTable from './Components/bill_history';
 
 
 function App() {
@@ -34,7 +36,7 @@ function App() {
      {/* {/* < AddMoneyForm/> */}
      {/* <AddPurchaseOrder/> */}
      {/* < AddVendor/> */}
-     <UpdatePurchaseOrder/>
+     {/* <UpdatePurchaseOrder/> */}
      {/* <AddProject/> */}
      {/* <AddBillForm/> */}
      {/* <PaymentRequestSummary/> */}
@@ -47,6 +49,8 @@ function App() {
      {/* <PaymentDetail/> */}
      {/* <PaymentRequest/> */}
      {/* <PaymentRequest/> */}
+     {/* <PoHistoryTable/> */}
+     <BillHistoryTable/>
     </div>
   );
 }

@@ -24,37 +24,49 @@ const UpdatePurchaseOrder = () => {
     po_value: "",
     other: "",
     partial_billing: "",
-    comments: "",
+    comment: "",
   });
   const [projectIDs, setProjectIDs] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [items, setItems] = useState([]);
   const [showOtherItem, setShowOtherItem] = useState(false);
-
+  const [allPo, setAllPo] = useState([]);
   // Fetching data from APIs
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetching project IDs
         const projectsRes = await axios.get(
-          "http://147.93.20.206:8080/v1/get-all-project"
+          "https://api.slnkoprotrac.com/v1/get-all-project"
         );
         setProjectIDs(projectsRes.data.data || []);
-
+  
+        // Fetching vendors
         const vendorsRes = await axios.get(
-          "http://147.93.20.206:8080/v1/get-all-vendor"
+          "https://api.slnkoprotrac.com/v1/get-all-vendor"
         );
         setVendors(vendorsRes.data.data || []);
-
+  
+        // Fetching items
         const itemsRes = await axios.get(
-          "http://147.93.20.206:8080/v1/get-item"
+          "https://api.slnkoprotrac.com/v1/get-item"
         );
         setItems([...itemsRes.data.Data, "Other"]);
+  
+        // Fetching purchase orders
+        const poRes = await axios.get(
+          "https://api.slnkoprotrac.com/v1/get-all-po"
+        );
+        setAllPo(poRes.data.data || []);
+        console.log("Fetched Purchase Orders:", poRes.data); // You can set state here if needed
       } catch (err) {
         console.error("Error fetching data:", err);
       }
     };
+  
     fetchData();
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -145,7 +157,7 @@ const UpdatePurchaseOrder = () => {
               <TextField
                 name="po_number"
                 label="PO Number"
-                value={formData.po_number}
+                value={allPo.po_number}
                 onChange={handleChange}
                 required
                 fullWidth
@@ -269,7 +281,7 @@ const UpdatePurchaseOrder = () => {
               <TextField
                 name="comments"
                 label="Comments (Why Changes?)"
-                value={formData.comments}
+                value={formData.comment}
                 onChange={handleChange}
                 required
                 fullWidth
