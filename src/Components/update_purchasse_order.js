@@ -10,11 +10,13 @@ import {
   Box,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import Img7 from ".././Assets/update-po.png";
+import axios from "axios";
+import Img7 from "../Assets/update-po.png";
 
 const UpdatePurchaseOrder = () => {
   const [formData, setFormData] = useState({
-    project_id: "",
+    p_id: "",
+    code: "",
     po_number: "",
     vendor: "",
     date: "",
@@ -24,16 +26,34 @@ const UpdatePurchaseOrder = () => {
     partial_billing: "",
     comments: "",
   });
-  const [projectID, setProjectID] = useState([]);
+  const [projectIDs, setProjectIDs] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [items, setItems] = useState([]);
   const [showOtherItem, setShowOtherItem] = useState(false);
 
+  // Fetching data from APIs
   useEffect(() => {
-    // Replace with actual API calls
-    setProjectID(["Chanda Mama", "Naganeshi", "Bhanwar Lal", "Adijai"]);
-    setVendors(["Vendor A", "Vendor B", "Vendor C"]);
-    setItems(["Item A", "Item B", "Item C", "Other"]);
+    const fetchData = async () => {
+      try {
+        const projectsRes = await axios.get(
+          "http://147.93.20.206:8080/v1/get-all-project"
+        );
+        setProjectIDs(projectsRes.data.data || []);
+
+        const vendorsRes = await axios.get(
+          "http://147.93.20.206:8080/v1/get-all-vendor"
+        );
+        setVendors(vendorsRes.data.data || []);
+
+        const itemsRes = await axios.get(
+          "http://147.93.20.206:8080/v1/get-item"
+        );
+        setItems([...itemsRes.data.Data, "Other"]);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -42,9 +62,14 @@ const UpdatePurchaseOrder = () => {
   };
 
   const handleAutocompleteChange = (field, newValue) => {
-    setFormData((prev) => ({ ...prev, [field]: newValue || "" }));
-
-    // Special case for "item" to handle the "Other" option
+    setFormData((prev) => ({
+      ...prev,
+      [field]: newValue || "",
+      ...(field === "code" && {
+        p_id:
+          projectIDs.find((project) => project.code === newValue)?.code || "",
+      }),
+    }));
     if (field === "item" && newValue === "Other") {
       setShowOtherItem(true);
     } else if (field === "item") {
@@ -64,7 +89,7 @@ const UpdatePurchaseOrder = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f4f6f8", // Light background for better contrast
+        backgroundColor: "#f4f6f8",
         padding: 3,
       }}
     >
@@ -73,7 +98,7 @@ const UpdatePurchaseOrder = () => {
         sx={{
           boxShadow: 3,
           borderRadius: 2,
-          backgroundColor: "#ffffff", // White background for the form
+          backgroundColor: "#ffffff",
           p: 4,
         }}
       >
@@ -87,29 +112,28 @@ const UpdatePurchaseOrder = () => {
             Update Purchase Order
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            Update Purchase Order
+            Update Purchase Order Details
           </Typography>
           <hr style={{ width: "50%", margin: "auto", marginTop: 10 }} />
         </Box>
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            {/* Project ID */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
                 <Autocomplete
-                  options={projectID}
-                  getOptionLabel={(option) => option || ""}
-                  value={formData.project_id || null}
+                  options={projectIDs.map((project, index) => ({
+                    label: project.code,
+                    key: `${project.code}-${index}`,
+                  }))}
+                  value={formData.code ? { label: formData.code } : null}
                   onChange={(event, newValue) =>
-                    handleAutocompleteChange("project_id", newValue)
+                    handleAutocompleteChange("code", newValue?.label || "")
                   }
-                  isOptionEqualToValue={(option, value) => option === value}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Select Project ID"
-                      variant="outlined"
+                      label="Select Project Code"
                       required
                     />
                   )}
@@ -117,7 +141,6 @@ const UpdatePurchaseOrder = () => {
               </FormControl>
             </Grid>
 
-            {/* PO Number */}
             <Grid item xs={12} md={4}>
               <TextField
                 name="po_number"
@@ -129,17 +152,24 @@ const UpdatePurchaseOrder = () => {
               />
             </Grid>
 
-            {/* Vendor */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
                 <Autocomplete
-                  options={vendors}
-                  getOptionLabel={(option) => option || ""}
-                  value={formData.vendor || null}
-                  onChange={(event, newValue) =>
-                    handleAutocompleteChange("vendor", newValue)
+                  options={vendors.map((vendor, index) => ({
+                    name: vendor.name,
+                    key: `${vendor.name}-${index}`,
+                  }))} // Pass the vendors array with unique keys
+                  getOptionLabel={(option) => option.name || ""} // Access the 'name' property for display
+                  value={
+                    vendors.find((vendor) => vendor.name === formData.vendor) ||
+                    null
                   }
-                  isOptionEqualToValue={(option, value) => option === value}
+                  onChange={(event, newValue) =>
+                    handleAutocompleteChange(
+                      "vendor",
+                      newValue ? newValue.name : ""
+                    )
+                  }
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -148,11 +178,15 @@ const UpdatePurchaseOrder = () => {
                       required
                     />
                   )}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.key}>
+                      {option.name}
+                    </li>
+                  )}
                 />
               </FormControl>
             </Grid>
 
-            {/* PO Date */}
             <Grid item xs={12} md={4}>
               <TextField
                 name="date"
@@ -166,30 +200,31 @@ const UpdatePurchaseOrder = () => {
               />
             </Grid>
 
-            {/* Item */}
             <Grid item xs={12} md={4}>
               <FormControl fullWidth>
                 <Autocomplete
-                  options={items}
-                  getOptionLabel={(option) => option || ""}
-                  value={formData.item || null}
+                  options={items.map((item, index) => ({
+                    label: typeof item === "object" ? item.item : item,
+                    key: `${
+                      typeof item === "object" ? item.item : item
+                    }-${index}`,
+                  }))}
+                  value={formData.item ? { label: formData.item } : null}
                   onChange={(event, newValue) =>
-                    handleAutocompleteChange("item", newValue)
+                    handleAutocompleteChange("item", newValue?.label || "")
                   }
-                  isOptionEqualToValue={(option, value) => option === value}
                   renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select Item"
-                      variant="outlined"
-                      required
-                    />
+                    <TextField {...params} label="Select Item" required />
+                  )}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.key}>
+                      {option.label}
+                    </li>
                   )}
                 />
               </FormControl>
             </Grid>
 
-            {/* PO Value */}
             <Grid item xs={12} md={4}>
               <TextField
                 name="po_value"
@@ -202,7 +237,6 @@ const UpdatePurchaseOrder = () => {
               />
             </Grid>
 
-            {/* Other Item */}
             {showOtherItem && (
               <Grid item xs={12}>
                 <TextField
@@ -216,24 +250,21 @@ const UpdatePurchaseOrder = () => {
               </Grid>
             )}
 
-            {/* Partial Billing */}
             <Grid item xs={12} md={4}>
-            <FormControl fullWidth required>
-    <TextField
-      select
-      name="partial_billing"
-      label="Partial Billing"
-      value={formData.partial_billing}
-      onChange={handleChange}
-      variant="outlined"
-    >
-      <MenuItem value="Yes">Yes</MenuItem>
-      <MenuItem value="No">No</MenuItem>
-    </TextField>
-  </FormControl>
+              <FormControl fullWidth required>
+                <TextField
+                  select
+                  name="partial_billing"
+                  label="Partial Billing"
+                  value={formData.partial_billing}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Yes">Yes</MenuItem>
+                  <MenuItem value="No">No</MenuItem>
+                </TextField>
+              </FormControl>
             </Grid>
 
-            {/* Comments */}
             <Grid item xs={12} md={8}>
               <TextField
                 name="comments"
