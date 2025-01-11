@@ -1,28 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 
 function PoHistoryTable() {
-  const rows = [
-    {
-      poNo: "12345",
-      vendor: "ABC Corp",
-      poDate: "2025-01-10",
-      item: "Office Supplies",
-      poValue: "₹50,000",
-      reason: "Updated Quantity",
-      submittedBy: "Rounik",
-    },
-    {
-      poNo: "12346",
-      vendor: "XYZ Corp",
-      poDate: "2025-01-12",
-      item: "Electronics",
-      poValue: "₹1,20,000",
-      reason: "Revised Rate",
-      submittedBy: "Rounik",
-    },
-  ];
+  const [poHistoryData, setPoHistoryData] = useState([]);
+  const [poNumber, setPoNumber] = useState(null);
+  const poId = "677baf379b33fd5b825a899a"; // Replace with dynamic _id if needed
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching PO details...");
+        const poResponse = await axios.get(`https://api.slnkoprotrac.com/v1/get-po/${poId}`);
+        
+        // Assuming the response from get-po is an object and contains po_number
+        const fetchedPoNumber = poResponse.data.data.po_number;
+        console.log("PO Details fetched successfully:", poResponse.data);
+        console.log("Fetched PO Number:", fetchedPoNumber);
+
+        // Set the fetched po_number
+        setPoNumber(fetchedPoNumber);
+
+        console.log("Fetching PO History...");
+        const historyResponse = await axios.get("https://api.slnkoprotrac.com/v1/get-po-history");
+        console.log("PO History API Response:", historyResponse);
+
+        // Ensure data from get-po-history is an array
+        const historyData = Array.isArray(historyResponse.data) ? historyResponse.data : historyResponse.data.data;
+
+        if (!Array.isArray(historyData)) {
+          throw new Error("PO history data is not an array.");
+        }
+
+        // Filter history data based on matching po_number
+        const matchedHistory = historyData.filter((history) => history.po_number === fetchedPoNumber);
+        console.log("Matched History Data:", matchedHistory);
+
+        // Update state with matched history
+        setPoHistoryData(matchedHistory);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [poId]);
 
   return (
     <Box sx={{ padding: 3, maxWidth: "1200px", margin: "auto" }}>
@@ -61,108 +84,58 @@ function PoHistoryTable() {
           }}
         >
           <Box component="tr">
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              PO NO.
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Vendor
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              PO Date
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Item
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              PO Value with GST
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Amendment Reason
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Submitted By
-            </Box>
+            {["PO NO.", "Vendor", "PO Date", "Item", "PO Value with GST", "Amendment Reason", "Submitted By"].map(
+              (header, index) => (
+                <Box
+                  component="th"
+                  key={index}
+                  sx={{
+                    padding: 2,
+                    textAlign: "left",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                  }}
+                >
+                  {header}
+                </Box>
+              )
+            )}
           </Box>
         </Box>
 
         {/* Table Body */}
         <Box component="tbody">
-          {rows.map((row, index) => (
+          {poHistoryData.length > 0 ? (
+            poHistoryData.map((row, index) => (
+              <Box
+                component="tr"
+                key={index}
+                sx={{
+                  backgroundColor: index % 2 === 0 ? "neutral.100" : "neutral.50",
+                  "&:hover": {
+                    backgroundColor: "neutral.200",
+                  },
+                }}
+              >
+                 <Box component="td" sx={{ padding: 2 }}>{row.po_number}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.vendor}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.date}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.item}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.po_value}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.comment}</Box>
+              <Box component="td" sx={{ padding: 2 }}>{row.submitted_By}</Box>
+              </Box>
+            ))
+          ) : (
             <Box
               component="tr"
-              key={index}
-              sx={{
-                backgroundColor: index % 2 === 0 ? "neutral.100" : "neutral.50",
-                "&:hover": {
-                  backgroundColor: "neutral.200",
-                },
-              }}
+              sx={{ textAlign: "center", padding: 2, backgroundColor: "neutral.50" }}
             >
-              <Box component="td" sx={{ padding: 2 }}>{row.poNo}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.vendor}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.poDate}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.item}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.poValue}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.reason}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.submittedBy}</Box>
+              <Box component="td" colSpan={7} sx={{ padding: 2 }}>
+                No matching history data found.
+              </Box>
             </Box>
-          ))}
+          )}
         </Box>
       </Box>
     </Box>

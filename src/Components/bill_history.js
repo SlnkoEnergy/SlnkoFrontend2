@@ -10,59 +10,58 @@ function BillHistoryTable() {
 
   // Fetch Purchase Order data (get-all-po)
   useEffect(() => {
-    const fetchPoData = async () => {
+    async function fetchPoData() {
       try {
         const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-po");
-        console.log("PO Data: ", response.data);  // Logging PO Data for debugging
-        setPoData(response.data); // Assuming data is an array
+        console.log("PO Data:", response.data); // Check PO Data
+        setPoData(response.data);
       } catch (error) {
         console.error("Error fetching PO data:", error);
       }
-    };
-
+    }
     fetchPoData();
   }, []);
 
   // Fetch Bill data (get-all-bill)
   useEffect(() => {
-    const fetchBillData = async () => {
+    async function fetchBillData() {
       try {
         const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-bill");
-        console.log("Bill Data: ", response.data);  // Logging Bill Data for debugging
-        setBillData(response.data); // Assuming data is an array
+        console.log("Bill Data:", response.data); // Check Bill Data
+        setBillData(response.data);
       } catch (error) {
         console.error("Error fetching Bill data:", error);
       }
-    };
-
+    }
     fetchBillData();
   }, []);
 
-  // Match PO data with Bill data when both are available
+  // Match PO data with Bill data
   useEffect(() => {
-    if (poData.length > 0 && billData.length > 0) {
+    if (poData.length && billData.length) {
       const matchedData = poData.map((po) => {
-        // Find matching bill data based on PO number
         const bill = billData.find((bill) => bill.po_number === po.po_number);
+        
+        
         if (bill) {
-          console.log("Match found: ", po.po_number, bill); // Logging matches for debugging
           return {
-            billDate: bill.bill_date,
-            billNumber: bill.bill_number,
-            billValue: bill.bill_value,
+            bill_date: bill.bill_date,
+            bill_number: bill.bill_number,
+            bill_value: bill.bill_value,
             submittedBy: bill.submitted_by,
           };
         }
-        return null;
-      }).filter((item) => item !== null); // Filter out null values
+        return null; // No match
+      }).filter((item) => item !== null);
 
-      console.log("Matched Data: ", matchedData); // Logging final matched data
-      setMatchingData(matchedData); // Set matched data to state
+      console.log("Matched Data:", matchedData); // Log matched data
+      setMatchingData(matchedData);
     }
-  }, [poData, billData]);
+  }, [poData, billData]); // Trigger when poData or billData changes
 
   return (
     <Box sx={{ padding: 3, maxWidth: "1200px", margin: "auto" }}>
+      {/* Title */}
       <Typography
         level="h4"
         component="h1"
@@ -146,23 +145,39 @@ function BillHistoryTable() {
 
         {/* Table Body */}
         <Box component="tbody">
-          {matchingData.map((row, index) => (
-            <Box
-              component="tr"
-              key={index}
-              sx={{
-                backgroundColor: index % 2 === 0 ? "neutral.100" : "neutral.50",
-                "&:hover": {
-                  backgroundColor: "neutral.200",
-                },
-              }}
-            >
-              <Box component="td" sx={{ padding: 2 }}>{row.billDate}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.billNumber}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.billValue}</Box>
-              <Box component="td" sx={{ padding: 2 }}>{row.submittedBy}</Box>
+          {matchingData.length > 0 ? (
+            matchingData.map((row, index) => (
+              <Box
+                component="tr"
+                key={index}
+                sx={{
+                  backgroundColor: index % 2 === 0 ? "neutral.100" : "neutral.50",
+                  "&:hover": {
+                    backgroundColor: "neutral.200",
+                  },
+                }}
+              >
+                <Box component="td" sx={{ padding: 2 }}>
+                  {row.bill_date}
+                </Box>
+                <Box component="td" sx={{ padding: 2 }}>
+                  {row.bill_number}
+                </Box>
+                <Box component="td" sx={{ padding: 2 }}>
+                  {row.bill_value}
+                </Box>
+                <Box component="td" sx={{ padding: 2 }}>
+                  {row.submittedBy}
+                </Box>
+              </Box>
+            ))
+          ) : (
+            <Box component="tr">
+              <Box component="td" colSpan={4} sx={{ textAlign: "center", padding: 2 }}>
+                No matching data found
+              </Box>
             </Box>
-          ))}
+          )}
         </Box>
       </Box>
     </Box>
