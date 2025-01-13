@@ -24,7 +24,8 @@ import './App.css';
 // import CustomerPaymentSummary from './Components/view_details';
 //  import PaymentRequest from './Components/payment_approval';
 // import PoHistoryTable  from './Components/po_history';
-import BillHistoryTable from './Components/bill_history';
+// import BillHistoryTable from './Components/bill_history';
+import VendorBillSummary from './Components/vendor_bill_summary';
 
 
 function App() {
@@ -50,7 +51,8 @@ function App() {
      {/* <PaymentRequest/> */}
      {/* <PaymentRequest/> */}
      {/* <PoHistoryTable/> */}
-     <BillHistoryTable/>
+     {/* <BillHistoryTable/> */}
+     <VendorBillSummary/>
     </div>
   );
 }
