@@ -162,7 +162,10 @@ function VendorBillSummary() {
                 <Box component="td" sx={{ padding: 2 }}>{row.vendor}</Box>
                 <Box component="td" sx={{ padding: 2 }}>{row.item}</Box>
                 <Box component="td" sx={{ padding: 2 }}>{row.bill_number}</Box>
-                <Box component="td" sx={{ padding: 2 }}>{row.bill_date}</Box>
+                <Box component="td" sx={{ padding: 2 }}>
+  {new Date(row.bill_date).toISOString().slice(0, 10)}
+</Box>
+
                 <Box component="td" sx={{ padding: 2 }}>{row.bill_value}</Box>
                 <Box component="td" sx={{ padding: 2 }}>{row.po_value}</Box>
                 <Box component="td" sx={{ padding: 2 }}>{row.total_billed}</Box>
