@@ -4,60 +4,48 @@ import Typography from "@mui/joy/Typography";
 import axios from "axios";
 
 function BillHistoryTable() {
-  const [poData, setPoData] = useState([]);
-  const [billData, setBillData] = useState([]);
-  const [matchingData, setMatchingData] = useState([]);
+  const [billHistoryData, setBillHistoryData] = useState([]);
+  const [poNumber, setPoNumber] = useState(null);
+  const poId = "677baf379b33fd5b825a899a"; // Replace with dynamic _id if needed
 
-  // Fetch Purchase Order data (get-all-po)
   useEffect(() => {
-    async function fetchPoData() {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-po");
-        console.log("PO Data:", response.data); // Check PO Data
-        setPoData(response.data);
-      } catch (error) {
-        console.error("Error fetching PO data:", error);
-      }
-    }
-    fetchPoData();
-  }, []);
-
-  // Fetch Bill data (get-all-bill)
-  useEffect(() => {
-    async function fetchBillData() {
-      try {
-        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-bill");
-        console.log("Bill Data:", response.data); // Check Bill Data
-        setBillData(response.data);
-      } catch (error) {
-        console.error("Error fetching Bill data:", error);
-      }
-    }
-    fetchBillData();
-  }, []);
-
-  // Match PO data with Bill data
-  useEffect(() => {
-    if (poData.length && billData.length) {
-      const matchedData = poData.map((po) => {
-        const bill = billData.find((bill) => bill.po_number === po.po_number);
+        console.log("Fetching PO details...");
+        const poResponse = await axios.get(`https://api.slnkoprotrac.com/v1/get-po/${poId}`);
         
-        
-        if (bill) {
-          return {
-            bill_date: bill.bill_date,
-            bill_number: bill.bill_number,
-            bill_value: bill.bill_value,
-            submittedBy: bill.submitted_by,
-          };
+        // Assuming the response contains a valid `po_number`
+        const fetchedPoNumber = poResponse.data.data.po_number;
+        console.log("PO Details fetched successfully:", poResponse.data);
+        console.log("Fetched PO Number:", fetchedPoNumber);
+
+        // Set the fetched PO number
+        setPoNumber(fetchedPoNumber);
+
+        console.log("Fetching Bill History...");
+        const billResponse = await axios.get("https://api.slnkoprotrac.com/v1/get-all-bill");
+        console.log("Bill History API Response:", billResponse);
+
+        // Ensure data from get-all-bill is an array
+        const billData = Array.isArray(billResponse.data) ? billResponse.data : billResponse.data.data;
+
+        if (!Array.isArray(billData)) {
+          throw new Error("Bill history data is not an array.");
         }
-        return null; // No match
-      }).filter((item) => item !== null);
 
-      console.log("Matched Data:", matchedData); // Log matched data
-      setMatchingData(matchedData);
-    }
-  }, [poData, billData]); // Trigger when poData or billData changes
+        // Filter bill data based on matching po_number
+        const matchedBills = billData.filter((bill) => bill.po_number === fetchedPoNumber);
+        console.log("Matched Bill Data:", matchedBills);
+
+        // Update state with matched bills
+        setBillHistoryData(matchedBills);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [poId]);
 
   return (
     <Box sx={{ padding: 3, maxWidth: "1200px", margin: "auto" }}>
@@ -73,7 +61,7 @@ function BillHistoryTable() {
           color: "primary.main",
         }}
       >
-        Bill History Summary
+        Bill History
       </Typography>
 
       {/* Table */}
@@ -96,57 +84,27 @@ function BillHistoryTable() {
           }}
         >
           <Box component="tr">
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Bill Date
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Bill Number
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Bill Value
-            </Box>
-            <Box
-              component="th"
-              sx={{
-                padding: 2,
-                textAlign: "left",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              Submitted By
-            </Box>
+            {["Bill Number", "Bill Date", "Bill Value", "Submitted By"].map((header, index) => (
+              <Box
+                component="th"
+                key={index}
+                sx={{
+                  padding: 2,
+                  textAlign: "left",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                }}
+              >
+                {header}
+              </Box>
+            ))}
           </Box>
         </Box>
 
         {/* Table Body */}
         <Box component="tbody">
-          {matchingData.length > 0 ? (
-            matchingData.map((row, index) => (
+          {billHistoryData.length > 0 ? (
+            billHistoryData.map((row, index) => (
               <Box
                 component="tr"
                 key={index}
@@ -158,23 +116,26 @@ function BillHistoryTable() {
                 }}
               >
                 <Box component="td" sx={{ padding: 2 }}>
-                  {row.bill_date}
+                  {row.bill_number}
                 </Box>
                 <Box component="td" sx={{ padding: 2 }}>
-                  {row.bill_number}
+                  {row.bill_date}
                 </Box>
                 <Box component="td" sx={{ padding: 2 }}>
                   {row.bill_value}
                 </Box>
                 <Box component="td" sx={{ padding: 2 }}>
-                  {row.submittedBy}
+                  {row.submitted_by}
                 </Box>
               </Box>
             ))
           ) : (
-            <Box component="tr">
-              <Box component="td" colSpan={4} sx={{ textAlign: "center", padding: 2 }}>
-                No matching data found
+            <Box
+              component="tr"
+              sx={{ textAlign: "center", padding: 2, backgroundColor: "neutral.50" }}
+            >
+              <Box component="td" colSpan={4} sx={{ padding: 2 }}>
+                No matching bill data found.
               </Box>
             </Box>
           )}

@@ -23,8 +23,8 @@ import './App.css';
 // import PaymentRequest from './Components/paymentApproved';
 // import CustomerPaymentSummary from './Components/view_details';
 //  import PaymentRequest from './Components/payment_approval';
-import PoHistoryTable  from './Components/po_history';
-// import BillHistoryTable from './Components/bill_history';
+// import PoHistoryTable  from './Components/po_history';
+import BillHistoryTable from './Components/bill_history';
 
 
 function App() {
@@ -49,8 +49,8 @@ function App() {
      {/* <PaymentDetail/> */}
      {/* <PaymentRequest/> */}
      {/* <PaymentRequest/> */}
-     <PoHistoryTable/>
-     {/* <BillHistoryTable/> */}
+     {/* <PoHistoryTable/> */}
+     <BillHistoryTable/>
     </div>
   );
 }
