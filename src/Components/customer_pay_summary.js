@@ -221,7 +221,7 @@ const [selectedClients, setSelectedClients] = useState([]);
       const fetchProjectData = async () => {
         try {
          
-          const response = await axios.get("http://147.93.20.206:8080/v1/get-all-project");
+          const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-project");
           const data = response.data?.data?.[0];
   
           if (data) {
@@ -257,7 +257,7 @@ const [selectedClients, setSelectedClients] = useState([]);
           try {
             console.log('Fetching credit history for p_id:', projectData.p_id);
   
-            const response = await axios.get(`http://147.93.20.206:8080/v1/all-bill?p_id=${projectData.p_id}`);
+            const response = await axios.get(`https://api.slnkoprotrac.com/v1/all-bill?p_id=${projectData.p_id}`);
             console.log('Credit History Response:', response);
   
             const data = response.data?.bill || [];
@@ -285,7 +285,7 @@ const [selectedClients, setSelectedClients] = useState([]);
             console.log("Fetching debit history for p_id:", projectData.p_id);
     
             // Fetch debit history data from the API
-            const response = await axios.get(`http://147.93.20.206:8080/v1/get-subtract-amount?p_id=${projectData.p_id}`);
+            const response = await axios.get(`https://api.slnkoprotrac.com/v1/get-subtract-amount?p_id=${projectData.p_id}`);
     
             // Log the API response to check the returned data
             console.log("Debit History Response:", response.data);
@@ -322,7 +322,7 @@ const [selectedClients, setSelectedClients] = useState([]);
             console.log("Fetching client history for projectData.code:", projectData.code);
     
             // Step 1: Fetch all PO data
-            const poResponse = await axios.get(`http://147.93.20.206:8080/v1/get-all-po`);
+            const poResponse = await axios.get(`https://api.slnkoprotrac.com/v1/get-all-po`);
             console.log("PO Response:", poResponse.data);
     
             const poData = poResponse.data?.data || [];
@@ -334,7 +334,7 @@ const [selectedClients, setSelectedClients] = useState([]);
             console.log("Filtered POs based on projectData.code:", filteredPOs);
     
             // Step 3: Fetch all bills
-            const billResponse = await axios.get(`http://147.93.20.206:8080/v1/all-bill`);
+            const billResponse = await axios.get(`https://api.slnkoprotrac.com/v1/get-all-bill`);
             console.log("Bill Response:", billResponse.data);
     
             const billData = billResponse.data?.data || [];
@@ -494,15 +494,18 @@ const [selectedClients, setSelectedClients] = useState([]);
     </Box>
 
     {/* Table Body */}
-    {creditHistory.map((row, index) => (
-      <Box
-        key={row.id}
-        display="grid"
-        gridTemplateColumns="2fr 2fr 2fr auto"
-        padding="12px"
-        borderBottom="1px solid #ddd"
-        backgroundColor={index % 2 === 0 ? '#fff' : '#f9f9f9'}
-      >
+    {creditHistory
+      .slice() // To avoid mutating the original array
+      .sort((a, b) => new Date(a.cr_date) - new Date(b.cr_date)) // Sort in ascending order of dates
+      .map((row, index) => (
+        <Box
+          key={row.id}
+          display="grid"
+          gridTemplateColumns="2fr 2fr 2fr auto"
+          padding="12px"
+          borderBottom="1px solid #ddd"
+          backgroundColor={index % 2 === 0 ? '#fff' : '#f9f9f9'}
+        >
         <Box>
           {new Date(row.cr_date).toLocaleDateString('en-IN', {
             day: '2-digit',
@@ -587,38 +590,44 @@ const [selectedClients, setSelectedClients] = useState([]);
 
       {/* Table Body */}
       <div>
-        {filteredDebits.length === 0 ? (
-          <div style={{ padding: '10px', textAlign: 'center' }}>No debit history available</div>
-        ) : (
-          filteredDebits.map((row) => (
-            <div
-              key={row.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 2fr 2fr 1fr 1fr 1fr',
-                padding: '10px',
-                borderBottom: '1px solid #ddd',
-              }}
-            >
-              <div>
-                {new Date(row.dbt_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-              </div>
-              <div>{row.pay_mode}</div>
-              <div>{row.paid_for}</div>
-              <div>{row.vendor}</div>
-              <div>₹ {row.amount_paid.toLocaleString('en-IN')}</div>
-              <div>{row.utr}</div>
-              <div>
-                <Checkbox
-                  color="primary"
-                  checked={selectedDebits.includes(row.id)}
-                  onChange={() => handleDebitCheckboxChange(row.id)}
-                />
-              </div>
-            </div>
-          ))
-        )}
+  {filteredDebits
+    .slice() // To avoid mutating the original array
+    .sort((a, b) => new Date(a.dbt_date) - new Date(b.dbt_date)) // Sort by date in ascending order
+    .map((row) => (
+      <div
+        key={row.id}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 2fr 2fr 1fr 1fr 1fr',
+          padding: '10px',
+          borderBottom: '1px solid #ddd',
+        }}
+      >
+        <div>
+          {new Date(row.dbt_date).toLocaleDateString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          })}
+        </div>
+        <div>{row.pay_mode}</div>
+        <div>{row.paid_for}</div>
+        <div>{row.vendor}</div>
+        <div>₹ {row.amount_paid.toLocaleString('en-IN')}</div>
+        <div>{row.utr}</div>
+        <div>
+          <Checkbox
+            color="primary"
+            checked={selectedDebits.includes(row.id)}
+            onChange={() => handleDebitCheckboxChange(row.id)}
+          />
+        </div>
       </div>
+    ))}
+  {filteredDebits.length === 0 && (
+    <div style={{ padding: '10px', textAlign: 'center' }}>No debit history available</div>
+  )}
+</div>
 
       {/* Total Amount Row */}
       <div

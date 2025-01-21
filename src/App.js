@@ -17,7 +17,7 @@ import './App.css';
 // import StandbySummaryForm from './Components/standBy_sumary';
 // import AddUserForm from './Components/add_user';
 // import CreateLeadForm from './Components/create_lead';
-// import CustomerPaymentSummary from './Components/customer_pay_summary';
+import CustomerPaymentSummary from './Components/customer_pay_summary';
 // import EditUserForm from './Components/edit_user';
 // import PaymentDetail from './Components/payment_details';
 // import PaymentRequest from './Components/paymentApproved';
@@ -25,7 +25,7 @@ import './App.css';
 //  import PaymentRequest from './Components/payment_approval';
 // import PoHistoryTable  from './Components/po_history';
 // import BillHistoryTable from './Components/bill_history';
-import VendorBillSummary from './Components/vendor_bill_summary';
+// import VendorBillSummary from './Components/vendor_bill_summary';
 
 
 function App() {
@@ -45,14 +45,14 @@ function App() {
      {/* <StandbySummaryForm/> */}
      {/* <AddUserForm/> */}
      {/* <CreateLeadForm /> */}
-     {/* <CustomerPaymentSummary/> */}
+     <CustomerPaymentSummary/>
      {/* <EditUserForm/> */}
      {/* <PaymentDetail/> */}
      {/* <PaymentRequest/> */}
      {/* <PaymentRequest/> */}
      {/* <PoHistoryTable/> */}
      {/* <BillHistoryTable/> */}
-     <VendorBillSummary/>
+     {/* <VendorBillSummary/> */}
     </div>
   );
 }
