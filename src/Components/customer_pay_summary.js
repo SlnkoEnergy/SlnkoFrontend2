@@ -1,3 +1,4 @@
+
 import React, { useState,useEffect } from 'react';
 import {
   Container,
@@ -110,7 +111,7 @@ const [selectedClients, setSelectedClients] = useState([]);
   const [debitSearch, setDebitSearch] = useState('');
   const [selectedDebits, setSelectedDebits] = useState([]);
   const [filteredDebits, setFilteredDebits] = useState([]);
-
+  const [selectedDate, setSelectedDate] = useState(''); // State for date filter
   const totalCredited = creditHistory.reduce((sum, item) => sum + item.cr_amount, 0);
 
   const totalDebited = debitHistory.reduce((sum, item) => sum + item.amount_paid, 0);
@@ -314,6 +315,31 @@ const [selectedClients, setSelectedClients] = useState([]);
         console.log("No p_id found in projectData");
       }
     }, [projectData.p_id]); // Trigger when projectData.p_id changes 
+
+
+
+    // Handle Date Filter
+  const handleDateFilter = (event) => {
+    const dateValue = event.target.value; // Format: YYYY-MM-DD
+    setSelectedDate(dateValue);
+
+    applyFilters(debitSearch, dateValue);
+  };
+
+  // Apply Combined Filters
+  const applyFilters = (searchValue, dateValue) => {
+    const filteredData = debitHistory.filter((item) => {
+      const matchesSearch =
+        (item.paid_for && item.paid_for.toLowerCase().includes(searchValue)) ||
+        (item.vendor && item.vendor.toLowerCase().includes(searchValue));
+      const matchesDate = dateValue
+        ? new Date(item.dbt_date).toISOString().split('T')[0] === dateValue
+        : true;
+      return matchesSearch && matchesDate;
+    });
+
+    setFilteredDebits(filteredData);
+  };
     
     useEffect(() => {
       if (projectData.code) {
@@ -558,6 +584,13 @@ const [selectedClients, setSelectedClients] = useState([]);
         onChange={handleSearchDebit}
         style={{ width: '250px' }}
       />
+       {/* Date Filter Input */}
+       <Input
+          type="date"
+          value={selectedDate}
+          onChange={handleDateFilter}
+          style={{ width: '200px' }}
+        />
       <Button
         variant="contained"
         color="error"
