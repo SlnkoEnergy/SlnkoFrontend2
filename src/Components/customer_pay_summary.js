@@ -54,26 +54,86 @@ const Customer_Payment_Summary = () => {
   const currentDay = today.toLocaleDateString('en-US', dayOptions);
   const currentDate = today.toLocaleDateString('en-US', dateOptions);
 
-    const handleExportCSV = () => {
-      const csvData = [
-        ["S.No.", "Balance Summary", "Value"],
-        ["1", "Total Received", crAmtNum],
-        ["2", "Total Return", totalReturn],
-        ["3", "Net Balance [(1)-(2)]", netBalance],
-        ["4", "Total Advance Paid to vendors", totalAdvanceValue],
-        ["5", "Balance With Slnko [(3)-(4)]", balanceSlnko],
-        ["6", "Total PO Value", totalPoValue],
-        ["7", "Total Billed Value", totalBilled],
-        ["8", "Net Advance Paid [(4)-(7)]", netAdvance],
-        ["9", "Balance Payable to vendors [(6)-(7)-(8)]", balancePayable],
-        ["10", "TCS as applicable", tcs],
-        ["11", "Balance Required [(5)-(9)-(10)]", balanceRequired],
-      ];
+  const handleExportCSV = () => {
+    // Summary section
+    const summaryData = [
+      ["S.No.", "Balance Summary", "Value"],
+      ["1", "Total Received", crAmtNum],
+      ["2", "Total Return", totalReturn],
+      ["3", "Net Balance [(1)-(2)]", netBalance],
+      ["4", "Total Advance Paid to Vendors", totalAdvanceValue],
+      ["5", "Balance with Slnko [(3)-(4)]", balanceSlnko],
+      ["6", "Total PO Value", totalPoValue],
+      ["7", "Total Billed Value", totalBilled],
+      ["8", "Net Advance Paid [(4)-(7)]", netAdvance],
+      ["9", "Balance Payable to Vendors [(6)-(7)-(8)]", balancePayable],
+      ["10", "TCS as Applicable", tcs],
+      ["11", "Balance Required [(5)-(9)-(10)]", balanceRequired],
+    ];
   
-      const csvContent = csvData.map((row) => row.join(",")).join("\n");
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      saveAs(blob, "CustomerPaymentSummary.csv");
-    };
+    // Credit history section
+    const creditHistoryData = creditHistory.map((item, index) => [
+      index + 1,
+      item.cr_date,
+      item.cr_mode,
+      item.cr_amount,
+    ]);
+    const creditHistoryHeaders = ["S.No.","Credit Date", "Credit Mode", "Credited Amount (₹)"];
+  
+    // Debit history section
+    const debitHistoryData = debitHistory.map((item, index) => [
+      index + 1,
+      item.dbt_date,
+      item.paid_for,
+      item.vendor,
+      item.amount_paid,
+      item.utr,
+    ]);
+    const debitHistoryHeaders = ["S.No.", "Date", "Paid For", "Paid To", "Amount (₹)", "UTR"];
+  
+    // Client history section
+    const clientHistoryData = clientHistory.map((item, index) => [
+      index + 1,
+      item.po_number,
+      item.vendor,
+      item.item,
+      item.po_value,
+      item.amountPaid,
+      item.item,
+      item.billedValue,
+    ]);
+    const clientHistoryHeaders = ["PO Number", "Vendor", "Item Name", "PO Value (₹)", "Advance Paid (₹)", "Remaining Amount (₹)", "Total Billed Value (₹)"];
+  
+    // Combine all sections into one CSV
+    const csvData = [
+      // Summary section
+      ...summaryData.map((row) => row.join(",")),
+      "", // Empty row for spacing
+  
+      // Credit history section
+      "Credit History",
+      creditHistoryHeaders.join(","),
+      ...creditHistoryData.map((row) => row.join(",")),
+      "", // Empty row for spacing
+  
+      // Debit history section
+      "Debit History",
+      debitHistoryHeaders.join(","),
+      ...debitHistoryData.map((row) => row.join(",")),
+      "", // Empty row for spacing
+  
+      // Client history section
+      "Client History",
+      clientHistoryHeaders.join(","),
+      ...clientHistoryData.map((row) => row.join(",")),
+    ].join("\n");
+  
+    // Create and save the CSV file
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "CustomerPaymentSummary.csv");
+  };
+  
+  
    
     
  
@@ -85,7 +145,7 @@ const Customer_Payment_Summary = () => {
 const [filteredClients, setFilteredClients] = useState([]);
 const [clientSearch, setClientSearch] = useState('');
 const [selectedClients, setSelectedClients] = useState([]);
-
+const [selectedDateCredit, setSelectedDateCredit] = useState(''); // State for date filter
   const adjustmentHistory = [
     {
       id: 1,
@@ -149,10 +209,10 @@ const [selectedClients, setSelectedClients] = useState([]);
     }
   };
 
-  const handleDelete = () => {
-    // Logic to delete selected items
-    console.log("Deleting selected adjustments", selectedAdjustments);
-  };
+  
+  
+  
+  
 
   const handleCheckboxChange = (id) => {
     setSelectedCredits((prev) =>
@@ -278,6 +338,13 @@ const [selectedClients, setSelectedClients] = useState([]);
         fetchCreditHistory();
     }
     }, [projectData.p_id]);
+
+    const handleDateFilterCredit = (event) => {
+      const dateValue = event.target.value; // Format: YYYY-MM-DD
+      setSelectedDateCredit(dateValue);
+  
+      applyFilters(debitSearch, dateValue);
+    };
   
     useEffect(() => {
       if (projectData.p_id) {
@@ -316,7 +383,52 @@ const [selectedClients, setSelectedClients] = useState([]);
       }
     }, [projectData.p_id]); // Trigger when projectData.p_id changes 
 
-
+    const handleDelete = async () => {
+      try {
+        console.log("Selected debits for deletion:", selectedDebits);
+    
+        if (selectedDebits.length === 0) {
+          console.log("No debits selected for deletion.");
+          alert("Please select at least one debit to delete.");
+          return;
+        }
+    
+        // Loop through each selected debit to delete them individually
+        for (const debitId of selectedDebits) {
+          // Log the API call details for each _id
+          console.log(`Initiating delete API call for _id: ${debitId}`);
+    
+          // API call to delete the specific debit record using _id in the URL
+          const response = await axios.delete(`https://api.slnkoprotrac.com/v1/delete-debit-money/${debitId}`);
+    
+          // Log the response from the API
+          console.log(`Delete API Response for _id ${debitId}:`, response.data);
+    
+          if (response.data.success) {
+            console.log("Delete successful for _id:", debitId);
+    
+            // Remove the deleted debit from the history list
+            setDebitHistory((prevHistory) => prevHistory.filter(item => item._id !== debitId));
+            setFilteredDebits((prevFiltered) => prevFiltered.filter(item => item._id !== debitId));
+          } else {
+            console.log("Delete failed for _id:", debitId);
+            alert(`Failed to delete debit with _id: ${debitId}`);
+          }
+        }
+    
+        // Clear selected debits after deletion
+        setSelectedDebits([]);
+        alert("Selected debits have been deleted successfully.");
+    
+      } catch (error) {
+        console.error("Error during deletion process:", error);
+        alert("An error occurred while deleting selected debits.");
+      }
+    };
+    
+    
+    
+    
 
     // Handle Date Filter
   const handleDateFilter = (event) => {

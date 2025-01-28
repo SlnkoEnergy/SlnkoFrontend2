@@ -89,10 +89,10 @@ function PaymentRequest() {
       setLoading(true);
       try {
         const [paymentResponse, projectResponse] = await Promise.all([
-          axios.get("/get-pay-summary", {
+          axios.get("https://api.slnkoprotrac.com/v1/get-pay-summary", {
             params: { approved: "Pending" },
           }),
-          axios.get("/get-all-project"),
+          axios.get("https://api.slnkoprotrac.com/v1/get-all-project"),
         ]);
         const pendingPayments = paymentResponse.data.data.filter(
           (payment) => payment.approved === "Pending"
