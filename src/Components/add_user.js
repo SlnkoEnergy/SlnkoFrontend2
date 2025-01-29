@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
+  Input,
   Typography,
   Button,
-  Paper,
+  Sheet,
   Select,
-  MenuItem,
-  InputLabel,
+  Option,
   FormControl,
+  FormLabel,
   Grid,
   Divider,
-} from "@mui/material";
+} from "@mui/joy";
 import axios from "axios";
 
-import Img11 from "../Assets/add_user.png"; // Replace with the actual path to your image.
+import Img11 from "../Assets/add_user.png";
 
 const AddUserForm = () => {
   const [formData, setFormData] = useState({
@@ -27,38 +27,25 @@ const AddUserForm = () => {
     password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e, newValue) => {
+    const { name, value } = e.target || { name: e, value: newValue };
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      emp_id: formData.emp_id,
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      role: formData.role,
-      department: formData.department,
-      password: formData.password,
-    };
-
+    const payload = { ...formData };
     try {
       const response = await axios.post(
         "http://147.93.20.206:8080/v1/user-registration",
         payload,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
       console.log("User registered successfully:", response.data);
       alert("User registered successfully!");
-
-      // Clear the form data
       setFormData({
         emp_id: "",
         name: "",
@@ -76,7 +63,6 @@ const AddUserForm = () => {
 
   const handleBack = () => {
     console.log("Back button clicked.");
-    // Add navigation logic here if needed
   };
 
   return (
@@ -87,24 +73,18 @@ const AddUserForm = () => {
         alignItems: "center",
         minHeight: "100vh",
         background: "linear-gradient(-45deg, #e7eaf6, #a2a8d3, #38598b)",
-        backgroundSize: "400% 400%",
-        animation: "gradient 15s ease infinite",
-        "@keyframes gradient": {
-          "0%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-          "100%": { backgroundPosition: "0% 50%" },
-        },
         padding: "20px",
       }}
     >
-      <Paper
+      <Sheet
+        variant="outlined"
         sx={{
           maxWidth: 600,
           width: "100%",
           padding: "30px",
           borderRadius: "10px",
-          boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)",
-          backgroundColor: "#e2e8f5",
+          boxShadow: "lg",
+          bgcolor: "background.surface",
         }}
       >
         <Box textAlign="center" mb={3}>
@@ -115,7 +95,6 @@ const AddUserForm = () => {
               justifyContent: "center",
               alignItems: "center",
               border: "2px solid #5791ff",
-              backgroundColor: "#f9f9f9",
               borderRadius: "50%",
               maxWidth: "90px",
               margin: "auto",
@@ -127,157 +106,75 @@ const AddUserForm = () => {
               style={{ borderRadius: "4px", maxHeight: "70px" }}
             />
           </Box>
-          <Typography
-            variant="h4"
-            sx={{
-              fontFamily: "Bona Nova SC, serif",
-              textTransform: "uppercase",
-              color: "#12263f",
-              fontWeight: 800,
-            }}
-          >
+          <Typography level="h3" sx={{ textTransform: "uppercase", fontWeight: 800 }}>
             Add User
           </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ fontWeight: 700 }}
-          >
+          <Typography level="body2" sx={{ fontWeight: 700 }}>
             Add New User
           </Typography>
-          <Divider sx={{ width: "50%", margin: "10px auto", fontWeight: "bold" }} />
+          <Divider sx={{ width: "50%", margin: "10px auto" }} />
         </Box>
 
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Employee ID"
-                name="emp_id"
-                value={formData.emp_id}
-                onChange={handleChange}
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="User Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="User Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Contact Number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                variant="outlined"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" required>
-                <InputLabel>User Role</InputLabel>
-                <Select
-                  value={formData.role}
-                  onChange={handleChange}
-                  name="role"
-                  label="User Role"
-                >
-                  <MenuItem value="" disabled>
-                    Select Role
-                  </MenuItem>
-                  <MenuItem value="Front-end Developer">Front-end Developer</MenuItem>
-                  <MenuItem value="Back-end Developer">Back-end Developer</MenuItem>
-                  <MenuItem value="Manager">Manager</MenuItem>
-                  <MenuItem value="Assistant Manager">Assistant Manager</MenuItem>
-                  <MenuItem value="Executive">Executive</MenuItem>
-                  <MenuItem value="Executive Initial">Executive Initial</MenuItem>
-                  <MenuItem value="Executive Follow">Executive Follow</MenuItem>
-                  <MenuItem value="Executive Warm">Executive Warm</MenuItem>
-                  <MenuItem value="Eng Executive One">Eng Executive One</MenuItem>
-                  <MenuItem value="Eng Executive Two">Eng Executive Two</MenuItem>
-                  <MenuItem value="SCM Executive One">SCM Executive One</MenuItem>
-                  <MenuItem value="SCM Executive Two">SCM Executive Two</MenuItem>
-                  <MenuItem value="Project Engineer">Project Engineer</MenuItem>
-                  <MenuItem value="Team Lead">Team Lead</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" required>
-                <InputLabel>Department</InputLabel>
-                <Select
-                  value={formData.department}
-                  onChange={handleChange}
-                  name="department"
-                  label="Department"
-                >
-                  <MenuItem value="" disabled>
-                    Select Department
-                  </MenuItem>
-                  <MenuItem value="IT">IT Department</MenuItem>
-                  <MenuItem value="Engineering">Engineering</MenuItem>
-                  <MenuItem value="SCM">SCM</MenuItem>
-                  <MenuItem value="BD">BD</MenuItem>
-                  <MenuItem value="Operation">Operation</MenuItem>
-                  <MenuItem value="Project">Project</MenuItem>
-                  <MenuItem value="Accounts">Accounts</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                variant="outlined"
-                required
-              />
-            </Grid>
+            {[
+              { label: "Employee ID", name: "emp_id" },
+              { label: "User Name", name: "name" },
+              { label: "User Email", name: "email", type: "email" },
+              { label: "Contact Number", name: "phone" },
+              { label: "Password", name: "password", type: "password" },
+            ].map((field) => (
+              <Grid item xs={12} key={field.name}>
+                <FormControl fullWidth>
+                  <FormLabel>{field.label}</FormLabel>
+                  <Input
+                    name={field.name}
+                    type={field.type || "text"}
+                    value={formData[field.name]}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormControl>
+              </Grid>
+            ))}
+
+{["role", "department"].map((field) => (
+  <Grid item xs={12} key={field}>
+    <FormControl fullWidth>
+      <FormLabel>{field === "role" ? "User Role" : "Department"}</FormLabel>
+      <Select
+        name={field}
+        value={formData[field]}
+        onChange={(e, newValue) => handleChange(field, newValue)}
+        required
+      >
+        {(field === "role"
+          ? ["Front-end Developer", "Back-end Developer", "Manager", "Assistant Manager", "Executive", "Executive Initial",
+             "Executive Follow", "Executive Warm", "Eng Executive One", "Eng Executive Two",
+              "SCM Executive One", "SCM Executive Two", "Project Engineer", "Team Lead" ]
+          : ["IT", "Engineering", "SCM", "BD", "Operation", "Project", "Accounts"]
+        ).map((option) => (
+          <Option key={option} value={option}>
+            {option}
+          </Option>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
+))}
+
+
             <Grid item xs={12} textAlign="center">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ marginRight: 2 }}
-              >
+              <Button type="submit" variant="solid" color="primary" sx={{ marginRight: 2 }}>
                 Submit
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleBack}
-              >
+              <Button variant="outlined" color="neutral" onClick={handleBack}>
                 Back
               </Button>
             </Grid>
           </Grid>
         </form>
-      </Paper>
+      </Sheet>
     </Box>
   );
 };

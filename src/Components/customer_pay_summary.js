@@ -717,7 +717,7 @@ const [selectedDateCredit, setSelectedDateCredit] = useState(''); // State for d
       {/* Table Header */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr 2fr 1fr 1fr 1fr', backgroundColor: '#f5f5f5', padding: '10px' }}>
         <div>Debit Date</div>
-        <div>Debit Mode</div>
+        <div>PO Number</div>
         <div>Paid For</div>
         <div>Paid To</div>
         <div>Amount (₹)</div>
