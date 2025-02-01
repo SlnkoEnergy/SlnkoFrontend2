@@ -15,7 +15,7 @@ import './App.css';
 // import PaymentRequestSummary from './Components/payment_request_summary';
 // import UpdateProject from './Components/edit_project';
 // import StandbySummaryForm from './Components/standBy_sumary';
-import AddUserForm from './Components/add_user';
+// import AddUserForm from './Components/add_user';
 // import CreateLeadForm from './Components/create_lead';
 // import CustomerPaymentSummary from './Components/customer_pay_summary';
 // import EditUserForm from './Components/edit_user';
@@ -26,6 +26,7 @@ import AddUserForm from './Components/add_user';
 // import PoHistoryTable  from './Components/po_history';
 // import BillHistoryTable from './Components/bill_history';
 // import VendorBillSummary from './Components/vendor_bill_summary';
+import CommercialForm from './Components/Commercial_Offer/commercial_form';
 
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
      {/* <PaymentRequestSummary/> */}
      {/* <UpdateProject/> */}
      {/* <StandbySummaryForm/> */}
-     <AddUserForm/>
+     {/* <AddUserForm/> */}
      {/* <CreateLeadForm /> */}
      {/* <CustomerPaymentSummary/> */}
      {/* <EditUserForm/> */}
@@ -53,6 +54,7 @@ function App() {
      {/* <PoHistoryTable/> */}
      {/* <BillHistoryTable/> */}
      {/* <VendorBillSummary/> */}
+     <CommercialForm/>
     </div>
   );
 }
