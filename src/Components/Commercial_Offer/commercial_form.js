@@ -1,24 +1,92 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import { Box, Button, Grid, Input, Select, Option, Typography, FormControl, FormLabel } from "@mui/joy";
+import axios from "axios";
 
 const CommercialForm = () => {
-    const [offerId, setOfferId] = useState("");
-    const [clientName, setClientName] = useState("");
-    const [villageName, setVillageName] = useState("");
-    const [districtName, setDistrictName] = useState("");
-    const [state, setState] = useState(""); // For state selection
-    const [pinCode, setPinCode] = useState("");
-    const [plantAcCapacity, setPlantAcCapacity] = useState("");
-    const [dcOverloading, setDcOverloading] = useState("");
-    const [plantDcCapacity, setPlantDcCapacity] = useState("");
-    const [scheme, setScheme] = useState("");
-    const [schemeComponent, setSchemeComponent] = useState("");
-    const [rate, setRate] = useState("");
-    const [timeline, setTimeline] = useState("");
-    const [preparedBy, setPreparedBy] = useState("");
-    const [moduleType, setModuleType] = useState("");
-    const [moduleCapacity, setModuleCapacity] = useState("");
-    
+    const [formData, setFormData] = useState({
+        offer_id: "",
+        client_name: "",
+        village: "",
+        district: "",
+        state: "",
+        pincode: "",
+        ac_capacity: "",
+        dc_overloading: "",
+        dc_capacity: "",
+        scheme: "",
+        component: "",
+        rate: "",
+        timeline: "",
+        prepared_by: "",
+        module_type: "",
+        module_capacity: "",
+        inverter_capacity: "",
+        evacuation_voltage: "",
+        module_orientation: "",
+        transmission_length: "",
+        transformer: "",
+        column_type: "",
+
+
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState({ type: "", text: "" });
+    const [submitTrigger, setSubmitTrigger] = useState(false);
+
+   // Handle form submission
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting form data:", formData);
+    setLoading(true);
+    try {
+      const response = await axios.post("https://api.slnkoprotrac.com/v1/create-offer", formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log("Response from server:", response);
+      if (response.status === 200 || response.status === 201) {
+        if (response.data.data && response.data.data._id) {
+          console.log("Generated _id:", response.data.data._id);
+        }
+        setMessage("Offer created successfully!");
+        // Reset the form
+        setFormData({
+          offer_id: "",
+          client_name: "",
+          village: "",
+          district: "",
+          state: "",
+          pincode: "",
+          ac_capacity: "",
+          dc_overloading: "",
+          dc_capacity: "",
+          scheme: "",
+          component: "",
+          rate: "",
+          timeline: "",
+          prepared_by: "",
+          module_type: "",
+          module_capacity: "",
+          inverter_capacity: "",
+          evacuation_voltage: "",
+          module_orientation: "",
+          transmission_length: "",
+          transformer: "",
+          column_type: "",
+        });
+      } else {
+        console.error("Unexpected response status:", response.status);
+        setMessage("Failed to create offer. Try again.");
+      }
+    } catch (error) {
+      console.error("Error creating offer:", error.response?.data || error.message);
+      setMessage("Failed to create offer. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+      
+
 
     const calculateDcCapacity = (ac, dc) => {
         const acValue = parseFloat(ac);
@@ -28,51 +96,58 @@ const CommercialForm = () => {
         }
         return "";
     };
+      
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        if (name === "plantAcCapacity") setPlantAcCapacity(value);
-        if (name === "dcOverloading") setDcOverloading(value);
-        setPlantDcCapacity(calculateDcCapacity(name === "plantAcCapacity" ? value : plantAcCapacity, name === "dcOverloading" ? value : dcOverloading));
+    const handleChange = (e, newValue) => {
+        if (e && e.target) {
+            // Handles text input fields
+            const { name, value } = e.target;
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+            }));
+        } else if (newValue !== undefined) {
+            // Handles MUI Select components (pass name explicitly)
+            setFormData(prev => ({
+                ...prev,
+                [e]: newValue, // Ensure 'e' is the name of the field
+            }));
+        }
     };
-
-    // Handle Select component change
+    
+    
     const handleSelectChange = (name, newValue) => {
-        if (name === "state") {
-            setState(newValue);
-        }
-        if (name === "schemeComponent") setSchemeComponent(newValue); // Handle Scheme Component
-        // Add other select fields handling if needed
-        if (name === "moduleType") {
-            setModuleType(newValue);
-            setModuleCapacity(""); // Reset module capacity when module type changes
-        }
+        setFormData(prev => ({
+            ...prev,
+            [name]: newValue
+        }));
     };
+    
 
     const getModuleCapacityOptions = () => {
-        if (moduleType === "P Type") return ["555", "550"];
-        if (moduleType === "N Type") return ["580", "585"];
+        if (formData.module_type === "P Type") return ["555", "550"];
+        if (formData.module_type === "N Type") return ["580", "585"];
         return [];
     };
+
+    useEffect(() => {
+        const updatedDcCapacity = calculateDcCapacity(formData.ac_capacity, formData.dc_overloading);
+        setFormData(prev => ({ ...prev, dc_capacity: updatedDcCapacity }));
+      }, [formData.ac_capacity, formData.dc_overloading]);
+      
 
 
     return (
         <Box sx={{ maxWidth: 800, mx: "auto", p: 3, borderRadius: "md", boxShadow: "lg", bgcolor: "background.paper" }}>
             <Typography level="h3" mb={2} sx={{ textAlign: "center", fontWeight: "bold", color: "primary.main" }}>Commercial Offer Form</Typography>
             <Grid container spacing={2}>
-                {/* Offer ID */}
-                <Grid xs={12} sm={6}>
-                    <FormControl>
-                        <FormLabel>Offer ID</FormLabel>
-                        <Input type="text" name="offerId" value={offerId} onChange={(e) => setOfferId(e.target.value)} placeholder="Enter Offer ID" />
-                    </FormControl>
-                </Grid>
+               
 
                 {/* Client Name */}
-                <Grid xs={12} sm={6}>
+                <Grid xs={12} sm={12}>
                     <FormControl>
                         <FormLabel>Client Name</FormLabel>
-                        <Input type="text" name="clientName" value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="Enter Client Name" />
+                        <Input type="text" name="client_name" value={formData.client_name} onChange={handleChange} placeholder="Enter Client Name" />
                     </FormControl>
                 </Grid>
 
@@ -80,26 +155,26 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Village Name</FormLabel>
-                        <Input type="text" name="villageName" value={villageName} onChange={(e) => setVillageName(e.target.value)} placeholder="Enter Village Name" />
+                        <Input type="text" name="village" value={formData.village} onChange={handleChange} placeholder="Enter Village Name" />
                     </FormControl>
                 </Grid>
 
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>District Name</FormLabel>
-                        <Input type="text" name="districtName" value={districtName} onChange={(e) => setDistrictName(e.target.value)} placeholder="Enter District Name" />
+                        <Input type="text" name="district" value={formData.district} onChange={handleChange} placeholder="Enter District Name" />
                     </FormControl>
                 </Grid>
 
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Select a State</FormLabel>
-                        <Select
-                            name="state"
-                            value={state}
-                            onChange={(e, newValue) => handleSelectChange("state", newValue)}
-                            placeholder="Select State"
-                        >
+                        <Select 
+  name="state"
+  value={formData.state}
+  onChange={(e, newValue) => handleSelectChange("state", newValue)}
+  placeholder="Select State"
+>
                             <Option value="Andhra Pradesh">Andhra Pradesh</Option>
                             <Option value="Arunachal Pradesh">Arunachal Pradesh</Option>
                             <Option value="Assam">Assam</Option>
@@ -145,7 +220,7 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Pin Code</FormLabel>
-                        <Input type="text" name="pinCode" value={pinCode} onChange={(e) => setPinCode(e.target.value)} placeholder="Enter Pin Code" />
+                        <Input type="text" name="pincode" value={formData.pincode} onChange={handleChange} placeholder="Enter Pin Code" />
                     </FormControl>
                 </Grid>
 
@@ -153,26 +228,32 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Scheme</FormLabel>
-                        <Input type="text" name="scheme" value={scheme} onChange={(e) => setScheme(e.target.value)} placeholder="Scheme" />
+                        <Input type="text" name="scheme" value={formData.scheme} onChange={handleChange} placeholder="Scheme" />
                     </FormControl>
                 </Grid>
 
                 {/* Component */}
-                <Grid xs={12} sm={6}>
-                    <FormControl>
-                        <FormLabel>Component</FormLabel>
-                        <Select name="schemeComponent" value={schemeComponent} onChange={(e, newValue) => handleSelectChange("schemeComponent", newValue)} placeholder="Component">
-                            <Option value="A">A</Option>
-                            <Option value="B">B</Option>
-                        </Select>
-                    </FormControl>
-                </Grid>
+<Grid item xs={12} sm={6}>
+  <FormControl>
+    <FormLabel>Component</FormLabel>
+    <Select
+      name="component"
+      value={formData.component}
+      onChange={(e, newValue) => handleSelectChange("component", newValue)}
+      placeholder="Component"
+    >
+      <Option value="A">A</Option>
+      <Option value="B">B</Option>
+    </Select>
+  </FormControl>
+</Grid>
+
 
                 {/* Rate */}
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Rate</FormLabel>
-                        <Input type="number" name="rate" value={rate} onChange={(e) => setRate(e.target.value)} placeholder="Rate" />
+                        <Input type="number" name="rate" value={formData.rate} onChange={handleChange} placeholder="Rate" />
                     </FormControl>
                 </Grid>
 
@@ -180,7 +261,7 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Timeline</FormLabel>
-                        <Input type="text" name="timeline" value={timeline} onChange={(e) => setTimeline(e.target.value)} placeholder="Timeline" />
+                        <Input type="text" name="timeline" value={formData.timeline} onChange={handleChange} placeholder="Timeline" />
                     </FormControl>
                 </Grid>
 
@@ -190,7 +271,7 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>Plant AC Capacity (MW)</FormLabel>
-                        <Input type="number" name="plantAcCapacity" value={plantAcCapacity} onChange={handleInputChange} placeholder="Enter Plant AC Capacity" />
+                        <Input type="number" name="ac_capacity" value={formData.ac_capacity} onChange={handleChange} placeholder="Enter Plant AC Capacity" />
                     </FormControl>
                 </Grid>
 
@@ -198,41 +279,55 @@ const CommercialForm = () => {
                 <Grid xs={12} sm={6}>
                     <FormControl>
                         <FormLabel>DC Overloading (%)</FormLabel>
-                        <Input type="number" name="dcOverloading" value={dcOverloading} onChange={handleInputChange} placeholder="Enter DC Overloading (%)" />
+                        <Input type="number" name="dc_overloading" value={formData.dc_overloading} onChange={handleChange} placeholder="Enter DC Overloading (%)" />
                     </FormControl>
                 </Grid>
 
-                {/* Plant DC Capacity */}
-                <Grid xs={12} sm={6}>
-                    <FormControl>
-                        <FormLabel>Plant DC Capacity (MWp)</FormLabel>
-                        <Input type="text" name="plantDcCapacity" value={plantDcCapacity} readOnly placeholder="Calculated Automatically" />
-                    </FormControl>
-                </Grid>
+               {/* Plant DC Capacity */}
+<Grid item xs={12} sm={6}>
+  <FormControl>
+    <FormLabel>Plant DC Capacity (MWp)</FormLabel>
+    <Input
+      type="text"
+      name="dc_capacity"
+      value={formData.dc_capacity}
+      readOnly
+      placeholder="Calculated Automatically"
+    />
+  </FormControl>
+</Grid>
+
 
                 {/* Transmission Line Length */}
-                {[{ label: "Transmission Line Length (km)", name: "transmissionLength" }].map((field, index) => (
-                    <Grid xs={12} sm={6} key={index}>
-                        <FormControl>
-                            <FormLabel>{field.label}</FormLabel>
-                            <Input type="number" name={field.name} placeholder={`Enter ${field.label}`} />
-                        </FormControl>
-                    </Grid>
-                ))}
+{[{ label: "Transmission Line Length (km)", name: "transmission_length" }].map((field, index) => (
+  <Grid item xs={12} sm={6} key={index}>
+    <FormControl>
+      <FormLabel>{field.label}</FormLabel>
+      <Input
+        type="number"
+        name={field.name}
+        placeholder={`Enter ${field.label}`}
+        value={formData[field.name] || ""}  // Bind the value from state
+        onChange={handleChange}            // Ensure changes are captured in state
+      />
+    </FormControl>
+  </Grid>
+))}
+
 
                 {/* Dropdown fields */}
                 {[{
                     label: "Module Orientation",
-                    name: "moduleOrientation",
+                    name: "module_orientation",
                     options: ["Landscape", "Portrait", "Agrivoltaic Dropdown"]
                 }    
                 ,{
                     label: "Evacuation Voltage Level (kV)",
-                    name: "evacuationVoltage",
+                    name: "evacuation_voltage",
                     options: [11, 33]
                 }, {
                     label: "Inverter Capacity (kVA)",
-                    name: "inverterCapacity",
+                    name: "inverter_capacity",
                     options: [275, 295, 302]
                 }, {
                     label: "Transformer",
@@ -257,18 +352,50 @@ const CommercialForm = () => {
                     
                 ))}
 
-<Grid xs={12} sm={6}><FormControl><FormLabel>Module Type</FormLabel><Select name="moduleType" value={moduleType} onChange={(e, newValue) => handleSelectChange("moduleType", newValue)} placeholder="Select Module Type"><Option value="P Type">P Type</Option><Option value="N Type">N Type</Option></Select></FormControl></Grid>
-<Grid xs={12} sm={6}><FormControl><FormLabel>Module Capacity</FormLabel><Select name="moduleCapacity" value={moduleCapacity} onChange={(e, newValue) => setModuleCapacity(newValue)} placeholder="Select Module Capacity" disabled={!moduleType}>{getModuleCapacityOptions().map(cap => <Option key={cap} value={cap}>{cap}</Option>)}</Select></FormControl></Grid>
+<Grid xs={12} sm={6}><FormControl><FormLabel>Module Type</FormLabel><Select name="module_type" value={formData.module_type} onChange={(e, newValue) => handleChange("module_type", newValue)} placeholder="Select Module Type"><Option value="P Type">P Type</Option><Option value="N Type">N Type</Option></Select></FormControl></Grid>
+<Grid xs={12} sm={6}>
+  <FormControl>
+    <FormLabel>Module Capacity</FormLabel>
+    <Select 
+      name="module_capacity" 
+      value={formData.module_capacity} 
+      onChange={(e, newValue) => handleSelectChange("module_capacity", newValue)} 
+      placeholder="Select Module Capacity" 
+      disabled={!formData.module_type}
+    >
+      {getModuleCapacityOptions().map(cap => (
+        <Option key={cap} value={cap}>{cap}</Option>
+      ))}
+    </Select>
+  </FormControl>
+</Grid>
                   {/* Prepared By */}
                   <Grid xs={12} sm={12}>
                     <FormControl>
                         <FormLabel>Prepared By</FormLabel>
-                        <Input type="text" name="preparedBy" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} placeholder="Prepared By" />
+                        <Input type="text" name="prepared_by" value={formData.prepared_by} onChange={handleChange} placeholder="Prepared By" />
                     </FormControl>
                 </Grid>
 
             </Grid>
-            <Button sx={{ mt: 2, width: "100%" }} variant="solid">Submit</Button>
+            <Box
+  component="form"
+  onSubmit={handleSubmit}
+  sx={{
+    maxWidth: 800,
+    mx: "auto",
+    p: 3,
+    borderRadius: "md",
+    boxShadow: "lg",
+    bgcolor: "background.paper",
+  }}
+>
+  {/* Your form fields here */}
+  <Button type="submit" sx={{ mt: 2, width: "100%" }} variant="solid" disabled={loading}>
+    {loading ? "Submitting..." : "Submit"}
+  </Button>
+</Box>
+
         </Box>
     );
 };

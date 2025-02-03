@@ -1,0 +1,37 @@
+
+@media print {
+    .logo-img {
+      
+      margin-left: 0 !important;
+      margin-right: 40px !important;
+      width: 250px !important;
+      height: 250px !important;
+    }
+  }
+  
+  .table-header {
+    width: 100%;
+    border-collapse: collapse; /* Ensures proper table structure */
+    table-layout: auto; 
+    border: 1px solid #dee2e6
+  }
+
+  /* styles.css */
+  .table-header th {
+    vertical-align: middle !important; /* Corrected */
+    font-size: 1rem !important;
+    font-weight: bold;
+    background-color: #0f4C7f !important; 
+    color: #95aac9 !important; 
+    font-family: serif !important;
+    text-align: center !important;
+    border: 1px solid white !important /* Ensures text is centered */
+  }
+  
+  .table-header td {
+    vertical-align: middle !important; /* Corrected */
+    font-size: 0.8rem !important;
+    font-family: sans-serif !important;
+    text-align: center !important;
+    border: 1px solid #dee2e6 /* Ensures text is centered */
+  }
