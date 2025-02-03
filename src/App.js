@@ -26,8 +26,8 @@ import './App.css';
 // import PoHistoryTable  from './Components/po_history';
 // import BillHistoryTable from './Components/bill_history';
 // import VendorBillSummary from './Components/vendor_bill_summary';
-import CommercialForm from './Components/Commercial_Offer/commercial_form';
-// import Reference from './Components/Commercial_Offer/Reference1';
+// import CommercialForm from './Components/Commercial_Offer/commercial_form';
+import Reference from './Components/Commercial_Offer/Reference1';
 
 
 function App() {
@@ -55,8 +55,8 @@ function App() {
      {/* <PoHistoryTable/> */}
      {/* <BillHistoryTable/> */}
      {/* <VendorBillSummary/> */}
-     <CommercialForm/>
-     {/* <Reference/> */}
+     {/* <CommercialForm/> */}
+     <Reference/>
     </div>
   );
 }

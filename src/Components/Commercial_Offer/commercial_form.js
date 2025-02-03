@@ -26,8 +26,6 @@ const CommercialForm = () => {
         transmission_length: "",
         transformer: "",
         column_type: "",
-
-
     });
 
     const [loading, setLoading] = useState(false);

@@ -1,9 +1,103 @@
 import { Box, Grid, Sheet, Table, Typography } from "@mui/joy";
-import React from "react";
+import React, { useState,useEffect  } from "react";
+import axios from 'axios';
 import logo from "../../Assets/slnko_blue_logo.png";
 import "../../CSS/file.css";
 
 const Reference = () => {
+
+  const [offerData, setOfferData] = useState({
+    offer_id: "",
+    client_name: "",
+    village: "",
+    district: "",
+    state: "",
+    pincode: "",
+    ac_capacity: "",
+    dc_overloading: "",
+    dc_capacity: "",
+    scheme: "",
+    component: "",
+    rate: "",
+    timeline: "",
+    prepared_by: "",
+    module_type: "",
+    module_capacity: "",
+    inverter_capacity: "",
+    evacuation_voltage: "",
+    module_orientation: "",
+    transmission_length: "",
+    transformer: "",
+    column_type: ""
+  });
+
+
+   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
+        console.log("API Response:", response.data);
+
+        // Assuming the data returned matches the structure you want
+        const fetchedData = response.data[0]; // Adjust based on the structure of API response
+        
+        // Map API response to the state keys (for simplicity)
+        setOfferData({
+          offer_id: fetchedData.offer_id || "",
+          client_name: fetchedData.client_name || "",
+          village: fetchedData.village || "",
+          district: fetchedData.district || "",
+          state: fetchedData.state || "",
+          pincode: fetchedData.pincode || "",
+          ac_capacity: fetchedData.ac_capacity || "",
+          dc_overloading: fetchedData.dc_overloading || "",
+          dc_capacity: fetchedData.dc_capacity || "",
+          scheme: fetchedData.scheme || "",
+          component: fetchedData.component || "",
+          rate: fetchedData.rate || "",
+          timeline: fetchedData.timeline || "",
+          prepared_by: fetchedData.prepared_by || "",
+          module_type: fetchedData.module_type || "",
+          module_capacity: fetchedData.module_capacity || "",
+          inverter_capacity: fetchedData.inverter_capacity || "",
+          evacuation_voltage: fetchedData.evacuation_voltage || "",
+          module_orientation: fetchedData.module_orientation || "",
+          transmission_length: fetchedData.transmission_length || "",
+          transformer: fetchedData.transformer || "",
+          column_type: fetchedData.column_type || ""
+        });
+
+      } catch (error) {
+        console.error("Error fetching commercial offer data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Run only once on component mount
+
+
+   // Function to determine the specification based on rating
+   const getSpecification = (module_capacity) => {
+    // Use the module_capacity value directly for specification logic
+    if (module_capacity === 580 || module_capacity === 550) {
+      return "Highly efficient Mono PERC M10 cells P-Type, PID Free & UV Resistant, With Inbuilt Bypass Diode, Frame is made of Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag inside module, Product Warranty up to 12 Years and Performance Warranty Up to 27/30 Years.";
+    } else if (module_capacity === 585 || module_capacity === 555) {
+      return "Highly efficient TOPCon Bifacial N-Type, PID Free & UV Resistant, With Inbuilt Bypass Diode, Frame is made of Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag inside module, Product Warranty up to 12 Years and Performance Warranty Up to 27/30 Years.";
+    } else {
+      return "Specification not available.";
+    }
+  };
+
+  const mountingStructure =(module_orientation) => {
+    if(module_orientation === "Portrait" ){
+      return "2PX12";
+    }
+    else{
+      return "4LX6";
+    }
+  };
+  
+
   return (
     <>
       <Grid
@@ -113,17 +207,13 @@ const Reference = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                    {/* First row (SPV Modules) - Dynamic */}
+                    <tr>
                     <td>1.</td>
                     <td>SPV Modules</td>
-                    <td>545 Wp</td>
-                    <td>
-                      Highly efficient Mono PERC M10 cells P-Type, PID Free & UV
-                      Resistant, With Inbuilt Bypass Diode, Frame is made of
-                      Aluminium Anodized With Power Tolerance + 5Wp, With RFID
-                      Tag inside module, Product Warranty up to 12 Years and
-                      Performance Warranty Up to 27/30 Years.
-                    </td>
+                    <td>{offerData.module_capacity} Wp</td>
+                    <td>{getSpecification(offerData.module_capacity)}</td>
+
                     <td>Nos.</td>
                     <td>5214</td>
                     <td>5208</td>
@@ -138,7 +228,7 @@ const Reference = () => {
                   <tr>
                     <td>2.</td>
                     <td>Solar Inverter</td>
-                    <td>295 kVA</td>
+                    <td>{offerData.inverter_capacity} Wp</td>
                     <td>
                       Grid-tied String Inverter, Three Phase, 50 Hz Inverter
                       output shall be at 800V, & IGBT/MOSFET Microprocessor,
@@ -159,7 +249,7 @@ const Reference = () => {
                   <tr>
                     <td>3.</td>
                     <td>Module Mounting Structure</td>
-                    <td>2PX12 Table</td>
+                    <td>{mountingStructure(offerData.module_orientation)}</td>
                     <td></td>
                     <td>Kg</td>
                     <td>69552</td>
