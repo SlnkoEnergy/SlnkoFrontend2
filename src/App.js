@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 
 
+
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -27,7 +28,10 @@ import './App.css';
 // import BillHistoryTable from './Components/bill_history';
 // import VendorBillSummary from './Components/vendor_bill_summary';
 // import CommercialForm from './Components/Commercial_Offer/commercial_form';
-import Reference from './Components/Commercial_Offer/Reference1';
+// import Reference from './Components/Commercial_Offer/Reference1';
+// import Reference2 from './Components/Commercial_Offer/Reference2';
+// import Reference3 from './Components/Commercial_Offer/Reference3';
+import FormComponent from './Components/Commercial_Offer/SCM_costing';
 
 
 function App() {
@@ -56,7 +60,10 @@ function App() {
      {/* <BillHistoryTable/> */}
      {/* <VendorBillSummary/> */}
      {/* <CommercialForm/> */}
-     <Reference/>
+     {/* <Reference/> */}
+     {/* <Reference2/> */}
+     {/* <Reference3/> */}
+     <FormComponent/>
     </div>
   );
 }
