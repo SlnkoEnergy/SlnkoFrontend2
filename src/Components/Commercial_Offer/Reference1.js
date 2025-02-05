@@ -96,7 +96,32 @@ const Reference = () => {
       return "4LX6";
     }
   };
-  
+
+  // ***for 1st row***
+  const internalQuantity1 = offerData.module_capacity
+  ? Math.round((offerData.dc_capacity * 1000 * 1000) / offerData.module_capacity)
+  : 0;
+
+  const PrintQuantity1 = Math.round(internalQuantity1 / 24) * 24;
+
+  // ***for 2nd row***
+  const internalQuantity2 = offerData.ac_capacity
+  ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+  : 0;
+
+  // ***for 3rd row***
+  const InternalQuantity3 = (offerData.module_orientation === "Portrait" ? 23 : 29) * 1000 * offerData.dc_capacity;
+
+   // ***for 5th row***
+   const InternalQuantity5 = offerData.dc_capacity*7000;
+
+   // ***for 6th row***
+   const InternalQuantity6 = internalQuantity2*97.5;
+
+   // ***for 6th row***
+   const InternalQuantity7 = internalQuantity2*20;
+
+
 
   return (
     <>
@@ -215,8 +240,8 @@ const Reference = () => {
                     <td>{getSpecification(offerData.module_capacity)}</td>
 
                     <td>Nos.</td>
-                    <td>5214</td>
-                    <td>5208</td>
+                    <td>{internalQuantity1}</td>
+                    <td>{PrintQuantity1}</td>
                     <td>15</td>
                     <td>INR/Wp</td>
                     <td>45309600</td>
@@ -236,8 +261,8 @@ const Reference = () => {
                       provided by Manufacturer.
                     </td>
                     <td>Nos.</td>
-                    <td>9</td>
-                    <td>9</td>
+                    <td>{internalQuantity2}</td>
+                    <td>{internalQuantity2}</td>
                     <td>460000</td>
                     <td>INR/Nos.</td>
                     <td>4140000</td>
@@ -252,8 +277,8 @@ const Reference = () => {
                     <td>{mountingStructure(offerData.module_orientation)}</td>
                     <td></td>
                     <td>Kg</td>
-                    <td>69552</td>
-                    <td>69552</td>
+                    <td>{InternalQuantity3}</td>
+                    <td>{InternalQuantity3}</td>
                     <td>77</td>
                     <td>INR/Kg</td>
                     <td>5355504</td>
@@ -297,8 +322,8 @@ const Reference = () => {
                       life expectency of 25 years. Flame retardent, UV resistent
                     </td>
                     <td>m</td>
-                    <td>21168</td>
-                    <td>21168</td>
+                    <td>{InternalQuantity5}</td>
+                    <td>{InternalQuantity5}</td>
                     <td>37.5</td>
                     <td>INR/m</td>
                     <td>793800</td>
@@ -319,8 +344,8 @@ const Reference = () => {
                       armouring to be used with minumum 90% area of coverage.
                     </td>
                     <td>m</td>
-                    <td>877.5</td>
-                    <td>877.5</td>
+                    <td>{InternalQuantity6}</td>
+                    <td>{InternalQuantity6}</td>
                     <td>935</td>
                     <td>INR/m</td>
                     <td>820463</td>
@@ -341,8 +366,8 @@ const Reference = () => {
                       armouring to be used with minumum 90% area of coverage.
                     </td>
                     <td>m</td>
-                    <td>180</td>
-                    <td>180</td>
+                    <td>{InternalQuantity7}</td>
+                    <td>{InternalQuantity7}</td>
                     <td>935</td>
                     <td>INR/m</td>
                     <td>168300</td>

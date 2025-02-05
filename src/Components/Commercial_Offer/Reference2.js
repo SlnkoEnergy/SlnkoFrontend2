@@ -31,6 +31,11 @@ const Reference2 = () => {
     column_type: ""
   });
 
+  // ***for 2nd row***
+  const internalQuantity2 = offerData.ac_capacity
+  ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+  : 0;
+
 
      useEffect(() => {
       const fetchData = async () => {
