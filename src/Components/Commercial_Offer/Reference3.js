@@ -30,6 +30,26 @@ const Reference3 = () => {
         column_type: ""
       });
 
+
+       // ***for 2nd row***
+      const internalQuantity2 = offerData.ac_capacity
+      ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+      : 0;
+
+      // ***for 16th row***/
+  const internalQuantity16 = offerData.dc_capacity
+  ? Math.round((offerData.dc_capacity*4+internalQuantity2+10))
+  : 0;
+
+      // ***for 17th row***/
+      const internalQuantity17 = offerData.dc_capacity
+      ? Math.round((offerData.dc_capacity*4+internalQuantity2+10))
+      : 0;
+    
+
+
+
+
         useEffect(() => {
           const fetchData = async () => {
             try {
@@ -81,6 +101,8 @@ const Reference3 = () => {
               return "33 kV, 630/800 amp,25 kA for 3 sec With MFM of CL0.2s";
             }
           };
+
+
 
         return (
             <>
@@ -236,8 +258,8 @@ const Reference3 = () => {
                               coke and salt as required as per provisions of IS: 3043
                             </td>
                             <td>Set</td>
-                            <td>32</td>
-                            <td>32</td>
+                            <td>{internalQuantity16}</td>
+                            <td>{internalQuantity16}</td>
                             <td>2000</td>
                             <td>INR/Set</td>
                             <td>64000</td>

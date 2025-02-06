@@ -36,6 +36,22 @@ const Reference2 = () => {
   ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
   : 0;
 
+  // ***for 9th row***
+  const internalQuantity9 = internalQuantity2*5;
+
+  // ***for 19th row***/
+  const internalQuantity19 = offerData.dc_capacity
+  ? Math.round(offerData.dc_capacity)
+  : 0;
+
+  //***for 10th row***/
+  const internalQuantity10 = internalQuantity19*15;
+
+
+  //***for 11th row***/
+  const internalQuantity11 = offerData.dc_capacity
+  ? Math.round(offerData.dc_capacity*0.4 * 1000)
+  : 0;
 
      useEffect(() => {
       const fetchData = async () => {
@@ -236,8 +252,8 @@ const Reference2 = () => {
                         <td>1C/35 sqmm /Cu / Green Cable/UnAr</td>
                         <td>Cu / Green Cable/UnAr., 450/750V</td>
                         <td>m</td>
-                        <td>45</td>
-                        <td>45</td>
+                        <td>{internalQuantity9}</td>
+                        <td>{internalQuantity9}</td>
                         <td>380</td>
                         <td>INR/m</td>
                         <td>17100</td>
@@ -254,8 +270,8 @@ const Reference2 = () => {
                           PVC Insulated flexible Cu Cable, Cu / Green Cable/UnAr
                         </td>
                         <td>m</td>
-                        <td>45</td>
-                        <td>45</td>
+                        <td>{internalQuantity10}</td>
+                        <td>{internalQuantity10}</td>
                         <td>660</td>
                         <td>INR/m</td>
                         <td>29700</td>
@@ -270,8 +286,8 @@ const Reference2 = () => {
                         <td>RS485 / 2P / 0.5 sqmm / Armoured / Shielded Cable</td>
                         <td>RS485 / 2P / 0.5 sqmm / Armoured / Shielded Cable</td>
                         <td>m</td>
-                        <td>1210</td>
-                        <td>1210</td>
+                        <td>{internalQuantity11}</td>
+                        <td>{internalQuantity11}</td>
                         <td>130</td>
                         <td>INR/m</td>
                         <td>157300</td>
