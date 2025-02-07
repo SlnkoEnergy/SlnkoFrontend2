@@ -150,6 +150,15 @@ const CivilWorks1 = () => {
        //***for 32nd row ***/
        const internalQuantity32 = offerData.ac_capacity*1000;
 
+         const scmWeekly4 = (ac_capacity)=>{
+                   if(ac_capacity<3){
+                     return 125000;
+                   }
+                   else{
+                     return 200000;
+                   }
+                 };
+
     
 
         return (
@@ -398,7 +407,7 @@ const CivilWorks1 = () => {
                             <td>Set</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>200000</td>
+                            <td>{scmWeekly4(offerData.ac_capacity)}</td>
                             <td>INR/Set</td>
                             <td>125000</td>
                             <td>18%</td>

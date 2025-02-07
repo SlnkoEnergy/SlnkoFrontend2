@@ -167,6 +167,17 @@ const Reference3 = () => {
             }
           };
 
+          const scmWeekly3 = (evacuation_voltage)=>{
+            if(evacuation_voltage===11){
+              return 440000;
+            }
+            else{
+              return 770000;
+            }
+          };
+
+        
+
 
 
         return (
@@ -298,7 +309,7 @@ const Reference3 = () => {
                             <td>Nos.</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>440000</td>
+                            <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
                             <td>INR/Nos.</td>
                             <td>440000</td>
                             <td>18%</td>
