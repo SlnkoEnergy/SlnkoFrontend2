@@ -31,6 +31,113 @@ const Reference3 = () => {
       });
 
 
+        const [scmData, setscmData] = useState({
+              spv_modules: "",
+              solar_inverter: "",
+              module_mounting_structure: "",
+              mounting_hardware: "",
+              dc_cable: "",
+              ac_cable_inverter_accb: "",
+              ac_cable_accb_transformer: "",
+              ac_ht_cable: "",
+              earthing_station: "",
+              earthing_strips: "",
+              earthing_strip: "",
+              lightening_arrestor: "",
+              datalogger: "",
+              auxilary_transformer: "",
+              ups_ldb: "",
+              balance_of_system: "",
+              transportation: "",
+              transmission_line: "",
+              ct_pt: "",
+              abt_meter: "",
+              vcb_kiosk: "",
+              slnko_charges: "",
+              installation_commissioing: {
+                labour_works: "",
+                machinery: "",
+                civil_material: "",
+              },
+            });
+        
+        
+           useEffect(() => {
+            const fetchData = async () => {
+              try {
+                const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
+                const result = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-scm-rate");
+                console.log("API Response:", response.data);
+                console.log("API Response:", result.data);
+        
+                // Assuming the data returned matches the structure you want
+                const fetchedData = response.data[0]; // Adjust based on the structure of API response
+                const fetchedScmData = result.data[0];
+                // Map API response to the state keys (for simplicity)
+                setOfferData({
+                  offer_id: fetchedData.offer_id || "",
+                  client_name: fetchedData.client_name || "",
+                  village: fetchedData.village || "",
+                  district: fetchedData.district || "",
+                  state: fetchedData.state || "",
+                  pincode: fetchedData.pincode || "",
+                  ac_capacity: fetchedData.ac_capacity || "",
+                  dc_overloading: fetchedData.dc_overloading || "",
+                  dc_capacity: fetchedData.dc_capacity || "",
+                  scheme: fetchedData.scheme || "",
+                  component: fetchedData.component || "",
+                  rate: fetchedData.rate || "",
+                  timeline: fetchedData.timeline || "",
+                  prepared_by: fetchedData.prepared_by || "",
+                  module_type: fetchedData.module_type || "",
+                  module_capacity: fetchedData.module_capacity || "",
+                  inverter_capacity: fetchedData.inverter_capacity || "",
+                  evacuation_voltage: fetchedData.evacuation_voltage || "",
+                  module_orientation: fetchedData.module_orientation || "",
+                  transmission_length: fetchedData.transmission_length || "",
+                  transformer: fetchedData.transformer || "",
+                  column_type: fetchedData.column_type || ""
+                });
+        
+                setscmData({
+                  spv_modules: fetchedScmData.spv_modules || "",
+                  solar_inverter:  fetchedScmData.solar_inverter || "",
+                  module_mounting_structure:  fetchedScmData.module_mounting_structure || "",
+                  mounting_hardware:  fetchedScmData.mounting_hardware || "",
+                  dc_cable:  fetchedScmData.dc_cable || "",
+                  ac_cable_inverter_accb:  fetchedScmData.ac_cable_inverter_accb || "",
+                  ac_cable_accb_transformer:  fetchedScmData.ac_cable_accb_transformer || "",
+                  ac_ht_cable:  fetchedScmData.ac_ht_cable || "",
+                  earthing_station:  fetchedScmData.earthing_station || "",
+                  earthing_strips:  fetchedScmData.earthing_strips || "",
+                  earthing_strip:  fetchedScmData.earthing_strip || "",
+                  lightening_arrestor:  fetchedScmData.lightening_arrestor || "",
+                  datalogger:  fetchedScmData.datalogger || "",
+                  auxilary_transformer:  fetchedScmData.auxilary_transformer || "",
+                  ups_ldb:  fetchedScmData.ups_ldb || "",
+                  balance_of_system:  fetchedScmData.balance_of_system || "",
+                  transportation:  fetchedScmData.transportation || "",
+                  transmission_line:  fetchedScmData.transmission_line || "",
+                  ct_pt:  fetchedScmData.ct_pt || "",
+                  abt_meter:  fetchedScmData.abt_meter || "",
+                  vcb_kiosk:  fetchedScmData.vcb_kiosk || "",
+                  slnko_charges:  fetchedScmData.slnko_charges || "",
+                  installation_commissioing: {
+                    labour_works: fetchedScmData.installation_commissioing?.labour_works || "",
+                    machinery: fetchedScmData.installation_commissioing?.machinery || "",
+                    civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
+                  },
+                });
+        
+              } catch (error) {
+                console.error("Error fetching commercial offer data:", error);
+              }
+            };
+        
+            fetchData();
+          }, []); // Run only once on component mount
+
+
        // ***for 2nd row***
       const internalQuantity2 = offerData.ac_capacity
       ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
@@ -43,55 +150,13 @@ const Reference3 = () => {
 
       // ***for 17th row***/
       const internalQuantity17 = offerData.dc_capacity
-      ? Math.round((offerData.dc_capacity*4+internalQuantity2+10))
+      ? Math.round((offerData.dc_capacity*1000*0.8))
       : 0;
-    
 
 
-
-
-        useEffect(() => {
-          const fetchData = async () => {
-            try {
-              const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
-              console.log("API Response:", response.data);
-      
-              // Assuming the data returned matches the structure you want
-              const fetchedData = response.data[0]; // Adjust based on the structure of API response
-              
-              // Map API response to the state keys (for simplicity)
-              setOfferData({
-                offer_id: fetchedData.offer_id || "",
-                client_name: fetchedData.client_name || "",
-                village: fetchedData.village || "",
-                district: fetchedData.district || "",
-                state: fetchedData.state || "",
-                pincode: fetchedData.pincode || "",
-                ac_capacity: fetchedData.ac_capacity || "",
-                dc_overloading: fetchedData.dc_overloading || "",
-                dc_capacity: fetchedData.dc_capacity || "",
-                scheme: fetchedData.scheme || "",
-                component: fetchedData.component || "",
-                rate: fetchedData.rate || "",
-                timeline: fetchedData.timeline || "",
-                prepared_by: fetchedData.prepared_by || "",
-                module_type: fetchedData.module_type || "",
-                module_capacity: fetchedData.module_capacity || "",
-                inverter_capacity: fetchedData.inverter_capacity || "",
-                evacuation_voltage: fetchedData.evacuation_voltage || "",
-                module_orientation: fetchedData.module_orientation || "",
-                transmission_length: fetchedData.transmission_length || "",
-                transformer: fetchedData.transformer || "",
-                column_type: fetchedData.column_type || ""
-              });
-      
-            } catch (error) {
-              console.error("Error fetching commercial offer data:", error);
-            }
-          };
-      
-          fetchData();
-        }, []); // Run only once on component mount
+      const internalQuantity18 = offerData.dc_capacity
+      ? Math.round(offerData.dc_capacity)
+      : 0
 
         const EvacuationVoltage =(evacuation_voltage) => {
             if(evacuation_voltage === 11 ){
@@ -260,7 +325,7 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>{internalQuantity16}</td>
                             <td>{internalQuantity16}</td>
-                            <td>2000</td>
+                            <td>{scmData.earthing_station}</td>
                             <td>INR/Set</td>
                             <td>64000</td>
                             <td>18%</td>
@@ -276,9 +341,9 @@ const Reference3 = () => {
                               25x3 mm GI strip With Zinc coating of 70 to 80 microns
                             </td>
                             <td>m</td>
-                            <td>2419.2</td>
-                            <td>2419.2</td>
-                            <td>48</td>
+                            <td>{internalQuantity17}</td>
+                            <td>{internalQuantity17}</td>
+                            <td>{scmData.earthing_strips}</td>
                             <td>INR/m</td>
                             <td>116122</td>
                             <td>18%</td>
@@ -296,7 +361,7 @@ const Reference3 = () => {
                             <td>m</td>
                             <td></td>
                             <td></td>
-                            <td>172</td>
+                            <td>{scmData.earthing_strip}</td>
                             <td>INR/m</td>
                             <td>0</td>
                             <td>18%</td>
@@ -313,9 +378,9 @@ const Reference3 = () => {
                               Mtr Dia over 7 Mtr High Mast with counter
                             </td>
                             <td>Set</td>
-                            <td>3</td>
-                            <td>3</td>
-                            <td>30000</td>
+                            <td>{internalQuantity18}</td>
+                            <td>{internalQuantity18}</td>
+                            <td>{scmData.lightening_arrestor}</td>
                             <td>INR/Set</td>
                             <td>90000</td>
                             <td>18%</td>
@@ -331,7 +396,7 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>35000</td>
+                            <td>{scmData.datalogger}</td>
                             <td></td>
                             <td>35000</td>
                             <td>18%</td>
@@ -347,7 +412,7 @@ const Reference3 = () => {
                             <td>Nos.</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>65000</td>
+                            <td>{scmData.auxilary_transformer}</td>
                             <td>INR/Nos.</td>
                             <td>65000</td>
                             <td>18%</td>
@@ -363,7 +428,7 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>1</td>
                             <td>1</td>
-                            <td>100000</td>
+                            <td>{scmData.ups_ldb}</td>
                             <td>INR/Set</td>
                             <td>100000</td>
                             <td>18%</td>

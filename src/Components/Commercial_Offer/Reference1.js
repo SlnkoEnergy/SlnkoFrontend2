@@ -31,16 +31,48 @@ const Reference = () => {
     column_type: ""
   });
 
+  const [scmData, setscmData] = useState({
+      spv_modules: "",
+      solar_inverter: "",
+      module_mounting_structure: "",
+      mounting_hardware: "",
+      dc_cable: "",
+      ac_cable_inverter_accb: "",
+      ac_cable_accb_transformer: "",
+      ac_ht_cable: "",
+      earthing_station: "",
+      earthing_strips: "",
+      earthing_strip: "",
+      lightening_arrestor: "",
+      datalogger: "",
+      auxilary_transformer: "",
+      ups_ldb: "",
+      balance_of_system: "",
+      transportation: "",
+      transmission_line: "",
+      ct_pt: "",
+      abt_meter: "",
+      vcb_kiosk: "",
+      slnko_charges: "",
+      installation_commissioing: {
+        labour_works: "",
+        machinery: "",
+        civil_material: "",
+      },
+    });
+
 
    useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
+        const result = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-scm-rate");
         console.log("API Response:", response.data);
+        console.log("API Response:", result.data);
 
         // Assuming the data returned matches the structure you want
         const fetchedData = response.data[0]; // Adjust based on the structure of API response
-        
+        const fetchedScmData = result.data[0];
         // Map API response to the state keys (for simplicity)
         setOfferData({
           offer_id: fetchedData.offer_id || "",
@@ -65,6 +97,36 @@ const Reference = () => {
           transmission_length: fetchedData.transmission_length || "",
           transformer: fetchedData.transformer || "",
           column_type: fetchedData.column_type || ""
+        });
+
+        setscmData({
+          spv_modules: fetchedScmData.spv_modules || "",
+          solar_inverter:  fetchedScmData.solar_inverter || "",
+          module_mounting_structure:  fetchedScmData.module_mounting_structure || "",
+          mounting_hardware:  fetchedScmData.mounting_hardware || "",
+          dc_cable:  fetchedScmData.dc_cable || "",
+          ac_cable_inverter_accb:  fetchedScmData.ac_cable_inverter_accb || "",
+          ac_cable_accb_transformer:  fetchedScmData.ac_cable_accb_transformer || "",
+          ac_ht_cable:  fetchedScmData.ac_ht_cable || "",
+          earthing_station:  fetchedScmData.earthing_station || "",
+          earthing_strips:  fetchedScmData.earthing_strips || "",
+          earthing_strip:  fetchedScmData.earthing_strip || "",
+          lightening_arrestor:  fetchedScmData.lightening_arrestor || "",
+          datalogger:  fetchedScmData.datalogger || "",
+          auxilary_transformer:  fetchedScmData.auxilary_transformer || "",
+          ups_ldb:  fetchedScmData.ups_ldb || "",
+          balance_of_system:  fetchedScmData.balance_of_system || "",
+          transportation:  fetchedScmData.transportation || "",
+          transmission_line:  fetchedScmData.transmission_line || "",
+          ct_pt:  fetchedScmData.ct_pt || "",
+          abt_meter:  fetchedScmData.abt_meter || "",
+          vcb_kiosk:  fetchedScmData.vcb_kiosk || "",
+          slnko_charges:  fetchedScmData.slnko_charges || "",
+          installation_commissioing: {
+            labour_works: fetchedScmData.installation_commissioing?.labour_works || "",
+            machinery: fetchedScmData.installation_commissioing?.machinery || "",
+            civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
+          },
         });
 
       } catch (error) {
@@ -242,7 +304,7 @@ const Reference = () => {
                     <td>Nos.</td>
                     <td>{internalQuantity1}</td>
                     <td>{PrintQuantity1}</td>
-                    <td>15</td>
+                    <td>{scmData.spv_modules}</td>
                     <td>INR/Wp</td>
                     <td>45309600</td>
                     <td>12%</td>
@@ -263,7 +325,7 @@ const Reference = () => {
                     <td>Nos.</td>
                     <td>{internalQuantity2}</td>
                     <td>{internalQuantity2}</td>
-                    <td>460000</td>
+                    <td>{scmData.solar_inverter}</td>
                     <td>INR/Nos.</td>
                     <td>4140000</td>
                     <td>12%</td>
@@ -279,7 +341,7 @@ const Reference = () => {
                     <td>Kg</td>
                     <td>{InternalQuantity3}</td>
                     <td>{InternalQuantity3}</td>
-                    <td>77</td>
+                    <td>{scmData.module_mounting_structure}</td>
                     <td>INR/Kg</td>
                     <td>5355504</td>
                     <td>18%</td>
@@ -298,7 +360,7 @@ const Reference = () => {
                     <td>Set</td>
                     <td>1</td>
                     <td>1</td>
-                    <td>0.20</td>
+                    <td>{scmData.mounting_hardware}</td>
                     <td>INR/Wp</td>
                     <td>604800</td>
                     <td>18%</td>
@@ -324,7 +386,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity5}</td>
                     <td>{InternalQuantity5}</td>
-                    <td>37.5</td>
+                    <td>{scmData.dc_cable}</td>
                     <td>INR/m</td>
                     <td>793800</td>
                     <td>18%</td>
@@ -346,7 +408,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity6}</td>
                     <td>{InternalQuantity6}</td>
-                    <td>935</td>
+                    <td>{scmData.ac_cable_inverter_accb}</td>
                     <td>INR/m</td>
                     <td>820463</td>
                     <td>18%</td>
@@ -368,7 +430,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity7}</td>
                     <td>{InternalQuantity7}</td>
-                    <td>935</td>
+                    <td>{scmData.ac_cable_accb_transformer}</td>
                     <td>INR/m</td>
                     <td>168300</td>
                     <td>18%</td>

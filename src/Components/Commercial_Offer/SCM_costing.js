@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 
 const FormComponent = () => {
-  const [formData, setFormData] = useState({
+  const [scmData, setscmData] = useState({
     spv_modules: "",
     solar_inverter: "",
     module_mounting_structure: "",
@@ -22,7 +22,7 @@ const FormComponent = () => {
     ac_ht_cable: "",
     earthing_station: "",
     earthing_strips: "",
-    earthing_Strips: "",
+    earthing_strip: "",
     lightening_arrestor: "",
     datalogger: "",
     auxilary_transformer: "",
@@ -43,30 +43,74 @@ const FormComponent = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name in formData.installation_commissioing) {
-      setFormData((prev) => ({
-        ...prev,
-        installation_commissioing: {
-          ...prev.installation_commissioing,
-          [name]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+  
+    setscmData((prev) => {
+      // Check if the field exists inside installation_commissioing (nested object)
+      if (prev.installation_commissioing?.hasOwnProperty(name)) {
+        return {
+          ...prev,
+          installation_commissioing: {
+            ...prev.installation_commissioing,
+            [name]: value,
+          },
+        };
+      }
+      return { ...prev, [name]: value };
+    });
   };
+  
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("https://api.example.com/post-data", formData);
-      alert("Data submitted successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Submission failed");
-    }
-  };
+  const [loading, setLoading] = useState(false);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const response = await axios.post(
+      "https://api.slnkoprotrac.com/v1/create-scm-rate",
+      scmData,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    console.log("Response:", response.data);
+    alert("Data submitted successfully!");
+    setscmData({
+    spv_modules: "",
+    solar_inverter: "",
+    module_mounting_structure: "",
+    mounting_hardware: "",
+    dc_cable: "",
+    ac_cable_inverter_accb: "",
+    ac_cable_accb_transformer: "",
+    ac_ht_cable: "",
+    earthing_station: "",
+    earthing_strips: "",
+    earthing_strip: "",
+    lightening_arrestor: "",
+    datalogger: "",
+    auxilary_transformer: "",
+    ups_ldb: "",
+    balance_of_system: "",
+    transportation: "",
+    transmission_line: "",
+    ct_pt: "",
+    abt_meter: "",
+    vcb_kiosk: "",
+    slnko_charges: "",
+    installation_commissioing: {
+      labour_works: "",
+      machinery: "",
+      civil_material: "",
+      },
+    });
+  } catch (error) {
+    console.error("Error:", error.response?.data || error.message);
+    alert("Submission failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Sheet
@@ -88,7 +132,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="spv_modules"
-              value={formData.spv_modules}
+              value={scmData.spv_modules}
               onChange={handleChange}
               fullWidth
             />
@@ -98,7 +142,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="solar_inverter"
-              value={formData.solar_inverter}
+              value={scmData.solar_inverter}
               onChange={handleChange}
               fullWidth
             />
@@ -108,7 +152,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="module_mounting_structure"
-              value={formData.module_mounting_structure}
+              value={scmData.module_mounting_structure}
               onChange={handleChange}
               fullWidth
             />
@@ -118,7 +162,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="mounting_hardware"
-              value={formData.mounting_hardware}
+              value={scmData.mounting_hardware}
               onChange={handleChange}
               fullWidth
             />
@@ -128,7 +172,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="dc_cable"
-              value={formData.dc_cable}
+              value={scmData.dc_cable}
               onChange={handleChange}
               fullWidth
             />
@@ -138,7 +182,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="ac_cable_inverter_accb"
-              value={formData.ac_cable_inverter_accb}
+              value={scmData.ac_cable_inverter_accb}
               onChange={handleChange}
               fullWidth
             />
@@ -148,7 +192,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="ac_cable_accb_transformer"
-              value={formData.ac_cable_accb_transformer}
+              value={scmData.ac_cable_accb_transformer}
               onChange={handleChange}
               fullWidth
             />
@@ -158,7 +202,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="ac_ht_cable"
-              value={formData.ac_ht_cable}
+              value={scmData.ac_ht_cable}
               onChange={handleChange}
               fullWidth
             />
@@ -168,7 +212,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="earthing_station"
-              value={formData.earthing_station}
+              value={scmData.earthing_station}
               onChange={handleChange}
               fullWidth
             />
@@ -178,7 +222,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="earthing_strips"
-              value={formData.earthing_strips}
+              value={scmData.earthing_strips}
               onChange={handleChange}
               fullWidth
             />
@@ -187,8 +231,8 @@ const FormComponent = () => {
             <FormLabel>Earthing Strips (50x6 mm GI strip) (INR/m)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.earthing_Strips}
+              name="earthing_strip"
+              value={scmData.earthing_strip}
               onChange={handleChange}
               fullWidth
             />
@@ -197,8 +241,8 @@ const FormComponent = () => {
             <FormLabel>Lightening Arrestor (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.lightening_arrestor}
+              name="lightening_arrestor"
+              value={scmData.lightening_arrestor}
               onChange={handleChange}
               fullWidth
             />
@@ -207,8 +251,8 @@ const FormComponent = () => {
             <FormLabel>Datalogger (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.datalogger}
+              name="datalogger"
+              value={scmData.datalogger}
               onChange={handleChange}
               fullWidth
             />
@@ -217,8 +261,8 @@ const FormComponent = () => {
             <FormLabel>Auxilary transformer (INR/Nos.)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.auxilary_transformer}
+              name="auxilary_transformer"
+              value={scmData.auxilary_transformer}
               onChange={handleChange}
               fullWidth
             />
@@ -227,8 +271,8 @@ const FormComponent = () => {
             <FormLabel>UPS & LDB (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.ups_ldb}
+              name="ups_ldb"
+              value={scmData.ups_ldb}
               onChange={handleChange}
               fullWidth
             />
@@ -237,8 +281,8 @@ const FormComponent = () => {
             <FormLabel>Balance of system with Wet Module Cleaning System (MCS) & Dry Cleaning semi automatic robot (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="earthing_strips"
-              value={formData.balance_of_system}
+              name="balance_of_system"
+              value={scmData.balance_of_system}
               onChange={handleChange}
               fullWidth
             />
@@ -258,7 +302,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="labour_works"
-              value={formData.installation_commissioing.labour_works}
+              value={scmData.installation_commissioing.labour_works}
               onChange={handleChange}
               fullWidth
             />
@@ -268,7 +312,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="machinery"
-              value={formData.installation_commissioing.machinery}
+              value={scmData.installation_commissioing.machinery}
               onChange={handleChange}
               fullWidth
             />
@@ -278,7 +322,7 @@ const FormComponent = () => {
             <Input
               type="number"
               name="civil_material"
-              value={formData.installation_commissioing.civil_material}
+              value={scmData.installation_commissioing.civil_material}
               onChange={handleChange}
               fullWidth
             />
@@ -291,8 +335,8 @@ const FormComponent = () => {
             <FormLabel>Transportaion (INR/Vehicle)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.transportation}
+              name="transportation"
+              value={scmData.transportation}
               onChange={handleChange}
               fullWidth
             />
@@ -301,8 +345,8 @@ const FormComponent = () => {
             <FormLabel>Transmission Line (INR/km)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.transmission_line}
+              name="transmission_line"
+              value={scmData.transmission_line}
               onChange={handleChange}
               fullWidth
             />
@@ -311,8 +355,8 @@ const FormComponent = () => {
             <FormLabel>CT PT (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.ct_pt}
+              name="ct_pt"
+              value={scmData.ct_pt}
               onChange={handleChange}
               fullWidth
             />
@@ -321,8 +365,8 @@ const FormComponent = () => {
             <FormLabel>ABT Meter (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.abt_meter}
+              name="abt_meter"
+              value={scmData.abt_meter}
               onChange={handleChange}
               fullWidth
             />
@@ -331,8 +375,8 @@ const FormComponent = () => {
             <FormLabel>VCB Kiosk (INR/Set)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.vcb_kiosk}
+              name="vcb_kiosk"
+              value={scmData.vcb_kiosk}
               onChange={handleChange}
               fullWidth
             />
@@ -341,8 +385,8 @@ const FormComponent = () => {
             <FormLabel>SLNKO EPCM Service Charges (INR/Wp)</FormLabel>
             <Input
               type="number"
-              name="civil_material"
-              value={formData.slnko_charges}
+              name="slnko_charges"
+              value={scmData.slnko_charges}
               onChange={handleChange}
               fullWidth
             />
