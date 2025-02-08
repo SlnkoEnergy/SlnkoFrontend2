@@ -141,6 +141,15 @@ const Reference4 = () => {
       //***for 24th row ***/
       const internalQuantity24 = offerData.dc_capacity*1000;
 
+
+      //***Total Value 23***/
+      const TotalVal23 = scmData.balance_of_system*internalQuantity24;
+
+      //***Total Value 24***/
+      const TotalVal24 = scmData.installation_commissioing.labour_works*internalQuantity24*1000;
+
+
+    
         return (
             <>
               <Grid
@@ -268,7 +277,7 @@ const Reference4 = () => {
                             <td>{internalQuantity24}</td>
                             <td>{scmData.balance_of_system}</td>
                             <td>INR/Set</td>
-                            <td>604800</td>
+                            <td>{TotalVal23}</td>
                             <td>18%</td>
                             <td>108864</td>
                             <td>713664</td>
@@ -357,7 +366,7 @@ const Reference4 = () => {
                             <td>{internalQuantity24}</td>
                             <td>{scmData.installation_commissioing.labour_works}</td>
                             <td>INR/Wp</td>
-                            <td>1209600</td>
+                            <td>{TotalVal24}</td>
                             <td>18%</td>
                             <td>217728</td>
                             <td>1427328</td>

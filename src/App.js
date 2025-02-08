@@ -29,10 +29,10 @@ import './App.css';
 // import VendorBillSummary from './Components/vendor_bill_summary';
 // import CommercialForm from './Components/Commercial_Offer/commercial_form';
 // import Reference from './Components/Commercial_Offer/Reference1';
-// import Reference2 from './Components/Commercial_Offer/Reference2';
+import Reference2 from './Components/Commercial_Offer/Reference2';
 // import Reference3 from './Components/Commercial_Offer/Reference3';
 // import Reference4 from './Components/Commercial_Offer/Reference4';
-import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
+// import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
 // import FormComponent from './Components/Commercial_Offer/SCM_costing';
 
 
@@ -63,10 +63,10 @@ function App() {
      {/* <VendorBillSummary/> */}
      {/* <CommercialForm/> */}
      {/* <Reference/> */}
-     {/* <Reference2/> */}
+     <Reference2/>
      {/* <Reference3/> */}
      {/* <Reference4/> */}
-     <CivilWorks1/>
+     {/* <CivilWorks1/> */}
      {/* <FormComponent/> */}
     </div>
   );

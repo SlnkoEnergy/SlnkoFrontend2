@@ -241,6 +241,26 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
   }
 };
 
+//***Total Value 8***/
+const TotalVal8 = scmData.ac_ht_cable*50;
+
+//***Total Value 9***/
+const TotalVal9 = 380*internalQuantity9;
+
+//***Total Value 10***/
+const TotalVal10 = 660*internalQuantity10;
+
+//***Total Value 11***/
+const TotalVal11 = 130*internalQuantity11;
+
+//***Total Value 12***/
+const TotalVal12 = 470*20;
+
+//***Total Value 13***/
+const TotalVal13 = scmWeekly1*1;
+
+
+
 
   return (
     <>
@@ -367,7 +387,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>50</td>
                     <td>{scmData.ac_ht_cable}</td>
                     <td>INR/m</td>
-                    <td>55000</td>
+                    <td>{TotalVal8}</td>
                     <td>18%</td>
                     <td>9900</td>
                     <td>64900</td>
@@ -383,7 +403,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>{internalQuantity9}</td>
                     <td>380</td>
                     <td>INR/m</td>
-                    <td>17100</td>
+                    <td>{TotalVal9}</td>
                     <td>18%</td>
                     <td>3078</td>
                     <td>20178</td>
@@ -401,7 +421,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>{internalQuantity10}</td>
                     <td>660</td>
                     <td>INR/m</td>
-                    <td>29700</td>
+                    <td>{TotalVal10}</td>
                     <td>18%</td>
                     <td>5346</td>
                     <td>35046</td>
@@ -417,7 +437,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>{internalQuantity11}</td>
                     <td>130</td>
                     <td>INR/m</td>
-                    <td>157300</td>
+                    <td>{TotalVal11}</td>
                     <td>18%</td>
                     <td>28314</td>
                     <td>185614</td>
@@ -433,7 +453,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>20</td>
                     <td>470</td>
                     <td>INR/m</td>
-                    <td>9400</td>
+                    <td>{TotalVal12}</td>
                     <td>18%</td>
                     <td>1692</td>
                     <td>11092</td>
@@ -465,7 +485,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>1</td>
                     <td>{scmWeekly1}</td>
                     <td>INR/Set</td>
-                    <td>1292000</td>
+                    <td>{TotalVal13}</td>
                     <td>18%</td>
                     <td>232560</td>
                     <td>1524260</td>
@@ -492,7 +512,7 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
                     <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
 
                     <td>INR/Nos.</td>
-                    <td>2184000</td>
+                    <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
                     <td>18%</td>
                     <td>393120</td>
                     <td>2577120</td>

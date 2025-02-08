@@ -176,8 +176,23 @@ const Reference3 = () => {
             }
           };
 
-        
+          //***Total Value 16***/
+          const TotalVal16 = internalQuantity16*scmData.earthing_station;
 
+          //***Total Value 17***/
+          const TotalVal17 = internalQuantity17*scmData.earthing_strips;
+
+           //***Total Value 19***/
+           const TotalVal19 = internalQuantity18*scmData.lightening_arrestor;
+
+           //***Total Value 20***/
+           const TotalVal20 = scmData.datalogger*1;
+
+           //***Total Value 21***/
+           const TotalVal21 = scmData.auxilary_transformer*1;
+
+           //***Total Value 22***/
+           const TotalVal22 = scmData.ups_ldb*1;
 
 
         return (
@@ -311,7 +326,7 @@ const Reference3 = () => {
                             <td>1</td>
                             <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
                             <td>INR/Nos.</td>
-                            <td>440000</td>
+                            <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
                             <td>18%</td>
                             <td>79200</td>
                             <td>519200</td>
@@ -338,7 +353,7 @@ const Reference3 = () => {
                             <td>{internalQuantity16}</td>
                             <td>{scmData.earthing_station}</td>
                             <td>INR/Set</td>
-                            <td>64000</td>
+                            <td>{TotalVal16}</td>
                             <td>18%</td>
                             <td>11520</td>
                             <td>75520</td>
@@ -356,7 +371,7 @@ const Reference3 = () => {
                             <td>{internalQuantity17}</td>
                             <td>{scmData.earthing_strips}</td>
                             <td>INR/m</td>
-                            <td>116122</td>
+                            <td>{TotalVal17}</td>
                             <td>18%</td>
                             <td>20902</td>
                             <td>137023</td>
@@ -393,7 +408,7 @@ const Reference3 = () => {
                             <td>{internalQuantity18}</td>
                             <td>{scmData.lightening_arrestor}</td>
                             <td>INR/Set</td>
-                            <td>90000</td>
+                            <td>{TotalVal19}</td>
                             <td>18%</td>
                             <td>16200</td>
                             <td>106200</td>
@@ -409,7 +424,7 @@ const Reference3 = () => {
                             <td>1</td>
                             <td>{scmData.datalogger}</td>
                             <td></td>
-                            <td>35000</td>
+                            <td>{TotalVal20}</td>
                             <td>18%</td>
                             <td>6300</td>
                             <td>41300</td>
@@ -425,7 +440,7 @@ const Reference3 = () => {
                             <td>1</td>
                             <td>{scmData.auxilary_transformer}</td>
                             <td>INR/Nos.</td>
-                            <td>65000</td>
+                            <td>{TotalVal21}</td>
                             <td>18%</td>
                             <td>11700</td>
                             <td>76700</td>
@@ -441,7 +456,7 @@ const Reference3 = () => {
                             <td>1</td>
                             <td>{scmData.ups_ldb}</td>
                             <td>INR/Set</td>
-                            <td>100000</td>
+                            <td>{TotalVal22}</td>
                             <td>18%</td>
                             <td>18000</td>
                             <td>118000</td>

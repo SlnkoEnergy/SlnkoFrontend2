@@ -183,6 +183,28 @@ const Reference = () => {
    // ***for 6th row***
    const InternalQuantity7 = internalQuantity2*20;
 
+   //***Total Value 1***/
+   const TotalVal1 = scmData.spv_modules*PrintQuantity1*offerData.module_capacity;
+
+    //***Total Value 2***/
+    const TotalVal2 = scmData.solar_inverter*internalQuantity2;
+
+    //***Total Value 3***/
+    const TotalVal3 = scmData.module_mounting_structure*InternalQuantity3;
+
+    //***Total Value 4***/
+    const TotalVal4 = Math.round(scmData.mounting_hardware*offerData.dc_capacity*1000*1000);
+
+     //***Total Value 5***/
+     const TotalVal5 = scmData.dc_cable*InternalQuantity5;
+
+      //***Total Value 6***/
+      const TotalVal6 = Math.round(scmData.ac_cable_inverter_accb*InternalQuantity6);
+
+      //***Total Value 7***/
+      const TotalVal7 = scmData.ac_cable_accb_transformer*InternalQuantity7;
+
+
 
 
   return (
@@ -306,10 +328,10 @@ const Reference = () => {
                     <td>{PrintQuantity1}</td>
                     <td>{scmData.spv_modules}</td>
                     <td>INR/Wp</td>
-                    <td>45309600</td>
+                    <td>{TotalVal1}</td>
                     <td>12%</td>
-                    <td>5437152</td>
-                    <td>50746752</td>
+                    <td>{TotalVal1*12/100}</td>
+                    <td>{TotalVal1*12/100+TotalVal1}</td>
                   </tr>
 
                   <tr>
@@ -327,10 +349,10 @@ const Reference = () => {
                     <td>{internalQuantity2}</td>
                     <td>{scmData.solar_inverter}</td>
                     <td>INR/Nos.</td>
-                    <td>4140000</td>
+                    <td>{TotalVal2}</td>
                     <td>12%</td>
-                    <td>496800</td>
-                    <td>4636800</td>
+                    <td>{TotalVal2*12/100}</td>
+                    <td>{TotalVal2*12/100+TotalVal2}</td>
                   </tr>
 
                   <tr>
@@ -343,10 +365,10 @@ const Reference = () => {
                     <td>{InternalQuantity3}</td>
                     <td>{scmData.module_mounting_structure}</td>
                     <td>INR/Kg</td>
-                    <td>5355504</td>
+                    <td>{TotalVal3}</td>
                     <td>18%</td>
-                    <td>963991</td>
-                    <td>6319495</td>
+                    <td>{TotalVal3*18/100}</td>
+                    <td>{TotalVal3*18/100+TotalVal3}</td>
                   </tr>
 
                   <tr>
@@ -362,10 +384,10 @@ const Reference = () => {
                     <td>1</td>
                     <td>{scmData.mounting_hardware}</td>
                     <td>INR/Wp</td>
-                    <td>604800</td>
+                    <td>{TotalVal4}</td>
                     <td>18%</td>
-                    <td>108864</td>
-                    <td>713664</td>
+                    <td>{TotalVal4*18/100}</td>
+                    <td>{TotalVal4*18/100+TotalVal4}</td>
                   </tr>
 
                   <tr>
@@ -388,10 +410,10 @@ const Reference = () => {
                     <td>{InternalQuantity5}</td>
                     <td>{scmData.dc_cable}</td>
                     <td>INR/m</td>
-                    <td>793800</td>
+                    <td>{TotalVal5}</td>
                     <td>18%</td>
-                    <td>142884</td>
-                    <td>936684</td>
+                    <td>{TotalVal5*18/100}</td>
+                    <td>{TotalVal5*18/100+TotalVal5}</td>
                   </tr>
 
                   <tr>
@@ -410,10 +432,10 @@ const Reference = () => {
                     <td>{InternalQuantity6}</td>
                     <td>{scmData.ac_cable_inverter_accb}</td>
                     <td>INR/m</td>
-                    <td>820463</td>
+                    <td>{TotalVal6}</td>
                     <td>18%</td>
-                    <td>147683</td>
-                    <td>968146</td>
+                    <td>{Math.round(TotalVal6*18/100)}</td>
+                    <td>{Math.round(TotalVal6*18/100+TotalVal6)}</td>
                   </tr>
 
                   <tr>
@@ -432,10 +454,10 @@ const Reference = () => {
                     <td>{InternalQuantity7}</td>
                     <td>{scmData.ac_cable_accb_transformer}</td>
                     <td>INR/m</td>
-                    <td>168300</td>
+                    <td>{TotalVal7}</td>
                     <td>18%</td>
-                    <td>30294</td>
-                    <td>198594</td>
+                    <td>{TotalVal7*18/100}</td>
+                    <td>{TotalVal7*18/100+TotalVal7}</td>
                   </tr>
                 </tbody>
               </Table>

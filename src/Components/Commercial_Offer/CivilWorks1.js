@@ -159,6 +159,19 @@ const CivilWorks1 = () => {
                    }
                  };
 
+
+                       //***Total Value 25***/
+      const TotalVal25 = scmData.installation_commissioing.machinery*internalQuantity24*1000;
+
+      //***Total Value 26***/
+      const TotalVal26 = scmData.installation_commissioing.civil_material*internalQuantity24*1000;
+
+      //***Total Value 27***/
+      const TotalVal27 = scmData.transportation*internalQuantity25;
+
+      //***Total Value 32***/
+      const TotalVal32 = scmData.slnko_charges*internalQuantity32*1000;
+
     
 
         return (
@@ -282,7 +295,7 @@ const CivilWorks1 = () => {
                             <td>{internalQuantity24}</td>
                             <td>{scmData.installation_commissioing.machinery}</td>
                             <td>INR/Wp</td>
-                            <td>226800</td>
+                            <td>{TotalVal25}</td>
                             <td>18%</td>
                             <td>40824</td>
                             <td>267624</td>
@@ -303,7 +316,7 @@ const CivilWorks1 = () => {
                             <td>{internalQuantity24}</td>
                             <td>{scmData.installation_commissioing.civil_material}</td>
                             <td>INR/Wp</td>
-                            <td>907200</td>
+                            <td>{TotalVal26}</td>
                             <td>18%</td>
                             <td>163296</td>
                             <td>1070496</td>
@@ -320,7 +333,7 @@ const CivilWorks1 = () => {
                             <td>{internalQuantity25}</td>
                             <td>{scmData.transportation}</td>
                             <td>INR/Vehicle</td>
-                            <td>840000</td>
+                            <td>{TotalVal27}</td>
                             <td>18%</td>
                             <td>151200</td>
                             <td>991200</td>
@@ -337,7 +350,7 @@ const CivilWorks1 = () => {
                             <td>0</td>
                             <td>{scmData.transmission_line}</td>
                             <td>INR/Km</td>
-                            <td>0</td>
+                            <td>{scmData.transmission_line*0}</td>
                             <td>18%</td>
                             <td>0</td>
                             <td>0</td>
@@ -355,7 +368,7 @@ const CivilWorks1 = () => {
                             <td>2</td>
                             <td>{scmData.ct_pt}</td>
                             <td>INR/Set</td>
-                            <td>110000</td>
+                            <td>{scmData.ct_pt*2}</td>
                             <td>18%</td>
                             <td>19800</td>
                             <td>129800</td>
@@ -373,7 +386,7 @@ const CivilWorks1 = () => {
                             <td>3</td>
                             <td>{scmData.abt_meter}</td>
                             <td>INR/Set</td>
-                            <td>285000</td>
+                            <td>{scmData.abt_meter*3}</td>
                             <td>18%</td>
                             <td>51300</td>
                             <td>336300</td>
@@ -391,7 +404,7 @@ const CivilWorks1 = () => {
                             <td>1</td>
                             <td>{scmData.vcb_kiosk}</td>
                             <td>INR/Set</td>
-                            <td>320000</td>
+                            <td>{scmData.vcb_kiosk*1}</td>
                             <td>18%</td>
                             <td>57600</td>
                             <td>377600</td>
@@ -409,7 +422,7 @@ const CivilWorks1 = () => {
                             <td>1</td>
                             <td>{scmWeekly4(offerData.ac_capacity)}</td>
                             <td>INR/Set</td>
-                            <td>125000</td>
+                            <td>{scmWeekly4(offerData.ac_capacity)*1}</td>
                             <td>18%</td>
                             <td>22500</td>
                             <td>147500</td>
@@ -445,7 +458,7 @@ const CivilWorks1 = () => {
                             <td>{internalQuantity32}</td>
                             <td>{scmData.slnko_charges}</td>
                             <td>INR</td>
-                            <td>75474</td>
+                            <td>{TotalVal32}</td>
                             <td>18%</td>
                             <td>13585</td>
                             <td>89059</td>
