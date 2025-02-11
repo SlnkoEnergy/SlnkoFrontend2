@@ -32,8 +32,8 @@ import './App.css';
 // import Reference2 from './Components/Commercial_Offer/Reference2';
 // import Reference3 from './Components/Commercial_Offer/Reference3';
 // import Reference4 from './Components/Commercial_Offer/Reference4';
-import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
-// import FormComponent from './Components/Commercial_Offer/SCM_costing';
+// import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
+import ScmCostingForm from './Components/Commercial_Offer/SCM_costing';
 
 
 function App() {
@@ -66,8 +66,8 @@ function App() {
      {/* <Reference2/> */}
      {/* <Reference3/> */}
      {/* <Reference4/> */}
-     <CivilWorks1/>
-     {/* <FormComponent/> */}
+     {/* <CivilWorks1/> */}
+     <ScmCostingForm/>
     </div>
   );
 }

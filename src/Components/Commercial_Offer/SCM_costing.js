@@ -10,7 +10,7 @@ import {
 } from "@mui/joy";
 import axios from "axios";
 
-const FormComponent = () => {
+const ScmCostingForm = () => {
   const [scmData, setscmData] = useState({
     spv_modules: "",
     solar_inverter: "",
@@ -30,6 +30,8 @@ const FormComponent = () => {
     balance_of_system: "",
     transportation: "",
     transmission_line: "",
+    transmission_line_internal: "",
+    transmission_line_print: "",
     ct_pt: "",
     abt_meter: "",
     vcb_kiosk: "",
@@ -94,6 +96,8 @@ const handleSubmit = async (e) => {
     balance_of_system: "",
     transportation: "",
     transmission_line: "",
+    transmission_line_internal: "",
+    transmission_line_print: "",
     ct_pt: "",
     abt_meter: "",
     vcb_kiosk: "",
@@ -342,6 +346,26 @@ const handleSubmit = async (e) => {
             />
           </Grid>
           <Grid xs={12} sm={4}>
+            <FormLabel>Transmission Line Internal (INR/km)</FormLabel>
+            <Input
+              type="number"
+              name="transmission_line_internal"
+              value={scmData.transmission_line_internal}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid xs={12} sm={4}>
+            <FormLabel>Transmission Line Print (INR/km)</FormLabel>
+            <Input
+              type="number"
+              name="transmission_line_print"
+              value={scmData.transmission_line_print}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid xs={12} sm={4}>
             <FormLabel>Transmission Line (INR/km)</FormLabel>
             <Input
               type="number"
@@ -402,4 +426,4 @@ const handleSubmit = async (e) => {
   );
 };
 
-export default FormComponent;
+export default ScmCostingForm;
