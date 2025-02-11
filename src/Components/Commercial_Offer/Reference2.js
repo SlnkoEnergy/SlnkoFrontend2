@@ -389,8 +389,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal8}</td>
                     <td>18%</td>
-                    <td>9900</td>
-                    <td>64900</td>
+                    <td>{TotalVal8*18/100}</td>
+                    <td>{TotalVal8*18/100+TotalVal8}</td>
                   </tr>
 
                   <tr>
@@ -405,8 +405,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal9}</td>
                     <td>18%</td>
-                    <td>3078</td>
-                    <td>20178</td>
+                    <td>{TotalVal9*18/100}</td>
+                    <td>{TotalVal9*18/100+TotalVal9}</td>
                   </tr>
 
                   <tr>
@@ -423,8 +423,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal10}</td>
                     <td>18%</td>
-                    <td>5346</td>
-                    <td>35046</td>
+                    <td>{TotalVal10*18/100}</td>
+                    <td>{TotalVal10*18/100+TotalVal10}</td>
                   </tr>
 
                   <tr>
@@ -439,8 +439,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal11}</td>
                     <td>18%</td>
-                    <td>28314</td>
-                    <td>185614</td>
+                    <td>{TotalVal11*18/100}</td>
+                    <td>{TotalVal11*18/100+TotalVal11}</td>
                   </tr>
 
                   <tr>
@@ -455,8 +455,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal12}</td>
                     <td>18%</td>
-                    <td>1692</td>
-                    <td>11092</td>
+                    <td>{TotalVal12*18/100}</td>
+                    <td>{TotalVal12*18/100+TotalVal12}</td>
                   </tr>
 
                   <tr>
@@ -487,8 +487,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/Set</td>
                     <td>{TotalVal13}</td>
                     <td>18%</td>
-                    <td>232560</td>
-                    <td>1524260</td>
+                    <td>{TotalVal13*18/100}</td>
+                    <td>{TotalVal13*18/100+TotalVal13}</td>
                   </tr>
 
                   <tr>
@@ -514,8 +514,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/Nos.</td>
                     <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
                     <td>18%</td>
-                    <td>393120</td>
-                    <td>2577120</td>
+                    <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)*18/100}</td>
+                    <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)*18/100+scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
                   </tr>
                 </tbody>
               </Table>

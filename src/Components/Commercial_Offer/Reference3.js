@@ -328,8 +328,8 @@ const Reference3 = () => {
                             <td>INR/Nos.</td>
                             <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
                             <td>18%</td>
-                            <td>79200</td>
-                            <td>519200</td>
+                            <td>{scmWeekly3(offerData.evacuation_voltage)*18/100}</td>
+                            <td>{scmWeekly3(offerData.evacuation_voltage)*18/100+scmWeekly3(offerData.evacuation_voltage)}</td>
                           </tr>
         
                           <tr>
@@ -355,8 +355,8 @@ const Reference3 = () => {
                             <td>INR/Set</td>
                             <td>{TotalVal16}</td>
                             <td>18%</td>
-                            <td>11520</td>
-                            <td>75520</td>
+                            <td>{TotalVal16*18/100}</td>
+                            <td>{TotalVal16*18/100+TotalVal16}</td>
                           </tr>
         
                           <tr>
@@ -373,8 +373,8 @@ const Reference3 = () => {
                             <td>INR/m</td>
                             <td>{TotalVal17}</td>
                             <td>18%</td>
-                            <td>20902</td>
-                            <td>137023</td>
+                            <td>{TotalVal17*18/100}</td>
+                            <td>{TotalVal17*18/100+TotalVal17}</td>
                           </tr>
         
                           <tr>
@@ -410,8 +410,8 @@ const Reference3 = () => {
                             <td>INR/Set</td>
                             <td>{TotalVal19}</td>
                             <td>18%</td>
-                            <td>16200</td>
-                            <td>106200</td>
+                            <td>{TotalVal19*18/100}</td>
+                            <td>{TotalVal19*18/100+TotalVal19}</td>
                           </tr>
         
                           <tr>
@@ -426,8 +426,8 @@ const Reference3 = () => {
                             <td></td>
                             <td>{TotalVal20}</td>
                             <td>18%</td>
-                            <td>6300</td>
-                            <td>41300</td>
+                            <td>{TotalVal20*18/100}</td>
+                            <td>{TotalVal20*18/100+TotalVal20}</td>
                           </tr>
         
                           <tr>
@@ -442,8 +442,8 @@ const Reference3 = () => {
                             <td>INR/Nos.</td>
                             <td>{TotalVal21}</td>
                             <td>18%</td>
-                            <td>11700</td>
-                            <td>76700</td>
+                            <td>{TotalVal21*18/100}</td>
+                            <td>{TotalVal21*18/100+TotalVal21}</td>
                           </tr>
         
                           <tr>
@@ -458,8 +458,8 @@ const Reference3 = () => {
                             <td>INR/Set</td>
                             <td>{TotalVal22}</td>
                             <td>18%</td>
-                            <td>18000</td>
-                            <td>118000</td>
+                            <td>{TotalVal22*18/100}</td>
+                            <td>{TotalVal22*18/100+TotalVal22}</td>
                           </tr>
                         </tbody>
                       </Table>

@@ -279,8 +279,8 @@ const Reference4 = () => {
                             <td>INR/Set</td>
                             <td>{TotalVal23}</td>
                             <td>18%</td>
-                            <td>108864</td>
-                            <td>713664</td>
+                            <td>{TotalVal23*18/100}</td>
+                            <td>{TotalVal23*18/100+TotalVal23}</td>
                           </tr>
                         </tbody>
                       </Table>
@@ -368,8 +368,8 @@ const Reference4 = () => {
                             <td>INR/Wp</td>
                             <td>{TotalVal24}</td>
                             <td>18%</td>
-                            <td>217728</td>
-                            <td>1427328</td>
+                            <td>{TotalVal24*18/100}</td>
+                            <td>{TotalVal24*18/100+TotalVal24}</td>
                           </tr>
                         </tbody>
                       </Table>

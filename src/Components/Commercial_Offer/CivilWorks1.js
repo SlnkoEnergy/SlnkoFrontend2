@@ -172,7 +172,255 @@ const CivilWorks1 = () => {
       //***Total Value 32***/
       const TotalVal32 = scmData.slnko_charges*internalQuantity32*1000;
 
-    
+// ***for 1st row***
+const internalQuantity1 = offerData.module_capacity
+? Math.round((offerData.dc_capacity * 1000 * 1000) / offerData.module_capacity)
+: 0;
+
+const PrintQuantity1 = Math.round(internalQuantity1 / 24) * 24;
+
+// ***for 2nd row***
+const internalQuantity2 = offerData.ac_capacity
+? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+: 0;
+
+// ***for 3rd row***
+const InternalQuantity3 = (offerData.module_orientation === "Portrait" ? 23 : 29) * 1000 * offerData.dc_capacity;
+
+ // ***for 5th row***
+ const InternalQuantity5 = offerData.dc_capacity*7000;
+
+ // ***for 6th row***
+ const InternalQuantity6 = internalQuantity2*97.5;
+
+ // ***for 6th row***
+ const InternalQuantity7 = internalQuantity2*20;
+
+ //***Total Value 1***/
+ const TotalVal1 = scmData.spv_modules*PrintQuantity1*offerData.module_capacity;
+
+  //***Total Value 2***/
+  const TotalVal2 = scmData.solar_inverter*internalQuantity2;
+
+  //***Total Value 3***/
+  const TotalVal3 = scmData.module_mounting_structure*InternalQuantity3;
+
+  //***Total Value 4***/
+  const TotalVal4 = Math.round(scmData.mounting_hardware*offerData.dc_capacity*1000*1000);
+
+   //***Total Value 5***/
+   const TotalVal5 = scmData.dc_cable*InternalQuantity5;
+
+    //***Total Value 6***/
+    const TotalVal6 = Math.round(scmData.ac_cable_inverter_accb*InternalQuantity6);
+
+    //***Total Value 7***/
+    const TotalVal7 = scmData.ac_cable_accb_transformer*InternalQuantity7;
+
+ // ***for 2nd row***
+//  const internalQuantity2 = offerData.ac_capacity
+//  ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+//  : 0;
+
+// ***for 9th row***
+const internalQuantity9 = internalQuantity2 * 5;
+
+// ***for 19th row***/
+const internalQuantity19 = offerData.dc_capacity
+ ? Math.round(offerData.dc_capacity)
+ : 0;
+
+//***for 10th row***/
+const internalQuantity10 = internalQuantity19 * 15;
+
+//***for 11th row***/
+const internalQuantity11 = offerData.dc_capacity
+ ? Math.round(offerData.dc_capacity * 0.4 * 1000)
+ : 0;
+
+const evacuationVoltage = (evacuation_voltage) => {
+ if (evacuation_voltage === 11) {
+   return "11 kV(E),3C,120Sqmm Al,Ar,HT,XLPE, CABLE";
+ } else {
+   return "33 kV(E),3C,120Sqmm Al,Ar,HT,XLPE, CABLE";
+ }
+};
+
+//***finding P17***/
+const setUp = (ac) => {
+ const acValue = parseFloat(ac);
+ if (!isNaN(acValue)) {
+     return Math.round(acValue * 1.1 * 1000 / 100) * 100; // Round to nearest 100
+ }
+ return "";
+};
+
+//***for N10 ***/
+const Nten = (internalQuantity2) => {
+ if (internalQuantity2 <= 11) {
+   console.log(`Nten = ${internalQuantity2}`); // Log the original value
+   return internalQuantity2;
+ } else {
+   const roundedValue = Math.round(internalQuantity2 / 2);
+   console.log(`Nten = ${roundedValue}`); // Log the rounded value
+   return roundedValue;
+ }
+};
+
+const NtenValue = Nten(internalQuantity2); // Call function and store the result
+const Neleven = internalQuantity2 - NtenValue; // Compute Neleven
+
+const Lten = (40000 * NtenValue + 30000 + 150000 + 20000) * 1.7;
+const Leleven = (40000 * Neleven + 30000 + 150000 + 20000) * 1.7;
+
+const scmWeekly1 = Lten + Leleven;
+
+//***finding Q22 ***/
+const findQ22 = (setupValue) => {
+ const setupFloat = parseFloat(setupValue);
+ if (!isNaN(setupFloat) && setupFloat > 0) {
+   return parseFloat(((-0.211 * Math.log(setupFloat) )+ 2.4482));
+ }
+ return 0; // Default value if setupValue is invalid
+};
+
+// *** Finding Q24 ***
+const findQ24 = (evacuation_voltage, Q22Value) => {
+return (evacuation_voltage === 11 ? Math.ceil((Q22Value)*100)/100 : 0.90);
+};
+
+
+
+// *** Finding scmWeekly2 ***
+const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
+const setupValue = setUp(ac_capacity); // Get setup value
+const Q22Value = findQ22(setupValue); // Compute Q22
+const Q24Value = findQ24(evacuation_voltage, Q22Value); // Compute Q24
+
+console.log("Transformer:", transformer);
+console.log("AC Capacity:", ac_capacity);
+console.log("Evacuation Voltage:", evacuation_voltage);
+console.log("setupValue:", setupValue);
+console.log("Q22Value:", Q22Value);
+console.log("Q24Value:", Q24Value);
+
+if (transformer === "OLTC") {
+ const result = Math.round(((((Q24Value * setupValue * 1000) + 400000) / setupValue) / 1000)*setupValue*1000);
+ console.log("scmWeekly2 (OLTC):", result);
+ return result;
+} else {
+ const result = Q24Value * setupValue * 1000;
+ console.log("scmWeekly2 (Non-OLTC):", result);
+ return result;
+}
+};
+
+//***Total Value 8***/
+const TotalVal8 = scmData.ac_ht_cable*50;
+
+//***Total Value 9***/
+const TotalVal9 = 380*internalQuantity9;
+
+//***Total Value 10***/
+const TotalVal10 = 660*internalQuantity10;
+
+//***Total Value 11***/
+const TotalVal11 = 130*internalQuantity11;
+
+//***Total Value 12***/
+const TotalVal12 = 470*20;
+
+//***Total Value 13***/
+const TotalVal13 = scmWeekly1*1;
+      
+
+
+      //  // ***for 2nd row***
+      //  const internalQuantity2 = offerData.ac_capacity
+      //  ? Math.round((offerData.ac_capacity * 1000) / offerData.inverter_capacity)
+      //  : 0;
+ 
+       // ***for 16th row***/
+   const internalQuantity16 = offerData.dc_capacity
+   ? Math.round((offerData.dc_capacity*4+internalQuantity2+10))
+   : 0;
+ 
+       // ***for 17th row***/
+       const internalQuantity17 = offerData.dc_capacity
+       ? Math.round((offerData.dc_capacity*1000*0.8))
+       : 0;
+ 
+ 
+       const internalQuantity18 = offerData.dc_capacity
+       ? Math.round(offerData.dc_capacity)
+       : 0
+ 
+         const EvacuationVoltage =(evacuation_voltage) => {
+             if(evacuation_voltage === 11 ){
+               return "11 kV, 630/800 amp,25 kA for 3 sec With MFM of CL0.2s";
+             }
+             else{
+               return "33 kV, 630/800 amp,25 kA for 3 sec With MFM of CL0.2s";
+             }
+           };
+ 
+           const scmWeekly3 = (evacuation_voltage)=>{
+             if(evacuation_voltage===11){
+               return 440000;
+             }
+             else{
+               return 770000;
+             }
+           };
+ 
+           //***Total Value 16***/
+           const TotalVal16 = internalQuantity16*scmData.earthing_station;
+ 
+           //***Total Value 17***/
+           const TotalVal17 = internalQuantity17*scmData.earthing_strips;
+ 
+            //***Total Value 19***/
+            const TotalVal19 = internalQuantity18*scmData.lightening_arrestor;
+ 
+            //***Total Value 20***/
+            const TotalVal20 = scmData.datalogger*1;
+ 
+            //***Total Value 21***/
+            const TotalVal21 = scmData.auxilary_transformer*1;
+ 
+            //***Total Value 22***/
+            const TotalVal22 = scmData.ups_ldb*1;
+
+
+   //***for 24th row ***/
+  //  const internalQuantity24 = offerData.dc_capacity*1000;
+
+
+   //***Total Value 23***/
+   const TotalVal23 = scmData.balance_of_system*internalQuantity24;
+
+   //***Total Value 24***/
+   const TotalVal24 = scmData.installation_commissioing.labour_works*internalQuantity24*1000;
+
+
+
+
+    const SumO6ToO38 = (TotalVal1*12/100+TotalVal1) + (TotalVal2*12/100+TotalVal2) + 
+    (TotalVal3*18/100+TotalVal3) + (TotalVal4*18/100+TotalVal4) + (TotalVal5*18/100+TotalVal5) + 
+    (Math.round(TotalVal6*18/100+TotalVal6)) + (TotalVal7*18/100+TotalVal7) +
+     (TotalVal8*18/100+TotalVal8) + (TotalVal9*18/100+TotalVal9) + (TotalVal10*18/100+TotalVal10) +
+      (TotalVal11*18/100+TotalVal11) + (TotalVal12*18/100+TotalVal12) + (TotalVal13*18/100+TotalVal13)
+       + (scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)*18/100+scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)) +
+        (scmWeekly3(offerData.evacuation_voltage)*18/100+scmWeekly3(offerData.evacuation_voltage)) + 
+        (TotalVal16*18/100+TotalVal16) + (TotalVal17*18/100+TotalVal17) + (TotalVal19*18/100+TotalVal19) + 
+        (TotalVal20*18/100+TotalVal20) + (TotalVal21*18/100+TotalVal21) + (TotalVal22*18/100+TotalVal22) + 
+        (TotalVal23*18/100+TotalVal23) + (TotalVal24*18/100+TotalVal24) + (TotalVal25*18/100+TotalVal25) + 
+        (TotalVal26*18/100+TotalVal26) + (TotalVal27*18/100+TotalVal27) + ((scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)) + 
+        ((scmData.abt_meter*3)*18/100+(scmData.abt_meter*3)) + ((scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1))
+         + ((scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1));
+
+
+         const scmWeekly5 = Math.round(SumO6ToO38*0.1/100);
 
         return (
             <>
@@ -297,8 +545,8 @@ const CivilWorks1 = () => {
                             <td>INR/Wp</td>
                             <td>{TotalVal25}</td>
                             <td>18%</td>
-                            <td>40824</td>
-                            <td>267624</td>
+                            <td>{TotalVal25*18/100}</td>
+                            <td>{TotalVal25*18/100+TotalVal25}</td>
                           </tr>
         
                           <tr>
@@ -318,8 +566,8 @@ const CivilWorks1 = () => {
                             <td>INR/Wp</td>
                             <td>{TotalVal26}</td>
                             <td>18%</td>
-                            <td>163296</td>
-                            <td>1070496</td>
+                            <td>{TotalVal26*18/100}</td>
+                            <td>{TotalVal26*18/100+TotalVal26}</td>
                           </tr>
         
                           <tr>
@@ -335,8 +583,8 @@ const CivilWorks1 = () => {
                             <td>INR/Vehicle</td>
                             <td>{TotalVal27}</td>
                             <td>18%</td>
-                            <td>151200</td>
-                            <td>991200</td>
+                            <td>{TotalVal27*18/100}</td>
+                            <td>{TotalVal27*18/100+TotalVal27}</td>
                           </tr>
         
                           <tr>
@@ -370,8 +618,8 @@ const CivilWorks1 = () => {
                             <td>INR/Set</td>
                             <td>{scmData.ct_pt*2}</td>
                             <td>18%</td>
-                            <td>19800</td>
-                            <td>129800</td>
+                            <td>{(scmData.ct_pt*2)*18/100}</td>
+                            <td>{(scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)}</td>
                           </tr>
         
                           <tr>
@@ -388,8 +636,8 @@ const CivilWorks1 = () => {
                             <td>INR/Set</td>
                             <td>{scmData.abt_meter*3}</td>
                             <td>18%</td>
-                            <td>51300</td>
-                            <td>336300</td>
+                            <td>{(scmData.abt_meter*3)*18/100}</td>
+                            <td>{(scmData.abt_meter*3)*18/100+(scmData.abt_meter*3)}</td>
                           </tr>
         
                           <tr>
@@ -406,8 +654,8 @@ const CivilWorks1 = () => {
                             <td>INR/Set</td>
                             <td>{scmData.vcb_kiosk*1}</td>
                             <td>18%</td>
-                            <td>57600</td>
-                            <td>377600</td>
+                            <td>{(scmData.vcb_kiosk*1)*18/100}</td>
+                            <td>{(scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1)}</td>
                           </tr>
         
                           <tr>
@@ -424,8 +672,8 @@ const CivilWorks1 = () => {
                             <td>INR/Set</td>
                             <td>{scmWeekly4(offerData.ac_capacity)*1}</td>
                             <td>18%</td>
-                            <td>22500</td>
-                            <td>147500</td>
+                            <td>{(scmWeekly4(offerData.ac_capacity)*1)*18/100}</td>
+                            <td>{(scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1)}</td>
                           </tr>
         
                           <tr>
@@ -438,12 +686,12 @@ const CivilWorks1 = () => {
                             <td>KWp</td>
                             <td>{internalQuantity31}</td>
                             <td>{internalQuantity31}</td>
-                            <td>145340</td>
+                            <td>{scmWeekly5}</td>
                             <td>INR</td>
-                            <td>75474</td>
+                            <td>{scmWeekly5}</td>
                             <td>18%</td>
-                            <td>13585</td>
-                            <td>89059</td>
+                            <td>{Math.round(scmWeekly5*18/100)}</td>
+                            <td>{Math.round(scmWeekly5*18/100+scmWeekly5)}</td>
                           </tr>
 
                           <tr>
@@ -460,13 +708,9 @@ const CivilWorks1 = () => {
                             <td>INR</td>
                             <td>{TotalVal32}</td>
                             <td>18%</td>
-                            <td>13585</td>
-                            <td>89059</td>
-                          </tr>
-
-                          
-        
-                          
+                            <td>{TotalVal32*18/100}</td>
+                            <td>{TotalVal32*18/100+TotalVal32}</td>
+                          </tr>   
                         </tbody>
                       </Table>
                     </Sheet>
