@@ -50,6 +50,8 @@ const CivilWorks1 = () => {
             balance_of_system: "",
             transportation: "",
             transmission_line: "",
+            transmission_line_internal: "",
+            transmission_line_print: "",
             ct_pt: "",
             abt_meter: "",
             vcb_kiosk: "",
@@ -118,6 +120,8 @@ const CivilWorks1 = () => {
                 balance_of_system:  fetchedScmData.balance_of_system || "",
                 transportation:  fetchedScmData.transportation || "",
                 transmission_line:  fetchedScmData.transmission_line || "",
+                transmission_line_internal:fetchedScmData.transmission_line_internal || "",
+                transmission_line_print:fetchedScmData.transmission_line_print || "",
                 ct_pt:  fetchedScmData.ct_pt || "",
                 abt_meter:  fetchedScmData.abt_meter || "",
                 vcb_kiosk:  fetchedScmData.vcb_kiosk || "",
@@ -594,14 +598,14 @@ const TotalVal13 = scmWeekly1*1;
                             <td>
                             </td>
                             <td>Km</td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{scmData.transmission_line_internal}</td>
+                            <td>{scmData.transmission_line_print}</td>
                             <td>{scmData.transmission_line}</td>
                             <td>INR/Km</td>
-                            <td>{scmData.transmission_line*0}</td>
+                            <td>{(scmData.transmission_line)*(scmData.transmission_line_print)}</td>
                             <td>18%</td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{((scmData.transmission_line)*(scmData.transmission_line_print))*18/100}</td>
+                            <td>{((scmData.transmission_line)*(scmData.transmission_line_print))*18/100+(scmData.transmission_line)*(scmData.transmission_line_print)}</td>
                           </tr>
         
                           <tr>
