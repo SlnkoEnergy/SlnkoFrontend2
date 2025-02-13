@@ -549,8 +549,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Wp</td>
                             <td>{TotalVal25}</td>
                             <td>18%</td>
-                            <td>{TotalVal25*18/100}</td>
-                            <td>{TotalVal25*18/100+TotalVal25}</td>
+                            <td>{Math.round(TotalVal25*18/100)}</td>
+                            <td>{Math.round(TotalVal25*18/100+TotalVal25)}</td>
                           </tr>
         
                           <tr>
@@ -570,8 +570,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Wp</td>
                             <td>{TotalVal26}</td>
                             <td>18%</td>
-                            <td>{TotalVal26*18/100}</td>
-                            <td>{TotalVal26*18/100+TotalVal26}</td>
+                            <td>{Math.round(TotalVal26*18/100)}</td>
+                            <td>{Math.round(TotalVal26*18/100+TotalVal26)}</td>
                           </tr>
         
                           <tr>
@@ -587,8 +587,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Vehicle</td>
                             <td>{TotalVal27}</td>
                             <td>18%</td>
-                            <td>{TotalVal27*18/100}</td>
-                            <td>{TotalVal27*18/100+TotalVal27}</td>
+                            <td>{Math.round(TotalVal27*18/100)}</td>
+                            <td>{Math.round(TotalVal27*18/100+TotalVal27)}</td>
                           </tr>
         
                           <tr>
@@ -598,14 +598,14 @@ const TotalVal13 = scmWeekly1*1;
                             <td>
                             </td>
                             <td>Km</td>
-                            <td>{scmData.transmission_line_internal}</td>
-                            <td>{scmData.transmission_line_print}</td>
+                            <td>{offerData.transmission_length}</td>
+                            <td>{offerData.transmission_length}</td>
                             <td>{scmData.transmission_line}</td>
                             <td>INR/Km</td>
-                            <td>{(scmData.transmission_line)*(scmData.transmission_line_print)}</td>
+                            <td>{(offerData.transmission_length)*(scmData.transmission_line)}</td>
                             <td>18%</td>
-                            <td>{((scmData.transmission_line)*(scmData.transmission_line_print))*18/100}</td>
-                            <td>{((scmData.transmission_line)*(scmData.transmission_line_print))*18/100+(scmData.transmission_line)*(scmData.transmission_line_print)}</td>
+                            <td>{Math.round((offerData.transmission_length)*(scmData.transmission_line))*18/100}</td>
+                            <td>{Math.round((offerData.transmission_length)*(scmData.transmission_line))*18/100+(scmData.transmission_line)*(offerData.transmission_length)}</td>
                           </tr>
         
                           <tr>
@@ -622,8 +622,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Set</td>
                             <td>{scmData.ct_pt*2}</td>
                             <td>18%</td>
-                            <td>{(scmData.ct_pt*2)*18/100}</td>
-                            <td>{(scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)}</td>
+                            <td>{Math.round((scmData.ct_pt*2)*18/100)}</td>
+                            <td>{Math.round((scmData.ct_pt*2)*18/100+(scmData.ct_pt*2))}</td>
                           </tr>
         
                           <tr>
@@ -640,8 +640,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Set</td>
                             <td>{scmData.abt_meter*3}</td>
                             <td>18%</td>
-                            <td>{(scmData.abt_meter*3)*18/100}</td>
-                            <td>{(scmData.abt_meter*3)*18/100+(scmData.abt_meter*3)}</td>
+                            <td>{Math.round((scmData.abt_meter*3)*18/100)}</td>
+                            <td>{Math.round((scmData.abt_meter*3)*18/100+(scmData.abt_meter*3))}</td>
                           </tr>
         
                           <tr>
@@ -658,8 +658,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Set</td>
                             <td>{scmData.vcb_kiosk*1}</td>
                             <td>18%</td>
-                            <td>{(scmData.vcb_kiosk*1)*18/100}</td>
-                            <td>{(scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1)}</td>
+                            <td>{Math.round((scmData.vcb_kiosk*1)*18/100)}</td>
+                            <td>{Math.round((scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1))}</td>
                           </tr>
         
                           <tr>
@@ -676,8 +676,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Set</td>
                             <td>{scmWeekly4(offerData.ac_capacity)*1}</td>
                             <td>18%</td>
-                            <td>{(scmWeekly4(offerData.ac_capacity)*1)*18/100}</td>
-                            <td>{(scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1)}</td>
+                            <td>{Math.round((scmWeekly4(offerData.ac_capacity)*1)*18/100)}</td>
+                            <td>{Math.round((scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1))}</td>
                           </tr>
         
                           <tr>
@@ -712,8 +712,8 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR</td>
                             <td>{TotalVal32}</td>
                             <td>18%</td>
-                            <td>{TotalVal32*18/100}</td>
-                            <td>{TotalVal32*18/100+TotalVal32}</td>
+                            <td>{Math.round(TotalVal32*18/100)}</td>
+                            <td>{Math.round(TotalVal32*18/100+TotalVal32)}</td>
                           </tr>   
                         </tbody>
                       </Table>

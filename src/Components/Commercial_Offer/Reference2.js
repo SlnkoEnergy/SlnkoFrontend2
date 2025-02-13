@@ -389,8 +389,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal8}</td>
                     <td>18%</td>
-                    <td>{TotalVal8*18/100}</td>
-                    <td>{TotalVal8*18/100+TotalVal8}</td>
+                    <td>{Math.round(TotalVal8*18/100)}</td>
+                    <td>{Math.round(TotalVal8*18/100+TotalVal8)}</td>
                   </tr>
 
                   <tr>
@@ -405,8 +405,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal9}</td>
                     <td>18%</td>
-                    <td>{TotalVal9*18/100}</td>
-                    <td>{TotalVal9*18/100+TotalVal9}</td>
+                    <td>{Math.round(TotalVal9*18/100)}</td>
+                    <td>{Math.round(TotalVal9*18/100+TotalVal9)}</td>
                   </tr>
 
                   <tr>
@@ -423,8 +423,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal10}</td>
                     <td>18%</td>
-                    <td>{TotalVal10*18/100}</td>
-                    <td>{TotalVal10*18/100+TotalVal10}</td>
+                    <td>{Math.round(TotalVal10*18/100)}</td>
+                    <td>{Math.round(TotalVal10*18/100+TotalVal10)}</td>
                   </tr>
 
                   <tr>
@@ -439,8 +439,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal11}</td>
                     <td>18%</td>
-                    <td>{TotalVal11*18/100}</td>
-                    <td>{TotalVal11*18/100+TotalVal11}</td>
+                    <td>{Math.round(TotalVal11*18/100)}</td>
+                    <td>{Math.round(TotalVal11*18/100+TotalVal11)}</td>
                   </tr>
 
                   <tr>
@@ -455,8 +455,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>INR/m</td>
                     <td>{TotalVal12}</td>
                     <td>18%</td>
-                    <td>{TotalVal12*18/100}</td>
-                    <td>{TotalVal12*18/100+TotalVal12}</td>
+                    <td>{Math.round(TotalVal12*18/100)}</td>
+                    <td>{Math.round(TotalVal12*18/100+TotalVal12)}</td>
                   </tr>
 
                   <tr>

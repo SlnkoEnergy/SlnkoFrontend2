@@ -330,8 +330,8 @@ const Reference = () => {
                     <td>INR/Wp</td>
                     <td>{TotalVal1}</td>
                     <td>12%</td>
-                    <td>{TotalVal1*12/100}</td>
-                    <td>{TotalVal1*12/100+TotalVal1}</td>
+                    <td>{Math.round(TotalVal1*12/100)}</td>
+                    <td>{Math.round(TotalVal1*12/100+TotalVal1)}</td>
                   </tr>
 
                   <tr>
@@ -351,8 +351,8 @@ const Reference = () => {
                     <td>INR/Nos.</td>
                     <td>{TotalVal2}</td>
                     <td>12%</td>
-                    <td>{TotalVal2*12/100}</td>
-                    <td>{TotalVal2*12/100+TotalVal2}</td>
+                    <td>{Math.round(TotalVal2*12/100)}</td>
+                    <td>{Math.round(TotalVal2*12/100+TotalVal2)}</td>
                   </tr>
 
                   <tr>
@@ -367,8 +367,8 @@ const Reference = () => {
                     <td>INR/Kg</td>
                     <td>{TotalVal3}</td>
                     <td>18%</td>
-                    <td>{TotalVal3*18/100}</td>
-                    <td>{TotalVal3*18/100+TotalVal3}</td>
+                    <td>{Math.round(TotalVal3*18/100)}</td>
+                    <td>{Math.round(TotalVal3*18/100+TotalVal3)}</td>
                   </tr>
 
                   <tr>
@@ -386,8 +386,8 @@ const Reference = () => {
                     <td>INR/Wp</td>
                     <td>{TotalVal4}</td>
                     <td>18%</td>
-                    <td>{TotalVal4*18/100}</td>
-                    <td>{TotalVal4*18/100+TotalVal4}</td>
+                    <td>{Math.round(TotalVal4*18/100)}</td>
+                    <td>{Math.round(TotalVal4*18/100+TotalVal4)}</td>
                   </tr>
 
                   <tr>
@@ -412,8 +412,8 @@ const Reference = () => {
                     <td>INR/m</td>
                     <td>{TotalVal5}</td>
                     <td>18%</td>
-                    <td>{TotalVal5*18/100}</td>
-                    <td>{TotalVal5*18/100+TotalVal5}</td>
+                    <td>{Math.round(TotalVal5*18/100)}</td>
+                    <td>{Math.round(TotalVal5*18/100+TotalVal5)}</td>
                   </tr>
 
                   <tr>
@@ -456,8 +456,8 @@ const Reference = () => {
                     <td>INR/m</td>
                     <td>{TotalVal7}</td>
                     <td>18%</td>
-                    <td>{TotalVal7*18/100}</td>
-                    <td>{TotalVal7*18/100+TotalVal7}</td>
+                    <td>{Math.round(TotalVal7*18/100)}</td>
+                    <td>{Math.round(TotalVal7*18/100+TotalVal7)}</td>
                   </tr>
                 </tbody>
               </Table>
