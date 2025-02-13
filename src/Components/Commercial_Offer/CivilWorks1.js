@@ -419,12 +419,41 @@ const TotalVal13 = scmWeekly1*1;
         (TotalVal16*18/100+TotalVal16) + (TotalVal17*18/100+TotalVal17) + (TotalVal19*18/100+TotalVal19) + 
         (TotalVal20*18/100+TotalVal20) + (TotalVal21*18/100+TotalVal21) + (TotalVal22*18/100+TotalVal22) + 
         (TotalVal23*18/100+TotalVal23) + (TotalVal24*18/100+TotalVal24) + (TotalVal25*18/100+TotalVal25) + 
-        (TotalVal26*18/100+TotalVal26) + (TotalVal27*18/100+TotalVal27) + ((scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)) + 
+        (TotalVal26*18/100+TotalVal26) + (TotalVal27*18/100+TotalVal27) + ((offerData.transmission_length)*(scmData.transmission_line))*18/100+(scmData.transmission_line)*(offerData.transmission_length) + ((scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)) + 
         ((scmData.abt_meter*3)*18/100+(scmData.abt_meter*3)) + ((scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1))
          + ((scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1));
 
 
          const scmWeekly5 = Math.round(SumO6ToO38*0.1/100);
+
+
+
+         const SumOfTotal_Value = Math.round(TotalVal1+TotalVal2+TotalVal3+TotalVal4+TotalVal5+TotalVal6+TotalVal7+TotalVal8+
+         TotalVal9+TotalVal10+TotalVal11+TotalVal12+TotalVal13+(scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage))+
+         (scmWeekly3(offerData.evacuation_voltage))+TotalVal16+TotalVal17+0+TotalVal19+TotalVal20+TotalVal21+TotalVal22+TotalVal23+
+         TotalVal24+TotalVal25+TotalVal26+TotalVal27+((offerData.transmission_length)*(scmData.transmission_line))+(scmData.ct_pt*2)+
+         (scmData.abt_meter*3)+(scmData.vcb_kiosk*1)+(scmWeekly4(offerData.ac_capacity)*1)+(scmWeekly5)+TotalVal32);
+
+         const SumOfTotal_With_GST = Math.round((TotalVal1*12/100+TotalVal1) + (TotalVal2*12/100+TotalVal2) + 
+    (TotalVal3*18/100+TotalVal3) + (TotalVal4*18/100+TotalVal4) + (TotalVal5*18/100+TotalVal5) + 
+    (Math.round(TotalVal6*18/100+TotalVal6)) + (TotalVal7*18/100+TotalVal7) +
+     (TotalVal8*18/100+TotalVal8) + (TotalVal9*18/100+TotalVal9) + (TotalVal10*18/100+TotalVal10) +
+      (TotalVal11*18/100+TotalVal11) + (TotalVal12*18/100+TotalVal12) + (TotalVal13*18/100+TotalVal13)
+       + (scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)*18/100+scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)) +
+        (scmWeekly3(offerData.evacuation_voltage)*18/100+scmWeekly3(offerData.evacuation_voltage)) + 
+        (TotalVal16*18/100+TotalVal16) + (TotalVal17*18/100+TotalVal17) + (TotalVal19*18/100+TotalVal19) + 
+        (TotalVal20*18/100+TotalVal20) + (TotalVal21*18/100+TotalVal21) + (TotalVal22*18/100+TotalVal22) + 
+        (TotalVal23*18/100+TotalVal23) + (TotalVal24*18/100+TotalVal24) + (TotalVal25*18/100+TotalVal25) + 
+        (TotalVal26*18/100+TotalVal26) + (TotalVal27*18/100+TotalVal27) + ((offerData.transmission_length)*(scmData.transmission_line))*18/100+(scmData.transmission_line)*(offerData.transmission_length) +  ((scmData.ct_pt*2)*18/100+(scmData.ct_pt*2)) + 
+        ((scmData.abt_meter*3)*18/100+(scmData.abt_meter*3)) + ((scmData.vcb_kiosk*1)*18/100+(scmData.vcb_kiosk*1))
+         + ((scmWeekly4(offerData.ac_capacity)*1)*18/100+(scmWeekly4(offerData.ac_capacity)*1)) + (scmWeekly5*18/100+scmWeekly5) + (TotalVal32*18/100+TotalVal32));
+
+         const SumOf_Total_GST_Value = (TotalVal1*12/100)+ (TotalVal2*12/100)+(TotalVal3*18/100)+(TotalVal4*18/100)+(TotalVal5*18/100) +(TotalVal6*18/100) +(TotalVal7*18/100)
+          +(TotalVal8*18/100) + (TotalVal9*18/100)+(TotalVal10*18/100) +(TotalVal11*18/100)
+           +(TotalVal12*18/100) +(TotalVal13*18/100) +(scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)*18/100) +
+           (scmWeekly3(offerData.evacuation_voltage)*18/100) + (TotalVal16*18/100)+(TotalVal17*18/100) +0 +(TotalVal19*18/100) +(TotalVal20*18/100) +(TotalVal21*18/100) 
+           +(TotalVal22*18/100) +(TotalVal23*18/100) + (TotalVal24*18/100)+ (TotalVal25*18/100)+(TotalVal26*18/100) +(TotalVal27*18/100) + (((offerData.transmission_length)*(scmData.transmission_line))*18/100)+
+           ((scmData.ct_pt*2)*18/100) +((scmData.abt_meter*3)*18/100) +((scmData.vcb_kiosk*1)*18/100)+ ((scmWeekly4(offerData.ac_capacity)*1)*18/100)+(scmWeekly5*18/100) +  (TotalVal32*18/100)   
 
         return (
             <>
@@ -441,7 +470,7 @@ const TotalVal13 = scmWeekly1*1;
                   sx={{
                     width: "100%",
                     height: "100%",
-                    border: "2px solid blue",
+                    // border: "2px solid blue",
                   }}
                 >
                   <Box
@@ -604,7 +633,7 @@ const TotalVal13 = scmWeekly1*1;
                             <td>INR/Km</td>
                             <td>{(offerData.transmission_length)*(scmData.transmission_line)}</td>
                             <td>18%</td>
-                            <td>{Math.round((offerData.transmission_length)*(scmData.transmission_line))*18/100}</td>
+                            <td>{Math.round(((offerData.transmission_length)*(scmData.transmission_line))*18/100)}</td>
                             <td>{Math.round((offerData.transmission_length)*(scmData.transmission_line))*18/100+(scmData.transmission_line)*(offerData.transmission_length)}</td>
                           </tr>
         
@@ -716,6 +745,19 @@ const TotalVal13 = scmWeekly1*1;
                             <td>{Math.round(TotalVal32*18/100+TotalVal32)}</td>
                           </tr>   
                         </tbody>
+
+                        <tfoot>
+                          <td colSpan={9}>Total Value</td>
+                          <td colSpan={4}>{Math.round(SumOfTotal_Value)}</td>
+                        </tfoot>
+                        <tfoot>
+                          <td colSpan={9}>Total With GST</td>
+                          <td colSpan={4}>{Math.round(SumOfTotal_With_GST)}</td>
+                        </tfoot>
+                        <tfoot>
+                          <td colSpan={9}>Total GST Value</td>
+                          <td colSpan={4}>{Math.round(SumOf_Total_GST_Value)}</td>
+                        </tfoot>
                       </Table>
                     </Sheet>
                   </Box>
