@@ -6,20 +6,25 @@ import {
   Typography,
   Grid,
   Sheet,
+  Table,
   FormLabel,
 } from "@mui/joy";
 import axios from "axios";
 
 const ScmCostingForm = () => {
   const [scmData, setscmData] = useState({
-    spv_modules: "",
+    spv_modules_555: "",
+      spv_modules_580: "",
+      spv_modules_550: "",
+      spv_modules_585: "",
     solar_inverter: "",
     module_mounting_structure: "",
     mounting_hardware: "",
     dc_cable: "",
     ac_cable_inverter_accb: "",
     ac_cable_accb_transformer: "",
-    ac_ht_cable: "",
+    ac_ht_cable_11KV: "",
+    ac_ht_cable_33KV: "",
     earthing_station: "",
     earthing_strips: "",
     earthing_strip: "",
@@ -29,11 +34,18 @@ const ScmCostingForm = () => {
     ups_ldb: "",
     balance_of_system: "",
     transportation: "",
-    transmission_line: "",
+    transmission_line_11kv: "",
+    transmission_line_33kv: "",
     transmission_line_internal: "",
     transmission_line_print: "",
-    ct_pt: "",
-    abt_meter: "",
+        ct_pt_11kv_MP: "",
+        ct_pt_33kv_MP: "",
+        ct_pt_11kv_Other: "",
+        ct_pt_33kv_Other: "",
+        abt_meter_11kv_MP: "",
+        abt_meter_33kv_MP: "",
+        abt_meter_11kv_Other: "",
+        abt_meter_33kv_Other: "",
     vcb_kiosk: "",
     slnko_charges: "",
     installation_commissioing: {
@@ -78,14 +90,18 @@ const handleSubmit = async (e) => {
     console.log("Response:", response.data);
     alert("Data submitted successfully!");
     setscmData({
-    spv_modules: "",
+      spv_modules_555: "",
+      spv_modules_580: "",
+      spv_modules_550: "",
+      spv_modules_585: "",
     solar_inverter: "",
-    module_mounting_structure: "",
+    module_mounting_structure: "",    
     mounting_hardware: "",
     dc_cable: "",
     ac_cable_inverter_accb: "",
     ac_cable_accb_transformer: "",
-    ac_ht_cable: "",
+    ac_ht_cable_11KV: "",
+    ac_ht_cable_33KV: "",
     earthing_station: "",
     earthing_strips: "",
     earthing_strip: "",
@@ -95,11 +111,18 @@ const handleSubmit = async (e) => {
     ups_ldb: "",
     balance_of_system: "",
     transportation: "",
-    transmission_line: "",
+    transmission_line_11kv: "",
+    transmission_line_33kv: "",
     transmission_line_internal: "",
     transmission_line_print: "",
-    ct_pt: "",
-    abt_meter: "",
+        ct_pt_11kv_MP: "",
+        ct_pt_33kv_MP: "",
+        ct_pt_11kv_Other: "",
+        ct_pt_33kv_Other: "",
+        abt_meter_11kv_MP: "",
+        abt_meter_33kv_MP: "",
+        abt_meter_11kv_Other: "",
+        abt_meter_33kv_Other: "",
     vcb_kiosk: "",
     slnko_charges: "",
     installation_commissioing: {
@@ -116,314 +139,1081 @@ const handleSubmit = async (e) => {
   }
 };
 
-  return (
-    <Sheet
-      sx={{
-        width: "50%",
-        margin: "auto",
-        padding: 3,
-        boxShadow: "lg",
-        borderRadius: "md",
-      }}
-    >
-      <Typography level="h2" sx={{ textAlign: "center", mb: 2 }}>
-        Solar Equipment Rate Form
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid xs={12} sm={4}>
-            <FormLabel>SPV Modules (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="spv_modules"
-              value={scmData.spv_modules}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Solar Inverter (INR/Nos.)</FormLabel>
-            <Input
-              type="number"
-              name="solar_inverter"
-              value={scmData.solar_inverter}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Module Mounting Structure (INR/kg)</FormLabel>
-            <Input
-              type="number"
-              name="module_mounting_structure"
-              value={scmData.module_mounting_structure}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Module Mounting & MMS Hardware (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="mounting_hardware"
-              value={scmData.mounting_hardware}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>DC Cable (Solar Module to Inverter) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="dc_cable"
-              value={scmData.dc_cable}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>AC Cable (Inverter to ACCB) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="ac_cable_inverter_accb"
-              value={scmData.ac_cable_inverter_accb}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>AC Cable (ACCB to Transformer) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="ac_cable_accb_transformer"
-              value={scmData.ac_cable_accb_transformer}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>AC HT Cable (Transformer to HT Panel) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="ac_ht_cable"
-              value={scmData.ac_ht_cable}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Earthing Station (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="earthing_station"
-              value={scmData.earthing_station}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Earthing Strips (25x3 mm GI strip) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="earthing_strips"
-              value={scmData.earthing_strips}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Earthing Strips (50x6 mm GI strip) (INR/m)</FormLabel>
-            <Input
-              type="number"
-              name="earthing_strip"
-              value={scmData.earthing_strip}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Lightening Arrestor (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="lightening_arrestor"
-              value={scmData.lightening_arrestor}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Datalogger (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="datalogger"
-              value={scmData.datalogger}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Auxilary transformer (INR/Nos.)</FormLabel>
-            <Input
-              type="number"
-              name="auxilary_transformer"
-              value={scmData.auxilary_transformer}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>UPS & LDB (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="ups_ldb"
-              value={scmData.ups_ldb}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={12}>
-            <FormLabel>Balance of system with Wet Module Cleaning System (MCS) & Dry Cleaning semi automatic robot (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="balance_of_system"
-              value={scmData.balance_of_system}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12}>
-  <Typography level="h3" sx={{ mt: 3, textAlign: "center", fontWeight: "bold", color: "#2D3748" }}>
-    Civil Works Rate
-  </Typography>
-</Grid>
-          <Grid xs={12}>
-            <Typography level="h4" sx={{ mt: 2 }}>
-              Installation & Commissioning
-            </Typography>
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Labour Works (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="labour_works"
-              value={scmData.installation_commissioing.labour_works}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Machinary (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="machinery"
-              value={scmData.installation_commissioing.machinery}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Civil Material (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="civil_material"
-              value={scmData.installation_commissioing.civil_material}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          {/* Add a margin or divider for separation */}
-<Grid xs={12}>
-  <Box sx={{ mt: 3, mb: 2, borderBottom: "1px solid #ccc" }} />
-</Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Transportaion (INR/Vehicle)</FormLabel>
-            <Input
-              type="number"
-              name="transportation"
-              value={scmData.transportation}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Transmission Line Internal (INR/km)</FormLabel>
-            <Input
-              type="number"
-              name="transmission_line_internal"
-              value={scmData.transmission_line_internal}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Transmission Line Print (INR/km)</FormLabel>
-            <Input
-              type="number"
-              name="transmission_line_print"
-              value={scmData.transmission_line_print}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>Transmission Line (INR/km)</FormLabel>
-            <Input
-              type="number"
-              name="transmission_line"
-              value={scmData.transmission_line}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>CT PT (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="ct_pt"
-              value={scmData.ct_pt}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>ABT Meter (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="abt_meter"
-              value={scmData.abt_meter}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>VCB Kiosk (INR/Set)</FormLabel>
-            <Input
-              type="number"
-              name="vcb_kiosk"
-              value={scmData.vcb_kiosk}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid xs={12} sm={4}>
-            <FormLabel>SLNKO EPCM Service Charges (INR/Wp)</FormLabel>
-            <Input
-              type="number"
-              name="slnko_charges"
-              value={scmData.slnko_charges}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Button type="submit" color="primary" variant="solid">
-            Submit
-          </Button>
-        </Box>
-      </form>
-    </Sheet>
-  );
+
+
+
+
+ return (
+   <Grid
+     container
+     sx={{
+       width: "100%",
+       height: "100%",
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center",
+       padding: { xs: 2, sm: 3, md: 4, lg: 5 },
+     }}
+   >
+     <Grid
+       item
+       xs={12}
+       sm={10}
+       md={8}
+       lg={7}
+       sx={{
+         height: "100%",
+       }}
+     >
+       {/* Logo Section */}
+       {/* <Box
+         sx={{
+           display: "flex",
+           flexDirection: { xs: "column", sm: "row" },
+           alignItems: "flex-end",
+
+           gap: 2,
+         }}
+       >
+         <img width={"220px"} height={"110px"} alt="logo" src={logo} />
+         <hr
+           style={{
+             width: "60%",
+             color: "blue",
+             borderTop: "3px solid #0f4C7f",
+             margin: "19px 0",
+           }}
+         />
+       </Box> */}
+
+       {/* Title Section */}
+       {/* <Box
+         sx={{
+           display: "flex",
+           justifyContent: "center",
+           flexWrap: "wrap",
+
+           marginTop: "20px",
+           textAlign: "center",
+         }}
+       >
+         <Typography
+           sx={{
+             color: "#56A4DA",
+             fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+             fontWeight: "bolder",
+             textDecoration: "underline rgb(243, 182, 39)",
+             textDecorationThickness: "3px",
+             textUnderlineOffset: "6px",
+           }}
+         >
+           Reference&nbsp;{" "}
+         </Typography>
+         <Typography
+           sx={{
+             color: "black",
+             fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+             fontWeight: "bolder",
+             textDecoration: "underline rgb(243, 182, 39)",
+             textDecorationThickness: "3px",
+             textUnderlineOffset: "6px",
+           }}
+         >
+           Material List
+         </Typography>
+       </Box> */}
+
+       {/* Table Section */}
+       <Box
+         sx={{
+           width: "100%",
+           height: "auto",
+           display: "flex",
+           justifyContent: "center",
+           marginTop: 3,
+         }}
+       >
+         <form onSubmit={handleSubmit}>
+         <Sheet
+           sx={{
+             width: "100%",
+             height: "100%",
+             backgroundColor: "white",
+             overflowX: "auto",
+           }}
+         >
+           <Table className="table-header">
+             <thead>
+               <tr>
+                 <th style={{ width: "5%" }}>S.NO.</th>
+                 <th style={{ width: "10%" }}>ITEM NAME</th>
+                 <th style={{ width: "15%" }}>RATING</th>
+                 <th style={{ width: "30%" }}>SPECIFICATION</th>
+                 <th>Rate</th>
+                 <th style={{ width: "10%" }}>Rate UoM</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr>
+                 <td>1.</td>
+                 <td>SPV Modules</td>
+                 <td>550 Wp</td>
+                 <td>
+                   Highly efficient Mono PERC M10 cells P-Type, PID Free & UV
+                   Resistant, With Inbuilt Bypass Diode, Frame is made of
+                   Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag
+                   inside module, Product Warranty upto 12 Years and
+                   Performance Warranty Upto 27/30 Year.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="spv_modules_550"
+                     value={scmData.spv_modules_550}
+                     onChange={handleChange} 
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>SPV Modules</td>
+                 <td>555 Wp</td>
+                 <td>
+                   Highly efficient Mono PERC M10 cells P-Type, PID Free & UV
+                   Resistant, With Inbuilt Bypass Diode, Frame is made of
+                   Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag
+                   inside module, Product Warranty upto 12 Years and
+                   Performance Warranty Upto 27/30 Year.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="spv_modules_555"
+                     value={scmData.spv_modules_555}
+                     onChange={handleChange} 
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>SPV Modules</td>
+                 <td>580 Wp</td>
+                 <td>
+                   Highly efficient TOPCon Bifacial N-Type, PID Free & UV
+                   Resistant, With Inbuilt Bypass Diode, Frame is made of
+                   Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag
+                   inside module, Product Warranty upto 12 Years and
+                   Performance Warranty Upto 27/30 Year.
+                 </td>
+                 <td>
+                 <input
+  type="number"
+  name="spv_modules_580"  
+  value={scmData.spv_modules_580}
+  onChange={handleChange}  
+  style={{
+    width: "80%",
+    padding: "5px",
+    fontSize: "1rem",
+  }}
+  placeholder="Enter Rate"
+/>
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>SPV Modules</td>
+                 <td>585 Wp</td>
+                 <td>
+                   Highly efficient TOPCon Bifacial N-Type, PID Free & UV
+                   Resistant, With Inbuilt Bypass Diode, Frame is made of
+                   Aluminium Anodized With Power Tolerance + 5Wp, With RFID Tag
+                   inside module, Product Warranty upto 12 Years and
+                   Performance Warranty Upto 27/30 Year.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="spv_modules_585"
+                     value={scmData.spv_modules_585}
+                     onChange={handleChange} 
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+               <tr>
+                 <td>2.</td>
+                 <td>Solar Inverter</td>
+                 <td>295 kVA</td>
+                 <td>
+                   Grid-tied String Inverter, Three Phase, 50 Hz Inverter
+                   output shall be at 800V, & IGBT/MOSFET Microprocessor,
+                   Efficiency-98% or above. 5 years warranty shall be provided
+                   by Manufacturer.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="solar_inverter"
+                     value={scmData.solar_inverter}
+                     onChange={handleChange} 
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Nos.</td>
+               </tr>
+               <tr>
+                 <td>3.</td>
+                 <td>Module Mounting Structure</td>
+                 <td>2PX12 Table, 4LX6 Table, 2Px24 Table</td>
+                 <td>
+                   MMS Shall be designed for wind speed as per IS 875 Part 3
+                   and optimum tilt angle. Galvalume (AZ-150-550MPA) shall
+                   conform to IS 15961, Column (YS-250) shall conform to IS
+                   2062 & HDG shall conform to IS 4759.1996 and . Exact
+                   Sections shall be decided at the time of detailed
+                   engineering. Depth of pile foundation shall be decided after
+                   soil tests.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="module_mounting_structure"
+                     value={scmData.module_mounting_structure}
+                     onChange={handleChange} 
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Kg</td>
+               </tr>
+               <tr>
+                 <td>4.</td>
+                 <td>Module Mounting & MMS Hardware</td>
+                 <td>SS304, HDG Grade 8.8</td>
+                 <td>
+                   SS304 for Module to Purlin Mounting & HDG Grade 8.8 for all
+                   other connections
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="mounting_hardware"
+                     value={scmData.mounting_hardware}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td>5.</td>
+                 <td>DC Cable (Solar Module to Inverter)</td>
+                 <td>
+                   1C x 4 sqmm Cu flexible copper conductor solar DC cable (Red
+                   & Black)
+                 </td>
+                 <td>
+                   {" "}
+                   Flexible copper conductor solar DC cable, Fine wire strands
+                   of annealed tinned copper, Rated 1.5 kV DC, Electron Beam
+                   Cross Linked Co-polymer(XLPO) Halogen Free Insulation and
+                   outer sheath, Black color and Red Colour, DC cables
+                   complying to EN50618, TUV 2PFG 1169 for service life
+                   expectency of 25 years. Flame retardent, UV resistent
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="dc_cable"
+                     value={scmData.dc_cable}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+
+               <tr>
+                 <td>6.</td>
+                 <td>AC Cable (Inverter to ACCB)</td>
+                 <td>
+                   1.9/3.3 kV,3C,300 <br />
+                   Sqmm Al, AR,XLPE, CABLE
+                 </td>
+                 <td>
+                   Aluminium, FRLS with galvanized steel armouring minimum area
+                   of coverage 90% , XLPE insulated compliant to IS: 7098, with
+                   distinct extruded XLPE inner sheath of black color as per IS
+                   5831. If armoured, Galvanized Steel armouring to be used
+                   with minumum 90% area of coverage.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ac_cable_inverter_accb"
+                     value={scmData.ac_cable_inverter_accb}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+
+               <tr>
+                 <td>7.</td>
+                 <td>AC Cable (ACCB to Transformer)</td>
+                 <td>
+                   1.9/3.3 kV,3C,300 <br />
+                   Sqmm Al, AR,XLPE, CABLE
+                 </td>
+                 <td>
+                   Aluminium, FRLS with galvanized steel armouring minimum area
+                   of coverage 90% , XLPE insulated compliant to IS: 7098, with
+                   distinct extruded XLPE inner sheath of black color as per IS
+                   5831. If armoured, Galvanized Steel armouring to be used
+                   with minumum 90% area of coverage.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ac_cable_accb_transformer"
+                     value={scmData.ac_cable_accb_transformer}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+
+               <tr>
+                 <td>8.</td>
+                 <td>AC HT Cable (Transformer to HT Panel)</td>
+                 <td>
+                   11 kV(E),3C,120 <br />
+                   Sqmm Al,Ar,HT,XLPE, CABLE
+                 </td>
+                 <td>
+                   Aluminium, FRLS with galvanized steel armouring minimum area
+                   of coverage 90% , XLPE insulated compliant to IS: 7098, with
+                   distinct extruded XLPE inner sheath of black color as per IS
+                   5831. If armoured, Galvanized Steel armouring to be used
+                   with minumum 90% area of coverage.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ac_ht_cable_11KV"
+                     value={scmData.ac_ht_cable_11KV}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>AC HT Cable (Transformer to HT Panel)</td>
+                 <td>
+                   33 kV(E),3C,120 <br />
+                   Sqmm Al,Ar,HT,XLPE, CABLE
+                 </td>
+                 <td>
+                   Aluminium, FRLS with galvanized steel armouring minimum area
+                   of coverage 90% , XLPE insulated compliant to IS: 7098, with
+                   distinct extruded XLPE inner sheath of black color as per IS
+                   5831. If armoured, Galvanized Steel armouring to be used
+                   with minumum 90% area of coverage.
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ac_ht_cable_33KV"
+                     value={scmData.ac_ht_cable_33KV}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+
+               <tr>
+                 <td>16.</td>
+                 <td>Earthing Station</td>
+                 <td>
+                   Maintenance Free Earth Electrode with Chemical Earthing Set{" "}
+                 </td>
+                 <td>
+                   The earthing for array and LT power system shall be made of
+                   3 mtr long , 17.2 mm dia, Copper Bonded , thickness of 250
+                   microns, chemical compound filled, double walled earthing
+                   electrodes including accessories, and providing masonry
+                   enclosure with cast iron cover plate having pad-locking
+                   arrangement, watering pipe using charcoal or coke and salt
+                   as required as per provisions of IS: 3043
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="earthing_station"
+                     value={scmData.earthing_station}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>17.</td>
+                 <td>Earthing Strips</td>
+                 <td>25x3 mm GI strip</td>
+                 <td>
+                   25x3 mm GI strip With Zinc coating of 70 to 80 microns
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="earthing_strips"
+                     value={scmData.earthing_strips}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+               
+               <tr>
+                 <td>18.</td>
+                 <td>Earthing Strips</td>
+                 <td>50x6 mm GI strip</td>
+                 <td>
+                   50x6 mm GI strip With Zinc coating of 70 to 80 microns
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="earthing_strip"
+                     value={scmData.earthing_strip}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/m</td>
+               </tr>
+               
+               <tr>
+                 <td>19.</td>
+                 <td>Lightening Arrestor</td>
+                 <td>107 Mtr Dia over 7 Mtr High Mast with counter</td>
+                 <td>
+                   ESE type as per NFC 17-102, ESE are considered with 107 Mtr
+                   Dia over 7 Mtr High Mast with counter
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="lightening_arrestor"
+                     value={scmData.lightening_arrestor}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>20.</td>
+                 <td>Datalogger</td>
+                 <td>As per inverter manufacturer</td>
+                 <td>As per inverter manufacturer</td>
+                 <td>
+                   <input
+                     type="number"
+                     name="datalogger"
+                     value={scmData.datalogger}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>21.</td>
+                 <td>Auxilary transformer</td>
+                 <td>10 kVA,50Hz, 800/415 V, Dyn11</td>
+                 <td>Dry Type Transformer</td>
+                 <td>
+                   <input
+                     type="number"
+                     name="auxilary_transformer"
+                     value={scmData.auxilary_transformer}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Nos.</td>
+               </tr>
+
+               <tr>
+                 <td>22.</td>
+                 <td>UPS & LDB</td>
+                 <td>1.5 kW Load with 1 Hour backup, Battery SMF Type</td>
+                 <td>-</td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ups_ldb"
+                     value={scmData.ups_ldb}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>23.</td>
+                 <td>
+                   Balance of system with Wet Module Cleaning System (MCS) &
+                   Dry Cleaning semi automatic robot
+                 </td>
+                 <td>
+                   Class C Items including Connectors, Lungs, Glands,
+                   Termination Kits, Conduits, Cable Tie, Ferruls, Sleeves, PU
+                   Foam, Route Marker, Danger boards and signages, Double
+                   Warning Tape, & Fire Fighting System
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="balance_of_system"
+                     value={scmData.balance_of_system}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+               <tr>
+                 <td colSpan={6} style={{fontWeight:"bold", fontSize:"2rem"}}>CIVIL WORKS</td>
+               </tr>
+               <tr>
+                 <td>24.</td>
+                 <td>Installation and commissioing</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>LABOUR WORKS:</span>{" "}
+                   Includes Pile casting, Module Mounting & Alignment, and
+                   complete AC-DC work till commissioning inside plant boundary
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="labour_works"
+                     value={scmData.installation_commissioing.labour_works}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td></td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>MACHINARY :</span>{" "}
+                   Includes Augar, Tractor, JCBs, Hydra, Ajax and other
+                   machinaries
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="machinery"
+                     value={scmData.installation_commissioing.machinery}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td></td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>CIVIL MATERIAL:</span>{" "}
+                   Cement, Aggregates, Bricks, Sand & Iron Bars
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="civil_material"
+                     value={scmData.installation_commissioing.civil_material}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+
+               <tr>
+                 <td>25.</td>
+                 <td>Transportaion</td>
+                 <td>Transformer, LT/HT, Cables, BOS</td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="transportation"
+                     value={scmData.transportation}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Vehicle</td>
+               </tr>
+
+               <tr>
+                 <td>26.</td>
+                 <td>Transmission Line</td>
+                 <td>
+                   11 kV Transmission Line with appropriate conductor size and
+                   PCC Poles
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="transmission_line_11kv"
+                     value={scmData.transmission_line_11kv}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Km</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>Transmission Line</td>
+                 <td>
+                   33 kV Transmission Line with appropriate conductor size and
+                   PCC Poles.
+                 </td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="transmission_line_33kv"
+                     value={scmData.transmission_line_33kv}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Km</td>
+               </tr>
+
+               <tr>
+                 <td>27.</td>
+                 <td>CT PT</td>
+                 <td>11kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Madhya
+                   Pradesh
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ct_pt_11kv_MP"
+                     value={scmData.ct_pt_11kv_MP}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>CT PT</td>
+                 <td>33kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Madhya
+                   Pradesh
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ct_pt_33kv_MP"
+                     value={scmData.ct_pt_33kv_MP}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>CT PT</td>
+                 <td>11kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Other
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ct_pt_11kv_Other"
+                     value={scmData.ct_pt_11kv_Other}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>CT PT</td>
+                 <td>33kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Other
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="ct_pt_33kv_Other"
+                     value={scmData.ct_pt_33kv_Other}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>28.</td>
+                 <td>ABT Meter</td>
+                 <td>11kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Madhya
+                   Pradesh
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="abt_meter_11kv_MP"
+                     value={scmData.abt_meter_11kv_MP}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>ABT Meter</td>
+                 <td>33kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Madhya
+                   Pradesh
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="abt_meter_33kv_MP"
+                     value={scmData.abt_meter_33kv_MP}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>ABT Meter</td>
+                 <td>11kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Other
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="abt_meter_11kv_Other"
+                     value={scmData.abt_meter_11kv_Other}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td></td>
+                 <td>ABT Meter</td>
+                 <td>33kV</td>
+                 <td>
+                   <span style={{ fontWeight: "bold" }}>State:</span> Other
+                 </td>
+                 <td>
+                   <input
+                     type="number"
+                     name="abt_meter_33kv_Other"
+                     value={scmData.abt_meter_33kv_Other}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               <tr>
+                 <td>29.</td>
+                 <td>VCB Kiosk</td>
+                 <td>As per DISCOM requirements</td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="vcb_kiosk"
+                     value={scmData.vcb_kiosk}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Set</td>
+               </tr>
+
+               
+
+               
+
+               <tr>
+                 <td>32.</td>
+                 <td>SLNKO EPCM Service Charges</td>
+                 <td>SLNKO FEE</td>
+                 <td></td>
+                 <td>
+                   <input
+                     type="number"
+                     name="slnko_charges"
+                     value={scmData.slnko_charges}
+                     onChange={handleChange}
+                     style={{
+                       width: "80%",
+                       padding: "5px",
+                       fontSize: "1rem",
+                     }}
+                     placeholder="Enter Rate"
+                   />
+                 </td>
+                 <td>INR/Wp</td>
+               </tr>
+             </tbody>
+             <tfoot>
+               <td colSpan={6}>
+               <Button type="submit" sx={{ mt: 1 }}>
+                   Submit
+                 </Button>
+               </td>
+             </tfoot>
+           </Table>
+         </Sheet>
+         </form>
+       </Box>
+     </Grid>
+   </Grid>
+ );
 };
+
+
 
 export default ScmCostingForm;
