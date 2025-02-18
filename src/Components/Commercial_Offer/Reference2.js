@@ -73,6 +73,14 @@ const Reference2 = () => {
     },
   });
 
+   const [bdRate, setBdRate] = useState({
+        spv_modules: "",
+        module_mounting_structure: "",
+        transmission_line: "",
+        slnko_charges: "",
+        submitted_by_BD: "",
+      });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,12 +90,15 @@ const Reference2 = () => {
         const result = await axios.get(
           "https://api.slnkoprotrac.com/v1/get-comm-scm-rate"
         );
+        const answer = await axios.get(
+          "https://api.slnkoprotrac.com/v1/get-comm-bd-rate");
         console.log("API Response:", response.data);
         console.log("API Response:", result.data);
-
+        console.log("API Response:", answer.data);
         // Assuming the data returned matches the structure you want
         const fetchedData = response.data[0]; // Adjust based on the structure of API response
         const fetchedScmData = result.data[0];
+        const fetchedBdData = answer.data[0];
         // Map API response to the state keys (for simplicity)
         setOfferData({
           offer_id: fetchedData.offer_id || "",
@@ -154,6 +165,17 @@ const Reference2 = () => {
             civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
           },
         });
+
+        setBdRate({
+          offer_id: fetchedBdData.offer_id || "",
+          spv_modules: fetchedBdData.spv_modules || "",
+          module_mounting_structure: fetchedBdData.module_mounting_structure || "",
+          transmission_line: fetchedBdData.transmission_line || "",
+          slnko_charges: fetchedBdData.slnko_charges || "",
+          submitted_by_BD: fetchedBdData.submitted_by_BD || "",
+
+        });
+
       } catch (error) {
         console.error("Error fetching commercial offer data:", error);
       }
@@ -190,6 +212,10 @@ const Reference2 = () => {
       return "33 kV(E),3C,120Sqmm Al,Ar,HT,XLPE, CABLE";
     }
   };
+
+  const final_ht_cable = (ac_ht_cable_11KV, ac_ht_cable_33KV, evacuation_voltage) => 
+    evacuation_voltage === 11 ? ac_ht_cable_11KV : ac_ht_cable_33KV;
+
 
   //***finding P17***/
   const setUp = (ac) => {
@@ -260,8 +286,15 @@ const scmWeekly2 = (transformer, ac_capacity, evacuation_voltage) => {
   }
 };
 
+// Call the function with actual values from offerData
+const selectedCable = final_ht_cable(
+  scmData.ac_ht_cable_11KV, 
+  scmData.ac_ht_cable_33KV, 
+  offerData.evacuation_voltage
+);
+
 //***Total Value 8***/
-const TotalVal8 = scmData.ac_ht_cable*50;
+const TotalVal8 = selectedCable*50;
 
 //***Total Value 9***/
 const TotalVal9 = 380*internalQuantity9;
@@ -381,6 +414,7 @@ const TotalVal13 = scmWeekly1*1;
                     <th>UoM</th>
                     <th>Qty (Int.)</th>
                     <th>Qty</th>
+                    <th>Category</th>
                     <th>Rate</th>
                     <th>Rate UoM</th>
                     <th>Total Value</th>
@@ -404,7 +438,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>m</td>
                     <td>50</td>
                     <td>50</td>
-                    <td>{scmData.ac_ht_cable}</td>
+                    <td>Cables</td>
+                    <td>{selectedCable}</td>
                     <td>INR/m</td>
                     <td>{TotalVal8}</td>
                     <td>18%</td>
@@ -420,6 +455,7 @@ const TotalVal13 = scmWeekly1*1;
                     <td>m</td>
                     <td>{internalQuantity9}</td>
                     <td>{internalQuantity9}</td>
+                    <td>Cables</td>
                     <td>380</td>
                     <td>INR/m</td>
                     <td>{TotalVal9}</td>
@@ -438,6 +474,7 @@ const TotalVal13 = scmWeekly1*1;
                     <td>m</td>
                     <td>{internalQuantity10}</td>
                     <td>{internalQuantity10}</td>
+                    <td>Cables</td>
                     <td>660</td>
                     <td>INR/m</td>
                     <td>{TotalVal10}</td>
@@ -454,6 +491,7 @@ const TotalVal13 = scmWeekly1*1;
                     <td>m</td>
                     <td>{internalQuantity11}</td>
                     <td>{internalQuantity11}</td>
+                    <td>Cables</td>
                     <td>130</td>
                     <td>INR/m</td>
                     <td>{TotalVal11}</td>
@@ -470,6 +508,7 @@ const TotalVal13 = scmWeekly1*1;
                     <td>m</td>
                     <td>20</td>
                     <td>20</td>
+                    <td>Cables</td>
                     <td>470</td>
                     <td>INR/m</td>
                     <td>{TotalVal12}</td>
@@ -502,6 +541,8 @@ const TotalVal13 = scmWeekly1*1;
                     <td>Set</td>
                     <td>1</td>
                     <td>1</td>
+                    <td>Electrical Equipment - Solar Plant Side
+                    (Transformer+LT Panel+HT Panel+Aux Transformer+UPS System)</td>
                     <td>{scmWeekly1}</td>
                     <td>INR/Set</td>
                     <td>{TotalVal13}</td>
@@ -528,8 +569,9 @@ const TotalVal13 = scmWeekly1*1;
                     <td>Nos.</td>
                     <td>1</td>
                     <td>1</td>
+                    <td>Electrical Equipment - Solar Plant Side
+                    (Transformer+LT Panel+HT Panel+Aux Transformer+UPS System)</td>
                     <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
-
                     <td>INR/Nos.</td>
                     <td>{scmWeekly2(offerData.transformer, offerData.ac_capacity, offerData.evacuation_voltage)}</td>
                     <td>18%</td>

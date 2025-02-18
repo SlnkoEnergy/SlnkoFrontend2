@@ -73,19 +73,29 @@ const Reference4 = () => {
                 civil_material: "",
                     },
                   });
-              
+                  
+                   const [bdRate, setBdRate] = useState({
+                                      spv_modules: "",
+                                      module_mounting_structure: "",
+                                      transmission_line: "",
+                                      slnko_charges: "",
+                                      submitted_by_BD: "",
+                                    });
               
                  useEffect(() => {
                   const fetchData = async () => {
                     try {
                       const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
                       const result = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-scm-rate");
+                      const answer = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-bd-rate");
                       console.log("API Response:", response.data);
                       console.log("API Response:", result.data);
+                      console.log("API Response:", answer.data);
               
                       // Assuming the data returned matches the structure you want
                       const fetchedData = response.data[0]; // Adjust based on the structure of API response
                       const fetchedScmData = result.data[0];
+                      const fetchedBdData = answer.data[0];
                       // Map API response to the state keys (for simplicity)
                       setOfferData({
                         offer_id: fetchedData.offer_id || "",
@@ -151,6 +161,16 @@ const Reference4 = () => {
             machinery: fetchedScmData.installation_commissioing?.machinery || "",
             civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
                           },
+                      });
+
+                      setBdRate({
+                        offer_id: fetchedBdData.offer_id || "",
+                        spv_modules: fetchedBdData.spv_modules || "",
+                        module_mounting_structure: fetchedBdData.module_mounting_structure || "",
+                        transmission_line: fetchedBdData.transmission_line || "",
+                        slnko_charges: fetchedBdData.slnko_charges || "",
+                        submitted_by_BD: fetchedBdData.submitted_by_BD || "",
+              
                       });
               
                     } catch (error) {
@@ -274,6 +294,7 @@ const Reference4 = () => {
                             <th>UoM</th>
                             <th>Qty (Int.)</th>
                             <th>Qty</th>
+                            <th>Category</th>
                             <th>Rate</th>
                             <th>Rate UoM</th>
                             <th>Total Value</th>
@@ -299,6 +320,7 @@ const Reference4 = () => {
                             <td>KWp</td>
                             <td>{internalQuantity24}</td>
                             <td>{internalQuantity24}</td>
+                            <td>Other Balance of Material</td>
                             <td>{scmData.balance_of_system}</td>
                             <td>INR/Set</td>
                             <td>{TotalVal23}</td>
@@ -367,6 +389,7 @@ const Reference4 = () => {
                             <th>UoM</th>
                             <th>Qty (Int.)</th>
                             <th>Qty</th>
+                            <th>Category</th>
                             <th>Rate</th>
                             <th>Rate UoM</th>
                             <th>Total Value</th>
@@ -388,6 +411,7 @@ const Reference4 = () => {
                             <td>KWp</td>
                             <td>{internalQuantity24}</td>
                             <td>{internalQuantity24}</td>
+                            <td>Installation Charges inside boundary wall (Labour, Machinary & Civil Material)</td>
                             <td>{scmData.installation_commissioing.labour_works}</td>
                             <td>INR/Wp</td>
                             <td>{TotalVal24}</td>

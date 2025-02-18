@@ -74,18 +74,27 @@ const Reference = () => {
       },
     });
 
+    const [bdRate, setBdRate] = useState({
+      spv_modules: "",
+      module_mounting_structure: "",
+      transmission_line: "",
+      slnko_charges: "",
+      submitted_by_BD: "",
+    });
 
    useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
         const result = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-scm-rate");
+        const answer = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-bd-rate");
         console.log("API Response:", response.data);
         console.log("API Response:", result.data);
-
+        console.log("API Response:", answer.data);
         // Assuming the data returned matches the structure you want
         const fetchedData = response.data[0]; // Adjust based on the structure of API response
         const fetchedScmData = result.data[0];
+        const fetchedBdData = answer.data[0];
         // Map API response to the state keys (for simplicity)
         setOfferData({
           offer_id: fetchedData.offer_id || "",
@@ -118,7 +127,7 @@ const Reference = () => {
           spv_modules_550: fetchedScmData.spv_modules_550 || "",
           spv_modules_585: fetchedScmData.spv_modules_585 || "",
           solar_inverter:  fetchedScmData.solar_inverter || "",
-          module_mounting_structure:  fetchedScmData.module_mounting_structure || "",
+          module_mounting_structure_scm:  fetchedScmData.module_mounting_structure || "",
           mounting_hardware:  fetchedScmData.mounting_hardware || "",
           dc_cable:  fetchedScmData.dc_cable || "",
           ac_cable_inverter_accb:  fetchedScmData.ac_cable_inverter_accb || "",
@@ -145,12 +154,22 @@ const Reference = () => {
           abt_meter_11kv_Other:  fetchedScmData.abt_meter_11kv_Other || "",
           abt_meter_33kv_Other:  fetchedScmData.abt_meter_33kv_Other || "",
           vcb_kiosk:  fetchedScmData.vcb_kiosk || "",
-          slnko_charges:  fetchedScmData.slnko_charges || "",
+          slnko_charges_scm:  fetchedScmData.slnko_charges_scm || "",
           installation_commissioing: {
             labour_works: fetchedScmData.installation_commissioing?.labour_works || "",
             machinery: fetchedScmData.installation_commissioing?.machinery || "",
             civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
           },
+        });
+
+        setBdRate({
+          offer_id: fetchedBdData.offer_id || "",
+          spv_modules: fetchedBdData.spv_modules || "",
+          module_mounting_structure: fetchedBdData.module_mounting_structure || "",
+          transmission_line: fetchedBdData.transmission_line || "",
+          slnko_charges: fetchedBdData.slnko_charges || "",
+          submitted_by_BD: fetchedBdData.submitted_by_BD || "",
+
         });
 
       } catch (error) {
@@ -208,13 +227,13 @@ const Reference = () => {
    const InternalQuantity7 = internalQuantity2*20;
 
    //***Total Value 1***/
-   const TotalVal1 = scmData.spv_modules*PrintQuantity1*offerData.module_capacity;
+   const TotalVal1 = bdRate.spv_modules*PrintQuantity1*offerData.module_capacity;
 
     //***Total Value 2***/
     const TotalVal2 = scmData.solar_inverter*internalQuantity2;
 
     //***Total Value 3***/
-    const TotalVal3 = scmData.module_mounting_structure*InternalQuantity3;
+    const TotalVal3 = bdRate.module_mounting_structure*InternalQuantity3;
 
     //***Total Value 4***/
     const TotalVal4 = Math.round(scmData.mounting_hardware*offerData.dc_capacity*1000*1000);
@@ -331,6 +350,7 @@ const Reference = () => {
                     <th>UoM</th>
                     <th>Qty (Int.)</th>
                     <th>Qty</th>
+                    <th>Category</th>
                     <th>Rate</th>
                     <th>Rate UoM</th>
                     <th>Total Value</th>
@@ -350,7 +370,8 @@ const Reference = () => {
                     <td>Nos.</td>
                     <td>{internalQuantity1}</td>
                     <td>{PrintQuantity1}</td>
-                    <td>{scmData.spv_modules}</td>
+                    <td>Solar Module</td>
+                    <td>{bdRate.spv_modules}</td>
                     <td>INR/Wp</td>
                     <td>{TotalVal1}</td>
                     <td>12%</td>
@@ -371,6 +392,7 @@ const Reference = () => {
                     <td>Nos.</td>
                     <td>{internalQuantity2}</td>
                     <td>{internalQuantity2}</td>
+                    <td>Solar Inverter & Datalogger</td>
                     <td>{scmData.solar_inverter}</td>
                     <td>INR/Nos.</td>
                     <td>{TotalVal2}</td>
@@ -387,7 +409,8 @@ const Reference = () => {
                     <td>Kg</td>
                     <td>{InternalQuantity3}</td>
                     <td>{InternalQuantity3}</td>
-                    <td>{scmData.module_mounting_structure}</td>
+                    <td>MMS With Fasteners</td>
+                    <td>{bdRate.module_mounting_structure}</td>
                     <td>INR/Kg</td>
                     <td>{TotalVal3}</td>
                     <td>18%</td>
@@ -406,6 +429,7 @@ const Reference = () => {
                     <td>Set</td>
                     <td>1</td>
                     <td>1</td>
+                    <td>MMS With Fasteners</td>
                     <td>{scmData.mounting_hardware}</td>
                     <td>INR/Wp</td>
                     <td>{TotalVal4}</td>
@@ -432,6 +456,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity5}</td>
                     <td>{InternalQuantity5}</td>
+                    <td>Cables</td>
                     <td>{scmData.dc_cable}</td>
                     <td>INR/m</td>
                     <td>{TotalVal5}</td>
@@ -454,6 +479,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity6}</td>
                     <td>{InternalQuantity6}</td>
+                    <td>Cables</td>
                     <td>{scmData.ac_cable_inverter_accb}</td>
                     <td>INR/m</td>
                     <td>{TotalVal6}</td>
@@ -476,6 +502,7 @@ const Reference = () => {
                     <td>m</td>
                     <td>{InternalQuantity7}</td>
                     <td>{InternalQuantity7}</td>
+                    <td>Cables</td>
                     <td>{scmData.ac_cable_accb_transformer}</td>
                     <td>INR/m</td>
                     <td>{TotalVal7}</td>

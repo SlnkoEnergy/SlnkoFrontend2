@@ -73,6 +73,14 @@ const Reference3 = () => {
           civil_material: "",
               },
             });
+
+            const [bdRate, setBdRate] = useState({
+                    spv_modules: "",
+                    module_mounting_structure: "",
+                    transmission_line: "",
+                    slnko_charges: "",
+                    submitted_by_BD: "",
+                  });
         
         
            useEffect(() => {
@@ -80,12 +88,15 @@ const Reference3 = () => {
               try {
                 const response = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-offer");
                 const result = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-scm-rate");
+                const answer = await axios.get("https://api.slnkoprotrac.com/v1/get-comm-bd-rate");
+                          
                 console.log("API Response:", response.data);
                 console.log("API Response:", result.data);
-        
+                console.log("API Response:", answer.data);
                 // Assuming the data returned matches the structure you want
                 const fetchedData = response.data[0]; // Adjust based on the structure of API response
                 const fetchedScmData = result.data[0];
+                const fetchedBdData = answer.data[0];
                 // Map API response to the state keys (for simplicity)
                 setOfferData({
                   offer_id: fetchedData.offer_id || "",
@@ -152,6 +163,16 @@ const Reference3 = () => {
             civil_material: fetchedScmData.installation_commissioing?.civil_material || "",
                   },
                 });
+
+                setBdRate({
+                  offer_id: fetchedBdData.offer_id || "",
+                  spv_modules: fetchedBdData.spv_modules || "",
+                  module_mounting_structure: fetchedBdData.module_mounting_structure || "",
+                  transmission_line: fetchedBdData.transmission_line || "",
+                  slnko_charges: fetchedBdData.slnko_charges || "",
+                  submitted_by_BD: fetchedBdData.submitted_by_BD || "",
+        
+                });
         
               } catch (error) {
                 console.error("Error fetching commercial offer data:", error);
@@ -176,6 +197,8 @@ const Reference3 = () => {
       const internalQuantity17 = offerData.dc_capacity
       ? Math.round((offerData.dc_capacity*1000*0.8))
       : 0;
+
+      const internalQuantity17_2 = 150;
 
 
       const internalQuantity18 = offerData.dc_capacity
@@ -205,6 +228,9 @@ const Reference3 = () => {
 
           //***Total Value 17***/
           const TotalVal17 = internalQuantity17*scmData.earthing_strips;
+
+          //***Total Value 18***/
+          const TotalVal18 = internalQuantity17_2*scmData.earthing_strip;
 
            //***Total Value 19***/
            const TotalVal19 = internalQuantity18*scmData.lightening_arrestor;
@@ -319,6 +345,7 @@ const Reference3 = () => {
                             <th>UoM</th>
                             <th>Qty (Int.)</th>
                             <th>Qty</th>
+                            <th>Category</th>
                             <th>Rate</th>
                             <th>Rate UoM</th>
                             <th>Total Value</th>
@@ -348,6 +375,8 @@ const Reference3 = () => {
                             <td>Nos.</td>
                             <td>1</td>
                             <td>1</td>
+                            <td>Electrical Equipment - Solar Plant Side
+                            (Transformer+LT Panel+HT Panel+Aux Transformer+UPS System)</td>
                             <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
                             <td>INR/Nos.</td>
                             <td>{scmWeekly3(offerData.evacuation_voltage)}</td>
@@ -375,6 +404,7 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>{internalQuantity16}</td>
                             <td>{internalQuantity16}</td>
+                            <td>Other Balance of Material</td>
                             <td>{scmData.earthing_station}</td>
                             <td>INR/Set</td>
                             <td>{TotalVal16}</td>
@@ -393,6 +423,7 @@ const Reference3 = () => {
                             <td>m</td>
                             <td>{internalQuantity17}</td>
                             <td>{internalQuantity17}</td>
+                            <td>Other Balance of Material</td>
                             <td>{scmData.earthing_strips}</td>
                             <td>INR/m</td>
                             <td>{TotalVal17}</td>
@@ -409,14 +440,15 @@ const Reference3 = () => {
                               50x6 mm GI strip With Zinc coating of 70 to 80 microns
                             </td>
                             <td>m</td>
-                            <td></td>
-                            <td></td>
+                            <td>{internalQuantity17_2}</td>
+                            <td>{internalQuantity17_2}</td>
+                            <td>Other Balance of Material</td>
                             <td>{scmData.earthing_strip}</td>
                             <td>INR/m</td>
-                            <td>0</td>
+                            <td>{TotalVal18}</td>
                             <td>18%</td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{Math.round(TotalVal18*18/100)}</td>
+                            <td>{Math.round(TotalVal18*18/100)+TotalVal18}</td>
                           </tr>
         
                           <tr>
@@ -430,6 +462,7 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>{internalQuantity18}</td>
                             <td>{internalQuantity18}</td>
+                            <td>Other Balance of Material</td>
                             <td>{scmData.lightening_arrestor}</td>
                             <td>INR/Set</td>
                             <td>{TotalVal19}</td>
@@ -446,8 +479,9 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>1</td>
                             <td>1</td>
+                            <td>Solar Inverter & Datalogger</td>
                             <td>{scmData.datalogger}</td>
-                            <td></td>
+                            <td>INR/Set</td>
                             <td>{TotalVal20}</td>
                             <td>18%</td>
                             <td>{Math.round(TotalVal20*18/100)}</td>
@@ -462,6 +496,8 @@ const Reference3 = () => {
                             <td>Nos.</td>
                             <td>1</td>
                             <td>1</td>
+                            <td>Electrical Equipment - Solar Plant Side
+                            (Transformer+LT Panel+HT Panel+Aux Transformer+UPS System)</td>
                             <td>{scmData.auxilary_transformer}</td>
                             <td>INR/Nos.</td>
                             <td>{TotalVal21}</td>
@@ -478,6 +514,8 @@ const Reference3 = () => {
                             <td>Set</td>
                             <td>1</td>
                             <td>1</td>
+                            <td>Electrical Equipment - Solar Plant Side
+                            (Transformer+LT Panel+HT Panel+Aux Transformer+UPS System)</td>
                             <td>{scmData.ups_ldb}</td>
                             <td>INR/Set</td>
                             <td>{TotalVal22}</td>
