@@ -944,7 +944,9 @@ const Total_Cost_GST = Math.round((((Final_Total_GST_Plant_Cost)/offerData.dc_ca
 const Total_Cost_with_GST = Math.round((((Final_Total_with_GST_Plant_Cost)/offerData.dc_capacity)/1000)/1000);
 
 
-
+const Without_module_INR_wp_Basic = Math.round((((Cost_Without_Module)/offerData.dc_capacity)/1000)/1000);
+const Without_module_INR_wp_GST = Math.round((((Cost_Without_Module_GST)/offerData.dc_capacity)/1000)/1000);
+const Without_Module__INR_wp_with_GST = Math.round((((Cost_Without_Module_with_GST)/offerData.dc_capacity)/1000)/1000);
 
 
 
@@ -1249,9 +1251,9 @@ const Total_Cost_with_GST = Math.round((((Final_Total_with_GST_Plant_Cost)/offer
 
                 <tr>
                   <td>Cost without Module (INR/Wp DC)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{Without_module_INR_wp_Basic}</td>
+                  <td>{Without_module_INR_wp_GST}</td>
+                  <td>{Without_Module__INR_wp_with_GST}</td>
                 </tr>
               </tbody>
             </Table>
