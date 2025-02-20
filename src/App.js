@@ -1,9 +1,6 @@
 
 import React from 'react';
 import './App.css';
-
-
-
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -36,7 +33,12 @@ import './App.css';
 // import Summary from './Components/Commercial_Offer/costing_summary';
 // import ScmCostingForm from './Components/Commercial_Offer/SCM_costing';
 // import ScmCostingSummary from './Components/Commercial_Offer/Scm_costing_summary';
-import EditSCMRate from './Components/Commercial_Offer/scm_edit_costing';
+// import EditSCMRate from './Components/Commercial_Offer/scm_edit_costing';
+// import Pages2 from './Components/Commercial_Offer/Pages2';
+// import Pages1 from './Components/Commercial_Offer/Pages1';
+import Page5 from './Components/Commercial_Offer/Page5';
+
+
 
 function App() {
   return (
@@ -72,7 +74,10 @@ function App() {
      {/* <ScmCostingForm/> */}
      {/* <ScmCostingSummary/> */}
      {/* <Summary/> */}
-     <EditSCMRate/>
+     {/* <EditSCMRate/> */}
+     {/* <Pages2/> */}
+     <Page5/>
+     
     </div>
   );
 }
