@@ -33,9 +33,10 @@ import './App.css';
 // import Reference3 from './Components/Commercial_Offer/Reference3';
 // import Reference4 from './Components/Commercial_Offer/Reference4';
 // import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
-import Summary from './Components/Commercial_Offer/costing_summary';
+// import Summary from './Components/Commercial_Offer/costing_summary';
 // import ScmCostingForm from './Components/Commercial_Offer/SCM_costing';
 // import ScmCostingSummary from './Components/Commercial_Offer/Scm_costing_summary';
+import EditSCMRate from './Components/Commercial_Offer/scm_edit_costing';
 
 function App() {
   return (
@@ -70,7 +71,8 @@ function App() {
      {/* <CivilWorks1/> */}
      {/* <ScmCostingForm/> */}
      {/* <ScmCostingSummary/> */}
-     <Summary/>
+     {/* <Summary/> */}
+     <EditSCMRate/>
     </div>
   );
 }
