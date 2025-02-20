@@ -36,7 +36,9 @@ import './App.css';
 // import EditSCMRate from './Components/Commercial_Offer/scm_edit_costing';
 // import Pages2 from './Components/Commercial_Offer/Pages2';
 // import Pages1 from './Components/Commercial_Offer/Pages1';
-import Page5 from './Components/Commercial_Offer/Page5';
+// import Page5 from './Components/Commercial_Offer/Page5';
+// import Page6 from './Components/Commercial_Offer/Page6';
+import Page9 from './Components/Commercial_Offer/Page9';
 
 
 
@@ -76,7 +78,9 @@ function App() {
      {/* <Summary/> */}
      {/* <EditSCMRate/> */}
      {/* <Pages2/> */}
-     <Page5/>
+     {/* <Page5/> */}
+     {/* <Page6/> */}
+     <Page9/>
      
     </div>
   );
