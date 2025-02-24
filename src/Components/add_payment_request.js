@@ -47,7 +47,7 @@ function PaymentRequestForm() {
   useEffect(() => {
     const fetchProjectIDs = async () => {
       try {
-        const response = await axios.get("http://147.93.20.206:8080/v1/get-all-project");
+        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-projecT-IT");
         console.log("Project IDs fetched:", response.data);
         setProjectIDs(response.data.data || []);
       } catch (error) {
@@ -57,7 +57,7 @@ function PaymentRequestForm() {
 
     const fetchPoNumbers = async () => {
       try {
-        const response = await axios.get("http://147.93.20.206:8080/v1/get-all-po");
+        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-pO-IT");
         console.log("PO Numbers fetched:", response.data);
         setPoNumbers(response.data.data || []);
       } catch (error) {
@@ -71,7 +71,7 @@ function PaymentRequestForm() {
 
   const getVendorDetails = async (vendorName) => {
     try {
-      const response = await axios.get("http://147.93.20.206:8080/v1/get-all-vendor");
+      const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-vendoR-IT");
       console.log("All vendor details fetched:", response.data);
 
       const matchedVendor = response.data.data?.find(
@@ -96,110 +96,58 @@ function PaymentRequestForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
 // Handle conditional logic for pay_type
-if (name === "pay_type") {
-  if (value === "adjustment") {
-    // Update requestedFor when payment type is Adjustment
+if (name === "po_number" && value) {
+  const selectedPo = poNumbers.find((po) => po.po_number === value);
+  if (selectedPo) {
+    console.log("Selected PO details:", selectedPo);
+    setSelectedPoDetails(selectedPo);
+    const currentPoBalance = selectedPo.po_value - selectedPo.amount_paid;
+
     setFormData((prev) => ({
       ...prev,
-      item: "Customer Adjustment", // Set requestedFor to Customer Adjustment
-      po_number: "N/A",
-      po_value: "N/A",
-      amount_paid: "N/A",
-      currentPoBalance: "N/A",
-      Beneficiary_Name: "",
-      Account_No: "",
-      IFSC_Code: "",
-      Bank_Name: "",
+      item: selectedPo.item || "",
+      vendor: selectedPo.vendor || "",
+      po_value: selectedPo.po_value || "",
+      amount_paid: selectedPo.amount_paid || "",
+      currentPoBalance: currentPoBalance !== null && currentPoBalance !== undefined ? currentPoBalance : "",
     }));
-  } else if (value === "slnko_service_charge") {
-    // Update requestedFor when payment type is Slnko Service Charge
-    setFormData((prev) => ({
-      ...prev,
-      item: "Slnko Service Charge", // Set requestedFor to Slnko Service Charge
-      Beneficiary_Name: "Slnko Energy PVT LTD",
-      Account_No: "N/A",
-      IFSC_Code: "N/A",
-      Bank_Name: "N/A",
-    }));
+
+    // Fetch beneficiary details
+    if (selectedPo.vendor) {
+      console.log("Fetching details for vendor:", selectedPo.vendor);
+      getVendorDetails(selectedPo.vendor).then((vendorDetails) => {
+        console.log("Fetched beneficiary details:", vendorDetails);
+        setFormData((prev) => ({
+          ...prev,
+          Beneficiary_Name: vendorDetails.Beneficiary_Name || "",
+          Account_No: vendorDetails.Account_No || "",
+          IFSC_Code: vendorDetails.IFSC_Code || "",
+          Bank_Name: vendorDetails.Bank_Name || "",
+          paymentMode: "Account Transfer", // Set payment mode automatically
+        }));
+      });
+    }
+
+    // Fetch Project Details using p_id from PO API
+    const matchingProject = projectIDs.find((project) => project.code === selectedPo.p_id);
+    if (matchingProject) {
+      console.log("Matched Project details from PO p_id:", matchingProject);
+      setFormData((prev) => ({
+        ...prev,
+        projectID: matchingProject.code || "", // Update Project ID
+        name: matchingProject.name || "",
+        customer: matchingProject.customer || "",
+        p_group: matchingProject.p_group || "",
+      }));
+    } else {
+      console.warn("No matching project found for p_id:", selectedPo.p_id);
+    }
   } else {
-    // Reset values if it's another payment type
-    setFormData((prev) => ({
-      ...prev,
-      item: "",
-      Beneficiary_Name: "",
-      Account_No: "",
-      IFSC_Code: "",
-      Bank_Name: "",
-    }));
+    console.warn("PO number not found in the list:", value);
   }
 }
 
 
-    if (name === "po_number" && value) {
-      const selectedPo = poNumbers.find((po) => po.po_number === value);
-      if (selectedPo) {
-        console.log("Selected PO details:", selectedPo);
-        setSelectedPoDetails(selectedPo);
-        const currentPoBalance = selectedPo.po_value - selectedPo.amount_paid;
-        setFormData((prev) => ({
-          ...prev,
-          item: selectedPo.item || "",
-          vendor: selectedPo.vendor || "",
-          po_value: selectedPo.po_value || "",
-          amount_paid: selectedPo.amount_paid || "",
-          currentPoBalance: currentPoBalance !== null && currentPoBalance !== undefined ? currentPoBalance : "", // Handle `0` properly
-        }));
-
-        // Fetch beneficiary details if vendor is present
-        if (selectedPo.vendor) {
-          console.log("Fetching details for vendor:", selectedPo.vendor);
-          getVendorDetails(selectedPo.vendor).then((vendorDetails) => {
-            console.log("Fetched beneficiary details:", vendorDetails);
-            setFormData((prev) => ({
-              ...prev,
-              Beneficiary_Name: vendorDetails.Beneficiary_Name || "",
-              Account_No: vendorDetails.Account_No || "",
-              IFSC_Code: vendorDetails.IFSC_Code || "",
-              Bank_Name: vendorDetails.Bank_Name || "",
-              paymentMode: "Account Transfer", // Set payment mode automatically
-            }));
-          });
-        }
-      } else {
-        console.warn("PO number not found in the list:", value);
-      }
-    }
-
- // If Amount Requested changes, validate that it does not exceed Current PO Balance
- if (name === "amountRequested") {
-  const amountRequested = parseFloat(value);
-  const currentPoBalance = parseFloat(formData.currentPoBalance);
-
-  if (amountRequested > currentPoBalance) {
-    // You can show an alert or message to the user
-    alert("Amount Requested cannot be greater than Current PO Balance!");
-    // Reset the value to the previous one or set it to the maximum allowed
-    setFormData((prev) => ({
-      ...prev,
-      amountRequested: currentPoBalance,
-    }));
-  }
-}
-
-    if (name === "projectID" && value) {
-      const selectedProject = projectIDs.find((project) => project.code === value);
-      if (selectedProject) {
-        console.log("Selected Project details:", selectedProject);
-        setFormData((prev) => ({
-          ...prev,
-          name: selectedProject.name || "",
-          customer: selectedProject.customer || "",
-          p_group: selectedProject.p_group || "",
-        }));
-      } else {
-        console.warn("Project ID not found in the list:", value);
-      }
-    }
   };
 
    const handleSubmit = async (e) => {
@@ -207,7 +155,7 @@ if (name === "pay_type") {
     console.log("Form data submitted:", formData);
     try {
       const response = await axios.post(
-        "http://147.93.20.206:8080/v1/add-pay-request",
+        "https://api.slnkoprotrac.com/v1/add-pay-requesT-IT",
         formData
       );
       console.log("Payment request submitted successfully:", response.data);
