@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
-import PaymentRequestForm from './Components/add_payment_request';
+// import PaymentRequestForm from './Components/add_payment_request';
 // import AddMoneyForm from './Components/add_money';
 // import AddPurchaseOrder from './Components/add_purchase_order';
 // import AddVendor from './Components/add_vendor';
@@ -40,6 +40,7 @@ import PaymentRequestForm from './Components/add_payment_request';
 // import Page6 from './Components/Commercial_Offer/Page6';
 // import Page9 from './Components/Commercial_Offer/Page9';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
+import CreateLead from './Components/BD/create_lead';
 
 
 
@@ -48,7 +49,7 @@ function App() {
     <div>
       {/* <Login /> */}
       {/* <ForgotPassword /> */}
-     < PaymentRequestForm/>
+     {/* < PaymentRequestForm/> */}
      {/* {/* < AddMoneyForm/> */}
      {/* <AddPurchaseOrder/> */}
      {/* < AddVendor/> */}
@@ -83,6 +84,7 @@ function App() {
      {/* <Page6/> */}
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
+     <CreateLead/>
     </div>
   );
 }
