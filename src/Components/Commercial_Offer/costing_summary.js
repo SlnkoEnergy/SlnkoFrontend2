@@ -1257,6 +1257,23 @@ const Without_Module__INR_wp_with_GST = Math.round((((Cost_Without_Module_with_G
                 </tr>
               </tbody>
             </Table>
+            <Box sx={{ width: "90%", marginTop: "20px" }}>
+  <Typography
+    variant="h6"
+    sx={{
+      fontWeight: "bold",
+      fontFamily: "sans-serif",
+      backgroundColor: "#D9D9D9",
+      padding: "8px",
+    }}
+  >
+    Exclusions:
+  </Typography>
+  <Typography>- 1. Control Room</Typography>
+  <Typography>- 2. Water Arrangement</Typography>
+  <Typography>- 3. Boundary Wall / Fencing</Typography>
+</Box>
+
           </Box>
         </Grid>
       </Grid>
