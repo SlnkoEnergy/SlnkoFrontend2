@@ -1,6 +1,7 @@
 
 import React from 'react';
 import './App.css';
+import FormComponent from './Components/BD/nextfu';
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -42,7 +43,7 @@ import './App.css';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
 // import CreateLead from './Components/BD/create_lead';
 // import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
-import TaskDashboard from './Components/BD/Task_Dashboard';
+// import TaskDashboard from './Components/BD/Task_Dashboard';
 
 
 
@@ -88,7 +89,8 @@ function App() {
      {/* <Rate_Offer/> */}
      {/* <CreateLead/> */}
      {/* <HandoverSheetForm/> */}
-     <TaskDashboard/>
+     {/* <TaskDashboard/> */}
+     <FormComponent/>
     </div>
   );
 }
