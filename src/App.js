@@ -1,7 +1,6 @@
 
 import React from 'react';
 import './App.css';
-import FormComponent from './Components/BD/nextfu';
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -44,6 +43,8 @@ import FormComponent from './Components/BD/nextfu';
 // import CreateLead from './Components/BD/create_lead';
 // import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
+import FormComponent from './Components/BD/nextfu';
+
 
 
 

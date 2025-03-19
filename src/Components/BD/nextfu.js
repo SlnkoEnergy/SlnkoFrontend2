@@ -32,15 +32,26 @@ const FormComponent = () => {
   useEffect(() => {
     const fetchBdMembers = async () => {
       try {
-        const response = await axios.get("/api/bd-members");
-        setBdMembers(response.data.map((member) => member.name));
+        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-user-IT");
+        console.log("API Response:", response.data); // Log to inspect the data structure
+  
+        const users = Array.isArray(response.data?.data) 
+          ? response.data.data 
+          : []; // Handle possible structure like { data: [...] }
+        
+        const filteredMembers = users.filter(
+          (user) => user.department === "BD"
+        );
+  
+        setBdMembers(filteredMembers.map((member) => member.name));
       } catch (error) {
         console.error("Error fetching BD members:", error);
       }
     };
-
+  
     fetchBdMembers();
   }, []);
+  
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
