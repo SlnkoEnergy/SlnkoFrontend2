@@ -25,7 +25,7 @@ import './App.css';
 // import BillHistoryTable from './Components/bill_history';
 // import VendorBillSummary from './Components/vendor_bill_summary';
 // import CommercialForm from './Components/Commercial_Offer/commercial_form';
-import EditCommercialForm from './Components/Commercial_Offer/edit_commercial_form';
+// import EditCommercialForm from './Components/Commercial_Offer/edit_commercial_form';
 // import Reference from './Components/Commercial_Offer/Reference1';
 // import Reference2 from './Components/Commercial_Offer/Reference2';
 // import Reference3 from './Components/Commercial_Offer/Reference3';
@@ -42,7 +42,7 @@ import EditCommercialForm from './Components/Commercial_Offer/edit_commercial_fo
 // import Page9 from './Components/Commercial_Offer/Page9';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
 // import CreateLead from './Components/BD/create_lead';
-// import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
+import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
 // import FormComponent from './Components/BD/nextfu';
 
@@ -90,10 +90,10 @@ function App() {
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
      {/* <CreateLead/> */}
-     {/* <HandoverSheetForm/> */}
+     <HandoverSheetForm/>
      {/* <TaskDashboard/> */}
      {/* <FormComponent/> */}
-     <EditCommercialForm/>
+     {/* <EditCommercialForm/> */}
     </div>
   );
 }
