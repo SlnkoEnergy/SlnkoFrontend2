@@ -20,11 +20,11 @@ import plus from "../../Assets/plus 1.png";
 
 const FormComponent = () => {
   const [formData, setFormData] = useState({
-    col1: "",
-    col2: "",
-    col3: "",
-    col4: [],
-    col5: "",
+    name: "",
+    date: "",
+    reference: "",
+    by_whom: {},
+    comment: "",
   });
 
   const [bdMembers, setBdMembers] = useState([]);
@@ -32,34 +32,53 @@ const FormComponent = () => {
   useEffect(() => {
     const fetchBdMembers = async () => {
       try {
-        const response = await axios.get("https://api.slnkoprotrac.com/v1/get-all-user-IT");
+        const response = await axios.get(
+          "https://api.slnkoprotrac.com/v1/get-all-user-IT"
+        );
         console.log("API Response:", response.data); // Log to inspect the data structure
-  
-        const users = Array.isArray(response.data?.data) 
-          ? response.data.data 
-          : []; // Handle possible structure like { data: [...] }
-        
+
+        const users = Array.isArray(response.data?.data)
+          ? response.data.data
+          : [];
+
         const filteredMembers = users.filter(
           (user) => user.department === "BD"
         );
-  
-        setBdMembers(filteredMembers.map((member) => member.name));
+
+        setBdMembers(
+          filteredMembers.map((member) => ({ label: member.name, id: member._id }))
+        );
       } catch (error) {
         console.error("Error fetching BD members:", error);
       }
     };
-  
+
     fetchBdMembers();
   }, []);
-  
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleByWhomChange = (_, newValue) => {
+    const selectedMembers = newValue.reduce((acc, member) => {
+      acc[member.id] = member.label;
+      return acc;
+    }, {});
+    handleChange("by_whom", selectedMembers);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+    try {
+      const response = await axios.post(
+        "https://api.slnkoprotrac.com/v1/add-task",
+        formData
+      );
+      console.log("Form Data Submitted Successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+    }
   };
 
   return (
@@ -116,8 +135,8 @@ const FormComponent = () => {
               <Input
                 fullWidth
                 placeholder="Customer Name"
-                value={formData.col1}
-                onChange={(e) => handleChange("col1", e.target.value)}
+                value={formData.name}
+                onChange={(e) => handleChange("name", e.target.value)}
                 sx={{ borderRadius: "8px" }}
               />
             </FormControl>
@@ -127,8 +146,8 @@ const FormComponent = () => {
                 fullWidth
                 type="date"
                 placeholder="Next FollowUp"
-                value={formData.col2}
-                onChange={(e) => handleChange("col2", e.target.value)}
+                value={formData.date}
+                onChange={(e) => handleChange("date", e.target.value)}
                 sx={{ borderRadius: "8px" }}
                 slotProps={{
                   input: {
@@ -141,8 +160,8 @@ const FormComponent = () => {
             <FormControl>
               <FormLabel>Reference</FormLabel>
               <Select
-                value={formData.col3}
-                onChange={(e, newValue) => handleChange("col3", newValue)}
+                value={formData.reference}
+                onChange={(e, newValue) => handleChange("reference", newValue)}
                 sx={{ borderRadius: "8px" }}
               >
                 <Option value="By call">By Call</Option>
@@ -155,16 +174,16 @@ const FormComponent = () => {
               <Autocomplete
                 multiple
                 options={bdMembers}
-                value={formData.col4 || []}
-                onChange={(_, newValue) => handleChange("col4", newValue)}
+                getOptionLabel={(option) => option.label}
+                value={Object.values(formData.by_whom).map((label) => ({ label }))}
+                onChange={handleByWhomChange}
                 renderInput={(params) => (
-                  <Input {...params} placeholder="Select BD Members" />
+                  <Input
+                    {...params}
+                    placeholder="Select BD Members"
+                    sx={{ minHeight: "40px", overflowY: "auto" }}
+                  />
                 )}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip key={option} label={option} {...getTagProps({ index })} />
-                  ))
-                }
               />
             </FormControl>
 
