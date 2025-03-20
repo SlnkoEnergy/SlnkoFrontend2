@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Sheet, Typography, Box } from '@mui/joy';
+import { Table, Sheet, Typography, Box, Divider } from '@mui/joy';
 import Img1 from "../../Assets/follow_up_history.png";
 
 
@@ -29,9 +29,26 @@ const FollowUpHistory = () => {
                 <Typography level="h2" sx={{ color: '#D78827', fontWeight: 'bold' }}>Follow Up History</Typography>
             </Box>
 
-            <Sheet variant="soft" sx={{ p: 2, mb: 2, backgroundColor: '#f5f5f5', borderRadius: '12px' }}>
-                <Typography sx={{ fontSize: '1.1rem' }}>
-                    Client Name: Ramesh &nbsp;&nbsp; | &nbsp;&nbsp; POC: Shambhavi &nbsp;&nbsp; | &nbsp;&nbsp; Company: Charlie Pvt.Ltd &nbsp;&nbsp; | &nbsp;&nbsp; Location: Rajasthan
+            <Sheet
+                variant="soft"
+                sx={{ 
+                    p: 3, 
+                    mb: 2, 
+                    backgroundColor: '#e3f2fd',
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5
+                }}
+            >
+                <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#1976D2' }}>Client Information</Typography>
+                <Divider />
+                <Typography sx={{ fontSize: '1.1rem', color: '#333' }}>
+                    <strong>Client Name:</strong> Ramesh &nbsp;| &nbsp;&nbsp; 
+                    <strong>POC:</strong> Shambhavi &nbsp;| &nbsp;&nbsp; 
+                    <strong>Company:</strong> Charlie Pvt.Ltd &nbsp;| &nbsp;&nbsp; 
+                    <strong>Location:</strong> Rajasthan
                 </Typography>
             </Sheet>
 
