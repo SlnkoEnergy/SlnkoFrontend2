@@ -23,7 +23,7 @@ const FormComponent = () => {
     name: "",
     date: "",
     reference: "",
-    by_whom: {},
+    by_whom: [],
     comment: "",
   });
 
@@ -61,11 +61,7 @@ const FormComponent = () => {
   };
 
   const handleByWhomChange = (_, newValue) => {
-    const selectedMembers = newValue.reduce((acc, member) => {
-      acc[member.id] = member.label;
-      return acc;
-    }, {});
-    handleChange("by_whom", selectedMembers);
+    handleChange("by_whom", newValue.map((member) => member.label));
   };
 
   const handleSubmit = async (e) => {
@@ -175,7 +171,7 @@ const FormComponent = () => {
                 multiple
                 options={bdMembers}
                 getOptionLabel={(option) => option.label}
-                value={Object.values(formData.by_whom).map((label) => ({ label }))}
+                value={formData.by_whom.map((label) => ({ label }))}
                 onChange={handleByWhomChange}
                 renderInput={(params) => (
                   <Input
