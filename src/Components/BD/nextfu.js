@@ -168,19 +168,23 @@ const FormComponent = () => {
             <FormControl>
               <FormLabel>By Whom</FormLabel>
               <Autocomplete
-                multiple
-                options={bdMembers}
-                getOptionLabel={(option) => option.label}
-                value={formData.by_whom.map((label) => ({ label }))}
-                onChange={handleByWhomChange}
-                renderInput={(params) => (
-                  <Input
-                    {...params}
-                    placeholder="Select BD Members"
-                    sx={{ minHeight: "40px", overflowY: "auto" }}
-                  />
-                )}
-              />
+  multiple
+  options={bdMembers}
+  getOptionLabel={(option) => option.label}
+  isOptionEqualToValue={(option, value) => option.id === value.id}
+  value={bdMembers.filter((member) => 
+    formData.by_whom.includes(member.label)
+  )}
+  onChange={handleByWhomChange}
+  renderInput={(params) => (
+    <Input
+      {...params}
+      placeholder="Select BD Members"
+      sx={{ minHeight: "40px", overflowY: "auto" }}
+    />
+  )}
+/>
+
             </FormControl>
 
             <Stack flexDirection="row" justifyContent="space-between">
