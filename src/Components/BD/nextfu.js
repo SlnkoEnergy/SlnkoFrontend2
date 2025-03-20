@@ -66,16 +66,28 @@ const FormComponent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const payload = {
+      ...formData,
+      by_whom: formData.by_whom.map((label) => ({
+        label,
+        id: bdMembers.find((member) => member.label === label)?.id || null,
+      })),
+    };
+  
+    console.log("Payload to be submitted:", payload);
+  
     try {
       const response = await axios.post(
         "https://api.slnkoprotrac.com/v1/add-task",
-        formData
+        payload
       );
       console.log("Form Data Submitted Successfully:", response.data);
     } catch (error) {
-      console.error("Error submitting form data:", error);
+      console.error("Error submitting form data:", error.response?.data || error);
     }
   };
+  
 
   return (
     <Grid
