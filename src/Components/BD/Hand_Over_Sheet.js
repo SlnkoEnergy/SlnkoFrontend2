@@ -77,7 +77,7 @@ const HandoverSheetForm = ({ onBack }) => {
     },
     {
       name: "Attached Details",
-      fields: ["HandedOver By"],
+      fields: ["HandedOver By", "LOA Number", "PPA Number", "GST Number"],
     },
   ];
 
@@ -351,43 +351,10 @@ const HandoverSheetForm = ({ onBack }) => {
               {/* Handle special case for Attached Details */}
               {section.name === "Attached Details" && (
                 <>
-                <Grid item xs={12} sm={6}>
-              <Typography level="body1">Final Customer Proposal</Typography>
-              <Select
-                fullWidth
-                value={formData["Attached Details"]?.["Final Customer Proposal"] || ""}
-                onChange={(e, newValue) => handleChange("Attached Details", "Final Customer Proposal", newValue)}
-              >
-                <Option value="Yes">Yes</Option>
-                <Option value="No">No</Option>
-              </Select>
-            </Grid>
-            {formData["Attached Details"]?.["Final Customer Proposal"] === "Yes" && (
-              <Grid item xs={12} sm={6}>
-                <Typography level="body1">Upload Proposal File</Typography>
-                <Input type="file" fullWidth />
-              </Grid>
-            )}
+                
+            
 
-                  <Grid item xs={12} sm={6}>
-                    <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Purchase Order from Client</Typography>
-                    <Select
-                      fullWidth
-                      placeholder="Purchase Order from Client"
-                      value={formData["Attached Details"]?.["Purchase Order from Client"] || ""}
-                      onChange={(e, newValue) => handleChange("Attached Details", "Purchase Order from Client", newValue)}
-                    >
-                      <Option value="Yes">Yes</Option>
-                      <Option value="No">No</Option>
-                      
-                    </Select>
-                  </Grid>
-                  {formData["Attached Details"]?.["Purchase Order from Client"] === "Yes" && (
-              <Grid item xs={12} sm={6}>
-                <Typography level="body1">Upload Purchase Order File</Typography>
-                <Input type="file" fullWidth />
-              </Grid>
-            )}
+                
 
                  
 
@@ -395,24 +362,18 @@ const HandoverSheetForm = ({ onBack }) => {
                     <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>TakenOver By</Typography>
                     <Select
                       fullWidth
-                      placeholder="TakenOver By"
+                      
                       value={formData["Attached Details"]?.["TakenOver By"] || ""}
                       onChange={(e, newValue) => handleChange("Attached Details", "TakenOver By", newValue)}
                     >
-                      <Option value="Projects">Projects</Option>
+                      
                       <Option value="CAM">CAM</Option>
-                      <Option value="Engineering">Engineering</Option>
-                      <Option value="Operations">Operations</Option>
-                      <Option value="SCM">SCM</Option>
-                      <Option value="ALL">ALL</Option>
+                     
                       
                     </Select>
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
-              <Typography level="body1">Order Form</Typography>
-              <Input type="file" fullWidth />
-            </Grid>
+                  
                 </>
               )}
 
