@@ -17,7 +17,56 @@ import Img1 from "../../Assets/HandOverSheet_Icon.jpeg";
 
 const HandoverSheetForm = ({ onBack }) => {
   const [expanded, setExpanded] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    customer_details: {
+      project_id: "",
+      project_name: "",
+      epc_developer: "",
+      site_address_pincode: "",
+      site_google_coordinates: "",
+      contact_no: "",
+      gst_no: "",
+      billing_address: "",
+    },
+    order_details: {
+      type_business: "",
+      tender_name: "",
+      discom_name: "",
+      design_date: "",
+    },
+    project_detail: {
+      project_type: "",
+      module_make_capacity: "",
+      module_make: "",
+      module_capacity: "",
+      evacuation_voltage: "",
+      inverter_make_capacity: "",
+      inverter_make: "",
+      inverter_type: "",
+      work_by_slnko: "",
+      topography_survey: "",
+      soil_test: "",
+      purchase_supply_net_meter: "",
+      liaisoning_net_metering: "",
+      ceig_ceg: "",
+      project_completion_date: "",
+      proposed_dc_capacity: "",
+      transmission_line: "",
+      substation_name: "",
+      overloading: "",
+    },
+    commercial_details: {
+      type: "",
+      subsidy_amount: "",
+    },
+    attached_details: {
+      taken_over_by: "",
+      cam_member_name: "",
+      loa_number: "",
+      ppa_number: "",
+      submitted_by_BD: "",
+    },
+  });
   const [moduleMakeOptions, setModuleMakeOptions] = useState([]);
   const [moduleCapacityOptions, setModuleCapacityOptions] = useState([]);
   const [inverterMakeOptions, setInverterMakeOptions] = useState([]);
@@ -45,10 +94,10 @@ const HandoverSheetForm = ({ onBack }) => {
   };
 
   const handleChange = (section, field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [section]: {
-        ...prevData[section],
+        ...prev[section],
         [field]: value,
       },
     }));
@@ -56,10 +105,15 @@ const HandoverSheetForm = ({ onBack }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("/api/handover", formData);
+      const response = await axios.post(
+        "https://api.slnkoprotrac.com/v1/create-hand-over-sheet",
+        formData
+      );
       console.log("Form submitted successfully:", response.data);
+      alert("Form submitted successfully");
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert("Submission failed");
     }
   };
 
@@ -67,23 +121,12 @@ const HandoverSheetForm = ({ onBack }) => {
     {
       name: "Customer Details",
       fields: [
-        "Project ID",
-        "Name",
-        "EPC/Developer",
-        "Site Address with Pin Code",
-        "Site Google Coordinates",
-        "Contact No.",
-        "GST No.",
-        "Billing Address",
+       
       ],
     },
     {
       name: "Order Details",
-      fields: [
-        "Tender Name",
-        "DISCOM Name",
-        "Preliminary Design Sign-off Date",
-      ],
+      fields: [],
     },
     {
       name: "Project Details",
@@ -129,7 +172,7 @@ const HandoverSheetForm = ({ onBack }) => {
       >
         Handover Sheet
       </Typography>
-
+      
       {/* Dynamic Sections */}
       {sections.map((section, index) => (
         <Accordion
@@ -148,40 +191,154 @@ const HandoverSheetForm = ({ onBack }) => {
           </AccordionSummary>
           <AccordionDetails sx={{ padding: 2.5 }}>
             <Grid container spacing={2}>
+              {section.name === "Customer Details" && (
+                <>
+                <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Project ID</Typography>
+              <Input
+                fullWidth
+                placeholder="Project ID"
+                value={formData.customer_details.project_id}
+                onChange={(e) => handleChange("customer_details", "project_id", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Name</Typography>
+              <Input
+                fullWidth
+                placeholder="Name"
+                value={formData.customer_details.project_name}
+                onChange={(e) => handleChange("customer_details", "project_name", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>EPC/Developer</Typography>
+              <Input
+                fullWidth
+                placeholder="EPC/Developer"
+                value={formData.customer_details.epc_developer}
+                onChange={(e) => handleChange("customer_details", "epc_developer", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Site Address with Pin Code</Typography>
+              <Input
+                fullWidth
+                placeholder="Site Address with Pin Code"
+                value={formData.customer_details.site_address_pincode}
+                onChange={(e) => handleChange("customer_details", "site_address_pincode", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Site Google Coordinates</Typography>
+              <Input
+                fullWidth
+                placeholder="Site Google Coordinates"
+                value={formData.customer_details.site_google_coordinates}
+                onChange={(e) => handleChange("customer_details", "site_google_coordinates", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Contact No.</Typography>
+              <Input
+                fullWidth
+                placeholder="Contact No."
+                value={formData.customer_details.contact_no}
+                onChange={(e) => handleChange("customer_details", "contact_no", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>GST No.</Typography>
+              <Input
+                fullWidth
+                placeholder="GST No."
+                value={formData.customer_details.gst_no}
+                onChange={(e) => handleChange("customer_details", "gst_no", e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 0.5 }}>Billing Address</Typography>
+              <Input
+                fullWidth
+                placeholder="Billing Address"
+                value={formData.customer_details.billing_address}
+                onChange={(e) => handleChange("customer_details", "billing_address", e.target.value)}
+              />
+            </Grid>
+                </>
+              )}
               {/* Handle special case for "Type of Business" dropdown */}
               {section.name === "Order Details" && (
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    level="body1"
-                    sx={{ fontWeight: "bold", marginBottom: 0.5 }}
-                  >
-                    Type of Business
-                  </Typography>
-                  <Select
-                    fullWidth
-                    placeholder="Select Type of Business"
-                    value={
-                      formData["Order Details"]?.["Type of Business"] || ""
-                    }
-                    onChange={(e, newValue) =>
-                      handleChange(
-                        "Order Details",
-                        "Type of Business",
-                        newValue
-                      )
-                    }
-                    sx={{
-                      padding: 1.2,
-                      fontSize: "1rem",
-                      backgroundColor: "#fff",
-                      borderRadius: "md",
-                    }}
-                  >
-                    <Option value="Commercial">Commercial</Option>
-                    <Option value="Tender">Tender</Option>
-                    <Option value="Consumer">Consumer</Option>
-                  </Select>
-                </Grid>
+                <>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      level="body1"
+                      sx={{ fontWeight: "bold", marginBottom: 0.5 }}
+                    >
+                      Type of Business
+                    </Typography>
+                    <Select
+                      fullWidth
+                      placeholder="Select Type of Business"
+                      value={formData.order_details.type_business || ""}
+                      onChange={(e, newValue) =>
+                        handleChange("order_details", "type_business", newValue)
+                      }
+                      sx={{
+                        padding: 1.2,
+                        fontSize: "1rem",
+                        backgroundColor: "#fff",
+                        borderRadius: "md",
+                      }}
+                    >
+                      <Option value="Commercial">Commercial</Option>
+                      <Option value="Tender">Tender</Option>
+                      <Option value="Consumer">Consumer</Option>
+                    </Select>
+                  </Grid>
+
+                  {/* Integrated Order Details Fields */}
+                  <Grid item xs={12} sm={6}>
+                    <Typography>Tender Name</Typography>
+                    <Input
+                      value={formData.order_details.tender_name}
+                      onChange={(e) =>
+                        handleChange(
+                          "order_details",
+                          "tender_name",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography>DISCOM Name</Typography>
+                    <Input
+                      value={formData.order_details.discom_name}
+                      onChange={(e) =>
+                        handleChange(
+                          "order_details",
+                          "discom_name",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography>Preliminary Design Sign-off Date</Typography>
+                    <Input
+                      type="date"
+                      value={formData.order_details.design_date}
+                      onChange={(e) =>
+                        handleChange(
+                          "order_details",
+                          "design_date",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                </>
               )}
               {/* Handle special case for "Type in Commercial Details */}
               {section.name === "Commercial Details" && (
