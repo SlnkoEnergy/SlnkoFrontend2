@@ -39,10 +39,14 @@ const HandoverSheetForm = ({ onBack }) => {
       module_make_capacity: "",
       module_make: "",
       module_capacity: "",
+      module_tye: "",
+      modeule_model_no: "",
       evacuation_voltage: "",
       inverter_make_capacity: "",
       inverter_make: "",
       inverter_type: "",
+      inverter_size: "",
+      inverter_model_no: "",
       work_by_slnko: "",
       topography_survey: "",
       soil_test: "",
@@ -68,20 +72,24 @@ const HandoverSheetForm = ({ onBack }) => {
     },
   });
   const [moduleMakeOptions, setModuleMakeOptions] = useState([]);
-  const [moduleCapacityOptions, setModuleCapacityOptions] = useState([]);
-  const [inverterMakeOptions, setInverterMakeOptions] = useState([]);
-  const [inverterTypeOptions, setInverterTypeOptions] = useState([]);
+  const [moduleTypeOptions, setModuleTypeOptions] = useState([]);
+  const [moduleModelOptions, setModuleModelOptions] = useState([]);
 
+  const [inverterMakeOptions, setInverterMakeOptions] = useState([]);
+  const [inverterSizeOptions, setInverterSizeOptions] = useState([]);
+  const [inverterModelOptions, setInverterModelOptions] = useState([]);
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
         const moduleResponse = await axios.get("/api/master/module");
         setModuleMakeOptions(moduleResponse.data.moduleMake);
-        setModuleCapacityOptions(moduleResponse.data.moduleCapacity);
+        setModuleTypeOptions(moduleResponse.data.moduleType);
+        setModuleModelOptions(moduleResponse.data.moduleModelNo);
 
         const inverterResponse = await axios.get("/api/master/inverter");
         setInverterMakeOptions(inverterResponse.data.inverterMake);
-        setInverterTypeOptions(inverterResponse.data.inverterType);
+        setInverterSizeOptions(inverterResponse.data.inverterSize);
+        setInverterModelOptions(inverterResponse.data.inverterModelNo);
       } catch (error) {
         console.error("Error fetching master data:", error);
       }
@@ -552,6 +560,54 @@ const HandoverSheetForm = ({ onBack }) => {
                           ))}
                         </Select>
                       </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Typography level="body1">Module Type</Typography>
+                        <Select
+                          fullWidth
+                          value={
+                            formData["project_detail"]?.["module_type"] || ""
+                          }
+                          onChange={(e, newValue) =>
+                            handleChange(
+                              "project_detail",
+                              "module_type",
+                              newValue
+                            )
+                          }
+                        >
+                          {moduleTypeOptions.map((type) => (
+                            <Option key={type} value={type}>
+                              {type}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Typography level="body1">Module Model No</Typography>
+                        <Select
+                          fullWidth
+                          value={
+                            formData["project_detail"]?.["module_model_no"] ||
+                            ""
+                          }
+                          onChange={(e, newValue) =>
+                            handleChange(
+                              "project_detail",
+                              "module_model_no",
+                              newValue
+                            )
+                          }
+                        >
+                          {moduleModelOptions.map((model) => (
+                            <Option key={model} value={model}>
+                              {model}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Grid>
+
                       <Grid item xs={12} sm={6}>
                         <Typography level="body1">Module Capacity</Typography>
                         <Input
@@ -646,6 +702,52 @@ const HandoverSheetForm = ({ onBack }) => {
                           {inverterMakeOptions.map((option) => (
                             <Option key={option} value={option}>
                               {option}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Typography level="body1">Inverter Size</Typography>
+                        <Select
+                          fullWidth
+                          value={
+                            formData["project_detail"]?.["inverter_size"] || ""
+                          }
+                          onChange={(e, newValue) =>
+                            handleChange(
+                              "project_detail",
+                              "inverter_size",
+                              newValue
+                            )
+                          }
+                        >
+                          {inverterSizeOptions.map((size) => (
+                            <Option key={size} value={size}>
+                              {size}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <Typography level="body1">Inverter Model No</Typography>
+                        <Select
+                          fullWidth
+                          value={
+                            formData["project_detail"]?.["inverter_model_no"] ||
+                            ""
+                          }
+                          onChange={(e, newValue) =>
+                            handleChange(
+                              "project_detail",
+                              "inverter_model_no",
+                              newValue
+                            )
+                          }
+                        >
+                          {inverterModelOptions.map((model) => (
+                            <Option key={model} value={model}>
+                              {model}
                             </Option>
                           ))}
                         </Select>
