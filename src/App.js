@@ -41,8 +41,8 @@ import './App.css';
 // import Page6 from './Components/Commercial_Offer/Page6';
 // import Page9 from './Components/Commercial_Offer/Page9';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
-// import CreateLead from './Components/BD/create_lead';
-import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
+import CreateLead from './Components/BD/create_lead';
+// import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
 // import FollowUpHistory from './Components/BD/client_followup_history';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
 // import FormComponent from './Components/BD/nextfu';
@@ -90,8 +90,8 @@ function App() {
      {/* <Page6/> */}
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
-     {/* <CreateLead/> */}
-     <HandoverSheetForm/>
+     <CreateLead/>
+     {/* <HandoverSheetForm/> */}
      {/* <TaskDashboard/> */}
      {/* <FormComponent/> */}
      {/* <EditCommercialForm/> */}

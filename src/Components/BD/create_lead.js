@@ -23,6 +23,14 @@ const CreateLead = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  const sourceOptions = {
+    "Referred by": ["Directors", "Clients", "Team members", "E-mail"],
+    "Social Media": ["Whatsapp", "Instagram"],
+    "Marketing": ["Youtube", "Advertisements"],
+    "IVR/My Operator": [],
+    "Others": []
+  };
+
   const statesOfIndia = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
   ];
@@ -75,6 +83,21 @@ const CreateLead = () => {
         <Grid container spacing={3}>
           <Grid xs={12} sm={6}><FormLabel>Customer Name</FormLabel><Input name="c_name" value={formData.c_name} onChange={handleChange} required fullWidth /></Grid>
           <Grid xs={12} sm={6}><FormLabel>Company Name</FormLabel><Input name="company" value={formData.company} onChange={handleChange} required fullWidth /></Grid>
+              {/* Source Dropdown */}
+              <Grid xs={12} sm={6}><FormLabel>Source</FormLabel>
+            <Select name="source" value={formData.source} onChange={(e, newValue) => setFormData({ ...formData, source: newValue, sub_source: "" })} required fullWidth>
+              {Object.keys(sourceOptions).map(option => <Option key={option} value={option}>{option}</Option>)}
+            </Select>
+          </Grid>
+          
+          {/* Sub Source Dropdown - Conditional Rendering */}
+          {formData.source && sourceOptions[formData.source].length > 0 && (
+            <Grid xs={12} sm={6}><FormLabel>Sub Source</FormLabel>
+              <Select name="sub_source" value={formData.sub_source} onChange={(e, newValue) => setFormData({ ...formData, sub_source: newValue })} required fullWidth>
+                {sourceOptions[formData.source].map(option => <Option key={option} value={option}>{option}</Option>)}
+              </Select>
+            </Grid>
+          )}
           <Grid xs={12} sm={6}><FormLabel>Email ID</FormLabel><Input name="email" type="email" value={formData.email} onChange={handleChange} required fullWidth /></Grid>
           <Grid xs={12} sm={6}><FormLabel>Mobile Number</FormLabel><Input name="mobile" type="tel" value={formData.mobile} onChange={handleChange} required fullWidth /></Grid>
           <Grid xs={12} sm={6}><FormLabel>Alt Mobile Number</FormLabel><Input name="alt_mobile" type="tel" value={formData.alt_mobile} onChange={handleChange} fullWidth /></Grid>
