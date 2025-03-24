@@ -31,7 +31,7 @@ import './App.css';
 // import Reference3 from './Components/Commercial_Offer/Reference3';
 // import Reference4 from './Components/Commercial_Offer/Reference4';
 // import CivilWorks1 from './Components/Commercial_Offer/CivilWorks1';
-// import Summary from './Components/Commercial_Offer/costing_summary';
+import Summary from './Components/Commercial_Offer/costing_summary';
 // import ScmCostingForm from './Components/Commercial_Offer/SCM_costing';
 // import ScmCostingSummary from './Components/Commercial_Offer/Scm_costing_summary';
 // import EditSCMRate from './Components/Commercial_Offer/scm_edit_costing';
@@ -41,7 +41,7 @@ import './App.css';
 // import Page6 from './Components/Commercial_Offer/Page6';
 // import Page9 from './Components/Commercial_Offer/Page9';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
-import CreateLead from './Components/BD/create_lead';
+// import CreateLead from './Components/BD/create_lead';
 // import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
 // import FollowUpHistory from './Components/BD/client_followup_history';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
@@ -83,14 +83,14 @@ function App() {
      {/* <CivilWorks1/> */}
      {/* <ScmCostingForm/> */}
      {/* <ScmCostingSummary/> */}
-     {/* <Summary/> */}
+     <Summary/>
      {/* <EditSCMRate/> */}
      {/* <Pages2/> */}
      {/* <Page5/> */}
      {/* <Page6/> */}
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
-     <CreateLead/>
+     {/* <CreateLead/> */}
      {/* <HandoverSheetForm/> */}
      {/* <TaskDashboard/> */}
      {/* <FormComponent/> */}
