@@ -16,7 +16,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Img1 from "../../Assets/HandOverSheet_Icon.jpeg";
 
-const HandoverSheetForm = ({ onBack }) => {
+const EditHandoverSheetForm = ({ onBack }) => {
   const [expanded, setExpanded] = useState(null);
   const [formData, setFormData] = useState({
     customer_details: {
@@ -40,8 +40,8 @@ const HandoverSheetForm = ({ onBack }) => {
       module_make_capacity: "",
       module_make: "",
       module_capacity: "",
-      module_tye: "",
-      modeule_model_no: "",
+      module_type: "",
+      module_model_no: "",
       evacuation_voltage: "",
       inverter_make_capacity: "",
       inverter_make: "",
@@ -80,29 +80,29 @@ const [inverterMakeOptions, setInverterMakeOptions] = useState([]);
 const [inverterSizeOptions, setInverterSizeOptions] = useState([]);
 const [inverterModelOptions, setInverterModelOptions] = useState([]);
 const [inverterTypeOptions, setInverterTypeOptions] = useState([]);
-
+const [handoverId, setHandoverId] = useState(null);
 
 useEffect(() => {
   const fetchMasterData = async () => {
     try {
       const response = await axios.get("https://api.slnkoprotrac.com/v1/get-module-master");
 
-      console.log("Full API Response:", response.data);
+      // console.log("Module Master Response:", response.data);
 
       // Ensure response.data is an object and contains an array key
       const moduleData = Array.isArray(response.data.data) ? response.data.data : [];
 
-      console.log("Extracted Module Data:", moduleData);
+      // console.log("Extracted Module Master Data:", moduleData);
 
 
       const Inverterresponse = await axios.get("https://api.slnkoprotrac.com/v1/get-master-inverter");
 
-      console.log("Full API Response:", Inverterresponse.data);
+      // console.log("Inverter Master Response:", Inverterresponse.data);
 
       // Ensure response.data is an object and contains an array key
       const InverterData = Array.isArray(Inverterresponse.data.data) ? Inverterresponse.data.data : [];
 
-      console.log("Extracted Inverter Data:", InverterData);
+      // console.log("Extracted Inverter Master Data:", InverterData);
 
 
       // Extract unique values for Module
@@ -135,6 +135,84 @@ useEffect(() => {
 }, []);
 
 
+
+
+
+useEffect(() => {
+  const fetchHandoverData = async () => {
+    try {
+      const { data } = await axios.get("https://api.slnkoprotrac.com/v1/get-all-handover-sheet");
+
+      console.log("Full API Response:", data);
+
+      const handoverData = data?.Data?.[32] || {};
+      console.log("Extracted Data Before State Update:", JSON.stringify(handoverData, null, 2));
+
+      // Debug: Log Project Details
+      console.log("Project Details:", handoverData?.project_detail);
+
+      const projectDetail = handoverData.project_detail || {};
+
+      setFormData((prev) => {
+        const projectDetail = handoverData.project_detail || {};
+        const attachedDetails = handoverData.attached_details || {}; // Ensure attachedDetails exists
+      
+        return {
+          ...prev,
+          customer_details: { ...prev.customer_details, ...handoverData.customer_details },
+          order_details: { ...prev.order_details, ...handoverData.order_details },
+          project_detail: {
+            project_type: projectDetail.project_type || "",
+            module_make_capacity: projectDetail.module_make_capacity || "",
+            module_make: projectDetail.module_make || "",
+            module_capacity: projectDetail.module_capacity || "",
+            module_type: projectDetail.module_type || "",
+            module_model_no: projectDetail.module_model_no || "",
+            evacuation_voltage: projectDetail.evacuation_voltage || "",
+            inverter_make_capacity: projectDetail.inverter_make_capacity || "",
+            inverter_make: projectDetail.inverter_make || "",
+            inverter_type: projectDetail.inverter_type || "",
+            inverter_size: projectDetail.inverter_size || "",
+            inverter_model_no: projectDetail.inverter_model_no || "",
+            work_by_slnko: projectDetail.work_by_slnko || "",
+            topography_survey: projectDetail.topography_survey || "",
+            soil_test: projectDetail.soil_test || "",
+            purchase_supply_net_meter: projectDetail.purchase_supply_net_meter || "",
+            liaisoning_net_metering: projectDetail.liaisoning_net_metering || "",
+            ceig_ceg: projectDetail.ceig_ceg || "",
+            project_completion_date: projectDetail.project_completion_date || "",
+            proposed_dc_capacity: projectDetail.proposed_dc_capacity || "",
+            transmission_line: projectDetail.transmission_line || "",
+            substation_name: projectDetail.substation_name || "",
+            overloading: projectDetail.overloading || "",
+          },
+          commercial_details: { ...prev.commercial_details, ...handoverData.commercial_details },
+          attached_details: {
+            ...prev.attached_details,
+            ...attachedDetails,
+            taken_over_by: attachedDetails.taken_over_by || "", 
+          },
+        };
+      });
+      
+
+    } catch (error) {
+      console.error("Failed to fetch handover data:", error);
+    }
+  };
+
+  fetchHandoverData();
+}, []);
+
+
+
+
+// ✅ Debugging: Log State Updates to Ensure Data is Set Correctly
+useEffect(() => {
+  console.log("Updated Form Data in State:", formData);
+}, [formData]);
+
+
   const handleExpand = (panel) => {
     setExpanded(expanded === panel ? null : panel);
   };
@@ -149,19 +227,15 @@ useEffect(() => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://api.slnkoprotrac.com/v1/create-hand-over-sheet",
-        formData
-      );
-      console.log("Form submitted successfully:", response.data);
-      alert("Form submitted successfully");
+        await axios.put(`/api/handover/${handoverId}`, formData);
+        alert('Handover Sheet updated successfully');
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Submission failed");
+        console.error('Error updating data:', error);
     }
-  };
+};
 
   const sections = [
     {
@@ -1219,4 +1293,4 @@ useEffect(() => {
   );
 };
 
-export default HandoverSheetForm;
+export default EditHandoverSheetForm;
