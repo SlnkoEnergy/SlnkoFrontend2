@@ -145,7 +145,7 @@ useEffect(() => {
 
       console.log("Full API Response:", data);
 
-      const handoverData = data?.Data?.[32] || {};
+      const handoverData = data?.Data?.[33] || {};
       console.log("Extracted Data Before State Update:", JSON.stringify(handoverData, null, 2));
 
       // Debug: Log Project Details
@@ -230,12 +230,15 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await axios.put(`/api/handover/${handoverId}`, formData);
+      await axios.put(`https://api.slnkoprotrac.com/v1/edit-hand-over-sheet/67e2744c5c891bb412838925`, formData);
+
+
         alert('Handover Sheet updated successfully');
     } catch (error) {
         console.error('Error updating data:', error);
     }
 };
+
 
   const sections = [
     {
