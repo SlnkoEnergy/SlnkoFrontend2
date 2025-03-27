@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 
 
+
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -50,8 +51,8 @@ import './App.css';
 // import FormComponent from './Components/BD/nextfu';
 // import EditHandoverSheetForm from './Components/CAM/edit_update_handOverSheet';
 // import AddNewModuleForm from './Components/Engineering/module_master_database';
-import AddNewInverterForm from './Components/Engineering/inverter_master_database';
-
+// import AddNewInverterForm from './Components/Engineering/inverter_master_database';
+import AddNewTransformerForm from './Components/Engineering/transformer_master_database';
 
 
 
@@ -104,7 +105,8 @@ function App() {
      {/* <FollowUpHistory/> */}
      {/* <EditHandoverSheetForm/> */}
      {/* <AddNewModuleForm/> */}
-     <AddNewInverterForm/>
+     {/* <AddNewInverterForm/> */}
+     <AddNewTransformerForm/>
     </div>
   );
 }
