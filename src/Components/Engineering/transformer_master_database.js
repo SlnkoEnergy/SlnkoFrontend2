@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Input, Autocomplete, Grid, Typography, Sheet, FormLabel, FormControl, Select, Option } from "@mui/joy";
+import {
+  Button,
+  Input,
+  Autocomplete,
+  Grid,
+  Typography,
+  Sheet,
+  FormLabel,
+  FormControl,
+  Select,
+  Option,
+} from "@mui/joy";
 
 const AddNewTransformerForm = () => {
   const [formData, setFormData] = useState({
@@ -22,62 +33,69 @@ const AddNewTransformerForm = () => {
     submitted_By: "Admin",
   });
 
-  const makeOptions = ["Option 1", "Option 2", "Option 3"];
-  const typeOptions = ["OLTC", "OCTC"];
-  const vectorGroupOptions = ["YNd11", "YNd11d11"];
-  const primaryVoltageOptions = ["11", "33"];
-  const voltageVariationOptions = ["±5%", "±10%", "±15%"];
-  const voltageRatioOptions = ["11/0.433", "33/11", "33/0.433"];
-  const impedanceOptions = ["2%", "4%", "6%", "8%"];
-  const statusOptions = ["Available", "Not Available"];
+  // State variables for dropdown options
+  const [makeOptions, setMakeOptions] = useState([]);
+  const [impedanceOptions, setImpedanceOptions] = useState([]);
+  const [vectorGroupOptions, setVectorGroupOptions] = useState([]);
+
+  const fetchDropdownData = async () => {
+    try {
+      const response = await axios.get("https://api.slnkoprotrac.com/v1/get-transformer-options");
+  
+      console.log("API Full Response:", response); // Logs full response
+      console.log("API Data:", response.data); // Logs actual response data
+  
+      // Ensure response.data is an array
+      if (!response.data || !Array.isArray(response.data)) {
+        throw new Error("Invalid API response format: Expected an array");
+      }
+  
+      // Debugging: Print first data entry to check keys
+      if (response.data.length > 0) {
+        console.log("First Entry Sample:", response.data[0]);
+      }
+  
+      // Extract unique values (Check for correct key names)
+      const makes = [...new Set(response.data.map(item => item?.make).filter(Boolean))];
+      const vectorGroups = [...new Set(response.data.map(item => item?.vector_group).filter(Boolean))];
+      const impedances = [...new Set(response.data.map(item => item?.impedance).filter(Boolean))];
+  
+      console.log("✅ Extracted Make Options:", makes);
+      console.log("✅ Extracted Vector Group Options:", vectorGroups);
+      console.log("✅ Extracted Impedance Options:", impedances);
+  
+      setMakeOptions(makes);
+      setVectorGroupOptions(vectorGroups);
+      setImpedanceOptions(impedances);
+  
+    } catch (error) {
+      console.error("❌ Error fetching dropdown data:", error.response ? error.response.data : error.message);
+    }
+  };
+  
+  
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(`Updated Form Field - ${e.target.name}:`, e.target.value);
   };
 
   const handleAutocompleteChange = (name, newValue) => {
     setFormData({ ...formData, [name]: newValue });
+    console.log(`Updated Dropdown Field - ${name}:`, newValue);
   };
-
-  // Calculate Rated Current HV
-  useEffect(() => {
-    const size = parseFloat(formData.size);
-    const primaryVoltage = parseFloat(formData.primary_voltage);
-
-    if (!isNaN(size) && !isNaN(primaryVoltage) && primaryVoltage > 0) {
-      const calculatedHV = (size / (1.732 * primaryVoltage)).toFixed(3);
-      setFormData((prevData) => ({ ...prevData, ratedCurrentHV: calculatedHV }));
-    }
-  }, [formData.size, formData.primary_voltage]);
-
-  // Calculate Rated Current LV1 & LV2 based on Vector Group
-  useEffect(() => {
-    const size = parseFloat(formData.size);
-    const secondaryVoltage = parseFloat(formData.secondary_voltage);
-    const vectorGroup = formData.vector_group;
-
-    if (!isNaN(size) && !isNaN(secondaryVoltage) && secondaryVoltage > 0) {
-      let calculatedLV1 = ((size / 1.732) / secondaryVoltage).toFixed(3);
-      let calculatedLV2 = "";
-
-      if (vectorGroup === "YNd11d11") {
-        calculatedLV1 = (((size / 1.732) / secondaryVoltage) / 2).toFixed(3);
-        calculatedLV2 = calculatedLV1; // LV2 is same as LV1
-      }
-
-      setFormData((prevData) => ({
-        ...prevData,
-        ratedCurrentLV1: calculatedLV1,
-        ratedCurrentLV2: calculatedLV2,
-      }));
-    }
-  }, [formData.size, formData.secondary_voltage, formData.vector_group]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting Form Data:", formData);
+
     try {
-      const response = await axios.post("https://api.slnkoprotrac.com/v1/add-transformer-master", formData);
-      console.log("Response:", response.data);
+      const response = await axios.post(
+        "https://api.slnkoprotrac.com/v1/add-transformer-master",
+        formData
+      );
+      console.log("Form Submission Response:", response.data);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -85,25 +103,27 @@ const AddNewTransformerForm = () => {
 
   return (
     <Sheet sx={{ maxWidth: 900, mx: "auto", p: 3, borderRadius: "md", boxShadow: "lg" }}>
-      <Typography level="h3" sx={{ mb: 3, textAlign: "center" }}>Add New Transformer</Typography>
+      <Typography level="h3" sx={{ mb: 3, textAlign: "center" }}>
+        Add New Transformer
+      </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           {[
             ["Make", "make", makeOptions, true],
             ["Size", "size"],
-            ["Type", "type", typeOptions, false, true],
+            ["Type", "type"],
             ["Vector Group", "vector_group", vectorGroupOptions, true],
             ["Cooling Type", "cooling_type"],
-            ["Primary Voltage", "primary_voltage", primaryVoltageOptions, false, true],
-            ["Voltage Variation", "voltage_variation", voltageVariationOptions, false, true],
+            ["Primary Voltage", "primary_voltage", ["11", "33"], false, true],
+            ["Voltage Variation", "voltage_variation", ["±5%", "±10%", "±15%"], false, true],
             ["Secondary Voltage", "secondary_voltage"],
-            ["Voltage Ratio", "voltage_ratio", voltageRatioOptions, false, true],
+            ["Voltage Ratio", "voltage_ratio", ["11/0.433", "33/11", "33/0.433"], false, true],
             ["Rated Current HV", "ratedCurrentHV"],
             ["Rated Current LV1", "ratedCurrentLV1"],
             ["Rated Current LV2", "ratedCurrentLV2"],
             ["% Impedance", "impedance", impedanceOptions, true],
             ["Winding Material", "winding_material"],
-            ["Status", "status", statusOptions, false, true],
+            ["Status", "status", ["Available", "Not Available"], false, true],
           ].map(([label, name, options, isAutocomplete, isSelect], index) => (
             <Grid xs={4} key={index}>
               <FormControl>
@@ -115,7 +135,9 @@ const AddNewTransformerForm = () => {
                     onChange={(e, newValue) => handleAutocompleteChange(name, newValue)}
                   >
                     {options.map((option) => (
-                      <Option key={option} value={option}>{option}</Option>
+                      <Option key={option} value={option}>
+                        {option}
+                      </Option>
                     ))}
                   </Select>
                 ) : isAutocomplete ? (
@@ -127,18 +149,15 @@ const AddNewTransformerForm = () => {
                     freeSolo
                   />
                 ) : (
-                  <Input
-                    name={name}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    disabled={name === "ratedCurrentLV2" && formData.vector_group === "YNd11"} // Disable LV2 if Vector Group is "YNd11"
-                  />
+                  <Input name={name} value={formData[name]} onChange={handleChange} />
                 )}
               </FormControl>
             </Grid>
           ))}
         </Grid>
-        <Button type="submit" sx={{ mt: 3, width: "100%" }}>Submit</Button>
+        <Button type="submit" sx={{ mt: 3, width: "100%" }}>
+          Submit
+        </Button>
       </form>
     </Sheet>
   );

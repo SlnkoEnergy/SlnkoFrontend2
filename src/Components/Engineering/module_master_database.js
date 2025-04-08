@@ -1,150 +1,183 @@
-import React, { useState } from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Input, Select, Option, Button, Sheet, Typography, Grid, Box } from "@mui/joy";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import axios from "axios";
-import Img1 from "../../Assets/Add New Module.png"; 
+import React, { useState } from 'react';
+import {
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  Typography,
+  Button,
+  Grid,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  IconButton,
+  Paper,
+} from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-const AddNewModuleForm = () => {
-    const [formData, setFormData] = useState({
-        make: "",
-        power: "",
-        type: "",
-        model: "",
-        vmp: "",
-        imp: "",
-        voc: "",
-        isc: "",
-        alpha: "",
-        beta: "",
-        gamma: "",
-        l: "",
-        w: "",
-        t: "",
-        status: "",
-        submitted_by: "",
-    });
+const steps = [
+  'Module Details',
+  'Technical Data',
+  'Temperature Coefficients',
+  'Dimensions',
+  'Status',
+];
 
-    const [expanded, setExpanded] = useState(null);
+const AddModuleForm = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [formData, setFormData] = useState({
+    make: '',
+    power: '',
+    type: '',
+    modelNo: '',
+    vmp: '',
+    imp: '',
+    voc: '',
+    isc: '',
+    alpha: '',
+    beta: '',
+    gamma: '',
+    length: '',
+    width: '',
+    thickness: '',
+    status: '',
+  });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const handleAccordionChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : null);
-    };
+  const handleNext = () => {
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
 
-    const handleSubmit = async () => {
-        try {
-            const response = await axios.post("https://api.slnkoprotrac.com/v1/add-module-master", formData);
-            console.log("Success:", response.data);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
+  const handleBack = () => {
+    if (activeStep > 0) {
+      setActiveStep((prevStep) => prevStep - 1);
+    }
+  };
 
-    return (
-        <Sheet
-            variant="outlined"
-            sx={{
-                maxWidth: 850,
-                margin: "auto",
-                padding: 4,
-                borderRadius: "md",
-                boxShadow: "lg",
-                backgroundColor: "#F8F5F5",
-                mt: 6,
-                mb: 6
-            }}
+  const handleSubmit = () => {
+    console.log('Form Submitted:', formData);
+    // Submit API call
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '8px',
+    marginTop: '4px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+  };
+
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <Grid container spacing={3} px={2}>
+            <Grid item xs={6}><InputLabel>Make</InputLabel><input style={inputStyle} name="make" value={formData.make} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Power (Wp)</InputLabel><input style={inputStyle} name="power" value={formData.power} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Type</InputLabel><input style={inputStyle} name="type" value={formData.type} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Model No.</InputLabel><input style={inputStyle} name="modelNo" value={formData.modelNo} onChange={handleChange} /></Grid>
+          </Grid>
+        );
+      case 1:
+        return (
+          <Grid container spacing={3} px={2}>
+            <Grid item xs={6}><InputLabel>Vmp (V)</InputLabel><input style={inputStyle} name="vmp" value={formData.vmp} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Imp (I)</InputLabel><input style={inputStyle} name="imp" value={formData.imp} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Voc (V)</InputLabel><input style={inputStyle} name="voc" value={formData.voc} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Isc (I)</InputLabel><input style={inputStyle} name="isc" value={formData.isc} onChange={handleChange} /></Grid>
+          </Grid>
+        );
+      case 2:
+        return (
+          <Grid container spacing={3} px={2}>
+            <Grid item xs={6}><InputLabel>α (Isc)</InputLabel><input style={inputStyle} name="alpha" value={formData.alpha} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>β (Voc)</InputLabel><input style={inputStyle} name="beta" value={formData.beta} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>γ (Pmax)</InputLabel><input style={inputStyle} name="gamma" value={formData.gamma} onChange={handleChange} /></Grid>
+          </Grid>
+        );
+      case 3:
+        return (
+          <Grid container spacing={3} px={2}>
+            <Grid item xs={6}><InputLabel>Length</InputLabel><input style={inputStyle} name="length" value={formData.length} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Width</InputLabel><input style={inputStyle} name="width" value={formData.width} onChange={handleChange} /></Grid>
+            <Grid item xs={6}><InputLabel>Thickness</InputLabel><input style={inputStyle} name="thickness" value={formData.thickness} onChange={handleChange} /></Grid>
+          </Grid>
+        );
+      case 4:
+        return (
+          <Grid container spacing={3} px={2}>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel>Status</InputLabel>
+                <Select name="status" value={formData.status} onChange={handleChange}>
+                  <MenuItem value="Available">Available</MenuItem>
+                  <MenuItem value="Not Available">Not Available</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        p: 4,
+        borderRadius: 3,
+        bgcolor: '#fdfafa',
+        boxShadow: 2,
+      }}
+    >
+      <Box textAlign="center" mb={3}>
+        <IconButton color="primary">
+          <AddCircleOutlineIcon sx={{ fontSize: 50 }} />
+        </IconButton>
+        <Typography variant="h5" fontWeight="bold" mt={1}>Add New Module</Typography>
+      </Box>
+
+      <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
+        {steps.map((label, index) => (
+          <Step key={index}>
+            <StepLabel>{`${(index + 1).toString().padStart(2, '0')} ${label}`}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+
+      <Paper variant="outlined" sx={{ p: 3, mb: 4 }}>{renderStepContent(activeStep)}</Paper>
+
+      <Box mt={2} display="flex" justifyContent="space-between">
+        <Button
+          variant="contained"
+          color="inherit"
+          disabled={activeStep === 0}
+          onClick={handleBack}
         >
-            <Box sx={{ textAlign: "center", mb: 6 }}>
-                <img src={Img1} alt="Module Icon" style={{ width: 65, height: 65 }} />
-                <Typography level="h3" textAlign="center" gutterBottom sx={{ mt: 2 }}>
-                    Add New Module
-                </Typography>
-            </Box>
+          Back
+        </Button>
 
-            {[{
-                title: "Module Details",
-                fields: [
-                    { name: "make", label: "Make", gap: true },
-                    { name: "power", label: "Power (Wp)", gap: true },
-                    { name: "type", label: "Type" },
-                    { name: "model", label: "Model No." },
-                ],
-            },
-            {
-                title: "Technical Data",
-                fields: [
-                    { name: "vmp", label: "Vmp (V)", gap: true },
-                    { name: "imp", label: "Imp (I)", gap: true },
-                    { name: "voc", label: "Voc (V)" },
-                    { name: "isc", label: "Isc (I)" },
-                ],
-            },
-            {
-                title: "Temperature Coefficients",
-                fields: [
-                    { name: "alpha", label: "α (Isc)", gap: true },
-                    { name: "beta", label: "β (Voc)", gap: true },
-                    { name: "gamma", label: "γ (Pmax)" },
-                ],
-            },
-            {
-                title: "Dimensions",
-                fields: [
-                    { name: "l", label: "L", gap: true },
-                    { name: "w", label: "W", gap: true },
-                    { name: "t", label: "T" },
-                ],
-            }].map((section, index) => (
-                <Accordion key={section.title} expanded={expanded === index} onChange={handleAccordionChange(index)} sx={{ mb: 2.5}}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: "#e0e0e0", padding: 2 }}>
-                        <Typography level="h5" sx={{ fontWeight: "bold" }}>
-                            {section.title}
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ mt: 2 }}>
-                        <Grid container spacing={4} sx={{ mx: 1 }}>
-                            {section.fields.map((field) => (
-                                <Grid item xs={12} sm={6} key={field.name} sx={{ mt: field.gap ? 1.5 : 0, mb: 3 }}>
-                                    <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                                        {field.label}
-                                    </Typography>
-                                    <Input fullWidth variant="outlined" placeholder={field.label} name={field.name} value={formData[field.name]} onChange={handleChange} />
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </AccordionDetails>
-                </Accordion>
-            ))}
-
-            <Accordion expanded={expanded === "status"} onChange={handleAccordionChange("status")} sx={{ mb: 2.5 }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: "#e0e0e0", padding: 2 }}>
-                    <Typography level="h5" sx={{ fontWeight: "bold" }}>
-                        Status
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{ mt: 2,  mx: 2 }}>
-                    <Typography level="body1" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                        Status
-                    </Typography>
-                    <Select fullWidth name="status" value={formData.status} onChange={(e, value) => setFormData({ ...formData, status: value })} placeholder="Select Status">
-                        <Option value="Available">Available</Option>
-                        <Option value="Not Available">Not Available</Option>
-                    </Select>
-                </AccordionDetails>
-            </Accordion>
-
-            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 6 }}>
-                <Button variant="solid" size="lg" sx={{ px: 4, borderRadius: "md", backgroundColor: "#757575" }}>
-                    Back
-                </Button>
-                <Button onClick={handleSubmit} variant="solid" size="lg" sx={{ px: 4, borderRadius: "md", backgroundColor: "#1565C0" }}>
-                    Submit
-                </Button>
-            </Box>
-        </Sheet>
-    );
+        {activeStep === steps.length - 1 ? (
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        ) : (
+          <Button variant="contained" color="primary" onClick={handleNext}>
+            Next
+          </Button>
+        )}
+      </Box>
+    </Box>
+  );
 };
-export default AddNewModuleForm;
+
+export default AddModuleForm;
