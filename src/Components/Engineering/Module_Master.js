@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Img1 from '../../Assets/Add New Module.png';
 import {
   Box,
   Button,
@@ -10,7 +11,7 @@ import {
   Option,
   Typography,
   Sheet,
-  Stack,
+  Grid,
 } from '@mui/joy';
 
 const AddNewModuleForm = () => {
@@ -48,80 +49,129 @@ const AddNewModuleForm = () => {
   };
 
   return (
-    <Sheet
+    <Box
       sx={{
-        maxWidth: 500,
-        mx: 'auto',
-        mt: 4,
-        p: 3,
-        borderRadius: 'lg',
-        boxShadow: 'md',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f7f7f7',
+        p: 2,
       }}
     >
-      <Typography level="h4" textAlign="center" mb={2}>
-        Add Module
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
-          <FormControl>
-            <FormLabel>Make</FormLabel>
-            <Input
-              value={formData.make}
-              onChange={(e) => handleChange('make', e.target.value)}
-              placeholder="Enter Make"
-              required
-            />
-          </FormControl>
+      <Sheet
+        sx={{
+          width: 800,
+          p: 4,
+          borderRadius: 'lg',
+          boxShadow: 'lg',
+          backgroundColor: '#fff',
+        }}
+      >
+        <Typography level="h3" textAlign="center" mb={1}>
+          Add Module
+        </Typography>
 
-          <FormControl>
-            <FormLabel>Rating</FormLabel>
-            <Input
-              value={formData.power}
-              onChange={(e) => handleChange('power', e.target.value)}
-              placeholder="Enter Rating"
-              required
-            />
-          </FormControl>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <img
+            src={Img1}
+            width="40px"
+            height="40px"
+            alt="Module"
+            style={{ maxWidth: '100%', height: 'auto' }}
+          />
+        </Box>
 
-          <FormControl>
-            <FormLabel>Specification</FormLabel>
-            <Input
-              value={formData.type}
-              onChange={(e) => handleChange('type', e.target.value)}
-              placeholder="Enter Specification"
-              required
-            />
-          </FormControl>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid xs={12} sm={6}>
+              <FormControl>
+                <FormLabel sx={{ fontSize: 'lg' }}>Make</FormLabel>
+                <Input
+                  value={formData.make}
+                  onChange={(e) => handleChange('make', e.target.value)}
+                  placeholder="Enter Make"
+                  required
+                />
+              </FormControl>
+            </Grid>
 
-          <FormControl>
-            <FormLabel>Model No</FormLabel>
-            <Input
-              value={formData.model}
-              onChange={(e) => handleChange('model', e.target.value)}
-              placeholder="Enter Model No"
-              required
-            />
-          </FormControl>
+            <Grid xs={12} sm={6}>
+              <FormControl>
+                <FormLabel sx={{ fontSize: 'lg' }}>Rating</FormLabel>
+                <Input
+                  value={formData.power}
+                  onChange={(e) => handleChange('power', e.target.value)}
+                  placeholder="Enter Rating"
+                  required
+                />
+              </FormControl>
+            </Grid>
 
-          <FormControl>
-            <FormLabel>Status</FormLabel>
-            <Select
-              value={formData.status}
-              onChange={(_, value) => handleChange('status', value)}
-              placeholder="Select Status"
-              required
-            >
-              <Option value="Available">Available</Option>
-              <Option value="Not Available">Not Available</Option>
-            </Select>
-          </FormControl>
+            <Grid xs={12} sm={6}>
+              <FormControl>
+                <FormLabel sx={{ fontSize: 'lg' }}>Specification</FormLabel>
+                <Input
+                  value={formData.type}
+                  onChange={(e) => handleChange('type', e.target.value)}
+                  placeholder="Enter Specification"
+                  required
+                />
+              </FormControl>
+            </Grid>
 
-          <Button type="submit" variant="solid" color="primary">
-            Submit
-          </Button>
-        </Stack>
-      </form>
-    </Sheet>
+            <Grid xs={12} sm={6}>
+              <FormControl>
+                <FormLabel sx={{ fontSize: 'lg' }}>Model No</FormLabel>
+                <Input
+                  value={formData.model}
+                  onChange={(e) => handleChange('model', e.target.value)}
+                  placeholder="Enter Model No"
+                  required
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid xs={12}>
+              <FormControl>
+                <FormLabel sx={{ fontSize: 'lg' }}>Status</FormLabel>
+                <Select
+  value={formData.status}
+  onChange={(_, value) => handleChange('status', value)}
+  placeholder="Select Status"
+  required
+  sx={{
+    color:
+      formData.status === 'Available'
+        ? 'green'
+        : formData.status === 'Not Available'
+        ? 'red'
+        : 'inherit',
+    borderColor:
+      formData.status === 'Available'
+        ? 'green'
+        : formData.status === 'Not Available'
+        ? 'red'
+        : 'inherit',
+  }}
+>
+<Option value="Available" sx={{ color: 'green' }}>Available</Option>
+<Option value="Not Available" sx={{ color: 'red' }}>Not Available</Option>
+
+</Select>
+
+              </FormControl>
+            </Grid>
+
+            <Grid xs={12}>
+              <Button type="submit" variant="solid" color="primary" fullWidth>
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Sheet>
+    </Box>
   );
 };
 
