@@ -54,7 +54,9 @@ import './App.css';
 // import AddNewModuleForm from './Components/Engineering/module_master_database';
 // import AddNewInverterForm from './Components/Engineering/inverter_master_database';
 // import AddNewTransformerForm from './Components/Engineering/transformer_master_database';
-import AddNewModuleForm from './Components/Engineering/Module_Master';
+// import AddNewModuleForm from './Components/Engineering/Module_Master';
+// import AddNewInverterForm from './Components/Engineering/Inverter_Master';
+import AddNewTransformerForm from './Components/Engineering/Transformer_Master';
 
 
 
@@ -109,7 +111,9 @@ function App() {
      {/* <AddNewModuleForm/> */}
      {/* <AddNewInverterForm/> */}
      {/* <AddNewTransformerForm/> */}
-     <AddNewModuleForm/>
+     {/* <AddNewModuleForm/> */}
+     {/* <AddNewInverterForm/> */}
+     <AddNewTransformerForm/>
     </div>
   );
 }
