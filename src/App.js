@@ -5,6 +5,7 @@ import './App.css';
 
 
 
+
 // import Login from '../src/Components/login_page';
 // import ForgotPassword from './Components/forgot_password';
 // import PaymentRequestForm from './Components/add_payment_request';
@@ -56,8 +57,8 @@ import './App.css';
 // import AddNewTransformerForm from './Components/Engineering/transformer_master_database';
 // import AddNewModuleForm from './Components/Engineering/Module_Master';
 // import AddNewInverterForm from './Components/Engineering/Inverter_Master';
-import AddNewTransformerForm from './Components/Engineering/Transformer_Master';
-
+// import AddNewTransformerForm from './Components/Engineering/Transformer_Master';
+import AddBOMForm from './Components/Engineering/Add_BOM';
 
 
 
@@ -113,7 +114,8 @@ function App() {
      {/* <AddNewTransformerForm/> */}
      {/* <AddNewModuleForm/> */}
      {/* <AddNewInverterForm/> */}
-     <AddNewTransformerForm/>
+     {/* <AddNewTransformerForm/> */}
+     <AddBOMForm/>
     </div>
   );
 }
