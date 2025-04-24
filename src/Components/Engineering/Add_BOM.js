@@ -29,7 +29,7 @@ const AddBOMForm = () => {
     rating: '',
     specification: '',
     quantity: '',
-    uom: ''
+    uom: '',
   });
 
   const handleChange = (field, value) => {
