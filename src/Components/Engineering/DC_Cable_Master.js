@@ -14,16 +14,13 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 
-const HTPanelForm = () => {
+const DCCableForm = () => {
   const [formData, setFormData] = useState({
     make: "",
-    vcb_make: "",
-    pt_ratio: "",
-    vcb_rating: "",
-    ct_make: "",
-    ct_ratio: "",
-    cable_size_incoming: "",
-    pt_make: "",
+    size: "",
+    rated_ac_voltage: "",
+    nominal_dc_voltage: "",
+    core: "",
     status: "",
   });
 
@@ -37,20 +34,17 @@ const HTPanelForm = () => {
   const handleSubmit = async () => {
     try {
       console.log("Submitting:", formData);
-      const response = await axios.post("https://api.slnkoprotrac.com/v1/add-ht-panel", {
+      const response = await axios.post("https://api.slnkoprotrac.com/v1/add-dc-cable", {
         ...formData,
         submitted_by: "admin",
       });
       console.log("Success:", response.data);
       setFormData({
         make: "",
-        vcb_make: "",
-        pt_ratio: "",
-        vcb_rating: "",
-        ct_make: "",
-        ct_ratio: "",
-        cable_size_incoming: "",
-        pt_make: "",
+        size: "",
+        rated_ac_voltage: "",
+        nominal_dc_voltage: "",
+        core: "",
         status: "",
       });
     } catch (error) {
@@ -66,7 +60,7 @@ const HTPanelForm = () => {
     <Card sx={{ maxWidth: 800, mx: "auto", mt: 4, p: 2 }}>
       <CardContent>
         <Typography level="h4" textAlign="center" gutterBottom>
-          Add New HT Panel
+          Add New DC Cable
         </Typography>
         <Grid container spacing={2}>
           <Grid xs={12} sm={6}>
@@ -75,58 +69,45 @@ const HTPanelForm = () => {
               <Input name="make" value={formData.make} onChange={(e) => handleChange("make", e.target.value)} />
             </FormControl>
           </Grid>
+
           <Grid xs={12} sm={6}>
             <FormControl>
-              <FormLabel>VCB Make</FormLabel>
-              <Input name="vcb_make" value={formData.vcb_make} onChange={(e) => handleChange("vcb_make", e.target.value)} />
+              <FormLabel>Size</FormLabel>
+              <Input name="size" value={formData.size} onChange={(e) => handleChange("size", e.target.value)} />
             </FormControl>
           </Grid>
 
           <Grid xs={12} sm={6}>
             <FormControl>
-              <FormLabel>PT Ratio</FormLabel>
-              <Input name="pt_ratio" value={formData.pt_ratio} onChange={(e) => handleChange("pt_ratio", e.target.value)} />
-            </FormControl>
-          </Grid>
-          <Grid xs={12} sm={6}>
-            <FormControl>
-              <FormLabel>VCB Rating</FormLabel>
-              <Input name="vcb_rating" value={formData.vcb_rating} onChange={(e) => handleChange("vcb_rating", e.target.value)} />
-            </FormControl>
-          </Grid>
-
-          <Grid xs={12} sm={6}>
-            <FormControl>
-              <FormLabel>CT Make</FormLabel>
-              <Input name="ct_make" value={formData.ct_make} onChange={(e) => handleChange("ct_make", e.target.value)} />
-            </FormControl>
-          </Grid>
-          <Grid xs={12} sm={6}>
-            <FormControl>
-              <FormLabel>CT Ratio</FormLabel>
-              <Input name="ct_ratio" value={formData.ct_ratio} onChange={(e) => handleChange("ct_ratio", e.target.value)} />
-            </FormControl>
-          </Grid>
-
-          <Grid xs={12} sm={6}>
-            <FormControl>
-              <FormLabel>Cable Size Incoming (Sqmm)</FormLabel>
+              <FormLabel>Rated AC Voltage (kV)</FormLabel>
               <Input
-                name="cable_size_incoming"
-                value={formData.cable_size_incoming}
-                onChange={(e) => handleChange("cable_size_incoming", e.target.value)}
+                name="rated_ac_voltage"
+                value={formData.rated_ac_voltage}
+                onChange={(e) => handleChange("rated_ac_voltage", e.target.value)}
               />
             </FormControl>
           </Grid>
+
           <Grid xs={12} sm={6}>
             <FormControl>
-              <FormLabel>PT Make</FormLabel>
-              <Input name="pt_make" value={formData.pt_make} onChange={(e) => handleChange("pt_make", e.target.value)} />
+              <FormLabel>Nominal DC Voltage</FormLabel>
+              <Input
+                name="nominal_dc_voltage"
+                value={formData.nominal_dc_voltage}
+                onChange={(e) => handleChange("nominal_dc_voltage", e.target.value)}
+              />
+            </FormControl>
+          </Grid>
+
+          <Grid xs={12} sm={6}>
+            <FormControl>
+              <FormLabel>Core</FormLabel>
+              <Input name="core" value={formData.core} onChange={(e) => handleChange("core", e.target.value)} />
             </FormControl>
           </Grid>
 
           {/* ✅ Integrated Custom Status Field */}
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <FormLabel>Status</FormLabel>
               <Select
@@ -168,4 +149,4 @@ const HTPanelForm = () => {
   );
 };
 
-export default HTPanelForm;
+export default DCCableForm;
