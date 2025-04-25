@@ -19,6 +19,8 @@ const LTPannelForm = () => {
     make: "",
     type: "",
     voltage: "",
+    outgoing:"",
+        incoming: "",
     status: "",
     submitted_by: ""
   });
@@ -46,6 +48,8 @@ const LTPannelForm = () => {
         make: "",
         type: "",
         voltage: "",
+        outgoing:"",
+        incoming: "",
         status: "",
       });
     } catch (error) {
@@ -61,6 +65,8 @@ const LTPannelForm = () => {
       make: "",
       type: "",
       voltage: "",
+      outgoing:"",
+        incoming: "",
       status: "",
     });
   };
@@ -107,6 +113,27 @@ const LTPannelForm = () => {
                 <Input
                   value={formData.type}
                   onChange={(e) => handleChange("type", e.target.value)}
+                  required
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <FormLabel>Cable Size Outgoing</FormLabel>
+                <Input
+                  value={formData.outgoing}
+                  onChange={(e) => handleChange("outgoing", e.target.value)}
+                  required
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <FormLabel>Cable Size incoming</FormLabel>
+                <Input
+                  value={formData.incoming}
+                  onChange={(e) => handleChange("incoming", e.target.value)}
                   required
                 />
               </FormControl>
