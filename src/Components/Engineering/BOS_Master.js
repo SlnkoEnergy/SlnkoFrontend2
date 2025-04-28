@@ -40,7 +40,7 @@ const AddNewBOSForm = () => {
     e.preventDefault();
     try {
       console.log('Submitting:', formData);
-      await axios.post('https://your-api-endpoint.com/v1/add-bos-master', formData);
+      await axios.post('https://api.slnkoprotrac.com/v1/add-bos-master', formData);
       alert('BOS Item Added Successfully!');
       setFormData({
         category: '',
