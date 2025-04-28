@@ -7,12 +7,15 @@ import {
   Option,
   Button,
   Grid,
+  Box,
   Typography,
   Card,
   CardContent,
 } from "@mui/joy";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
+import Img1 from '../../Assets/Add New Module.png';
+
 
 const HTPanelForm = () => {
   const [formData, setFormData] = useState({
@@ -37,7 +40,7 @@ const HTPanelForm = () => {
   const handleSubmit = async () => {
     try {
       console.log("Submitting:", formData);
-      const response = await axios.post("https://api.slnkoprotrac.com/v1/add-ht-panel", {
+      const response = await axios.post("https://api.slnkoprotrac.com/v1/add-htpanel-master", {
         ...formData,
         submitted_by: "admin",
       });
@@ -68,6 +71,15 @@ const HTPanelForm = () => {
         <Typography level="h4" textAlign="center" gutterBottom>
           Add New HT Panel
         </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <img
+            src={Img1}
+            width="40px"
+            height="40px"
+            alt="Inverter"
+            style={{ maxWidth: '100%', height: 'auto' }}
+          />
+        </Box>
         <Grid container spacing={2}>
           <Grid xs={12} sm={6}>
             <FormControl>

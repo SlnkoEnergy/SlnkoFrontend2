@@ -37,7 +37,7 @@ const AddNewTransformerForm = () => {
     console.log('Submitting:', formData);
 
     try {
-      const response = await axios.post('https://api.slnkoprotrac.com/v1/get-transformer-options', formData);
+      const response = await axios.post('https://api.slnkoprotrac.com/v1/add-transformer-master', formData);
       console.log('Response:', response.data);
       alert('Transformer added successfully!');
       setFormData({

@@ -57,8 +57,8 @@ import './App.css';
 // import AddNewInverterForm from './Components/Engineering/Inverter_Master';
 // import AddNewTransformerForm from './Components/Engineering/Transformer_Master';
 // import AddBOMForm from './Components/Engineering/Add_BOM';
-import LTPannelForm from './Components/Engineering/LT_Panel_Master';
-// import HTPanelForm from './Components/Engineering/HT_Pannel_Master';
+// import LTPannelForm from './Components/Engineering/LT_Panel_Master';
+import HTPanelForm from './Components/Engineering/HT_Pannel_Master';
 // import DCCableForm from './Components/Engineering/DC_Cable_Master';
 // import ACCableForm from './Components/Engineering/AC_Cable_Master';
 // import AddNewBOSForm from './Components/Engineering/BOS_Master';
@@ -124,8 +124,8 @@ function App() {
      {/* <AddNewInverterForm/> */}
      {/* <AddNewTransformerForm/> */}
      {/* <AddBOMForm/> */}
-     <LTPannelForm/>
-     {/* <HTPanelForm/> */}
+     {/* <LTPannelForm/> */}
+     <HTPanelForm/>
      {/* <DCCableForm/> */}
      {/* <ACCableForm/> */}
       {/* <AddNewBOSForm /> */}
