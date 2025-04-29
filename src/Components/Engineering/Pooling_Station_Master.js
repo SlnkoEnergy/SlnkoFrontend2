@@ -38,7 +38,7 @@ const AddNewPoolingStationForm = () => {
     e.preventDefault();
     try {
       console.log('Submitting:', formData);
-      await axios.post('https://your-api-endpoint.com/v1/add-pooling-station', formData);
+      await axios.post('https://api.slnkoprotrac.com/v1/add-pooling-station-master', formData);
       alert('Pooling Station Added Successfully!');
       setFormData({
         category: '',

@@ -61,12 +61,8 @@ import './App.css';
 // import HTPanelForm from './Components/Engineering/HT_Pannel_Master';
 // import DCCableForm from './Components/Engineering/DC_Cable_Master';
 // import ACCableForm from './Components/Engineering/AC_Cable_Master';
-import AddNewBOSForm from './Components/Engineering/BOS_Master';
-// import AddNewPoolingStationForm from './Components/Engineering/Pooling_Station_Master';
-
-
-
-
+// import AddNewBOSForm from './Components/Engineering/BOS_Master';
+import AddNewPoolingStationForm from './Components/Engineering/Pooling_Station_Master';
 
 
 
@@ -128,8 +124,8 @@ function App() {
      {/* <HTPanelForm/> */}
      {/* <DCCableForm/> */}
      {/* <ACCableForm/> */}
-      <AddNewBOSForm />
-      {/* <AddNewPoolingStationForm/> */}
+      {/* <AddNewBOSForm /> */}
+      <AddNewPoolingStationForm/>
     </div>
   );
 }
