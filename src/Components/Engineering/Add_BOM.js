@@ -14,7 +14,7 @@ import axios from 'axios';
 import Img1 from '../../Assets/Add New Module.png';
 
 const dropdownOptions = {
-  category: ['Solar Panel', 'Inverter', 'Structure'],
+  category: ['Module Materials', 'Inverter Materials', 'Tranfo Materials', 'LT Panel', 'HT Panel', 'AC Cable', 'DC Cable'],
   make: ['Slnko', 'Client', 'Other'],
   rating: ['1kW', '2kW', '5kW'],
   specification: ['Mono Perc', 'Poly', 'Bi-facial'],
