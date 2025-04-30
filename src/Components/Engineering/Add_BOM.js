@@ -16,7 +16,7 @@ import Img1 from '../../Assets/Add New Module.png';
 
 const dropdownOptions = {
   category: ['Module Materials', 'Inverter Materials', 'Tranfo Materials', 'LT Panel', 'HT Panel', 'AC Cable', 'DC Cable'],
-  itemName: ['MC4 Connector', 'Module Mounting Structure', 'Cable Tie', 'ACDB', 'DCDB'], // example values
+  itemName: ['MC4 Connector', 'Module Mounting Structure', 'Cable Tie', 'ACDB', 'DCDB'],
   make: ['Slnko', 'Client', 'Other'],
   rating: ['1kW', '2kW', '5kW'],
   voltageRating: ['110V', '230V', '415V'],
@@ -37,8 +37,29 @@ const AddBOMForm = () => {
     uom: ''
   });
 
+  const [makeOptions, setMakeOptions] = useState([]);
+
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
+    if (field === 'category') {
+      if (value === 'Module Materials') {
+        fetchMakeOptionsByCategory();
+      } else {
+        setMakeOptions([]);
+      }
+    }
+  };
+
+  const fetchMakeOptionsByCategory = async () => {
+    try {
+      const response = await axios.get('https://api.slnkoprotrac.com/v1/get-module-master');
+      const makes = [...new Set(response.data.data.map(item => item.make).filter(Boolean))];
+      setMakeOptions(makes);
+    } catch (error) {
+      console.error('Error fetching make options:', error);
+      setMakeOptions([]);
+    }
   };
 
   const handleSubmit = async () => {
@@ -74,19 +95,14 @@ const AddBOMForm = () => {
         </Box>
         <CardContent>
           <Grid container spacing={2}>
-            {[
-              { field: 'category', label: 'Category' },
-              { field: 'itemName', label: 'Item Name' },
-              { field: 'make', label: 'Make' },
-              { field: 'quantity', label: 'Quantity' },
-              { field: 'uom', label: 'Unit of Measurement (UOM)' }
-            ].map(({ field, label }) => (
+            {/* Static fields excluding "make" */}
+            {['category', 'itemName', 'quantity', 'uom'].map((field) => (
               <Grid xs={12} sm={6} key={field}>
-                <FormLabel>{label}</FormLabel>
+                <FormLabel>{field === 'uom' ? 'Unit of Measurement (UOM)' : field.charAt(0).toUpperCase() + field.slice(1)}</FormLabel>
                 <Select
                   value={formData[field]}
                   onChange={(e, val) => handleChange(field, val)}
-                  placeholder={`Select ${label}`}
+                  placeholder={`Select ${field}`}
                   required
                 >
                   {dropdownOptions[field].map((option, i) => (
@@ -95,6 +111,21 @@ const AddBOMForm = () => {
                 </Select>
               </Grid>
             ))}
+
+            {/* Dynamic Make field */}
+            <Grid xs={12} sm={6}>
+              <FormLabel>Make</FormLabel>
+              <Select
+                value={formData.make}
+                onChange={(e, val) => handleChange('make', val)}
+                placeholder="Select Make"
+                required
+              >
+                {(makeOptions.length > 0 ? makeOptions : dropdownOptions.make).map((option, i) => (
+                  <Option key={i} value={option}>{option}</Option>
+                ))}
+              </Select>
+            </Grid>
 
             {/* Rating (only for non DC/AC cable) */}
             {!isDCCable && !isACCable && (
@@ -112,28 +143,26 @@ const AddBOMForm = () => {
               </Grid>
             )}
 
-            {/* Core (for both DC and AC cables) */}
+            {/* Core and Size for DC/AC Cable */}
             {(isDCCable || isACCable) && (
-              <Grid xs={12} sm={6}>
-                <FormLabel>Core</FormLabel>
-                <Input
-                  value={formData.core}
-                  onChange={(e) => handleChange('core', e.target.value)}
-                  placeholder="Enter Core"
-                />
-              </Grid>
-            )}
-
-            {/* Size (for both DC and AC cables) */}
-            {(isDCCable || isACCable) && (
-              <Grid xs={12} sm={6}>
-                <FormLabel>Size</FormLabel>
-                <Input
-                  value={formData.size}
-                  onChange={(e) => handleChange('size', e.target.value)}
-                  placeholder="Enter Size"
-                />
-              </Grid>
+              <>
+                <Grid xs={12} sm={6}>
+                  <FormLabel>Core</FormLabel>
+                  <Input
+                    value={formData.core}
+                    onChange={(e) => handleChange('core', e.target.value)}
+                    placeholder="Enter Core"
+                  />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                  <FormLabel>Size</FormLabel>
+                  <Input
+                    value={formData.size}
+                    onChange={(e) => handleChange('size', e.target.value)}
+                    placeholder="Enter Size"
+                  />
+                </Grid>
+              </>
             )}
 
             {/* Voltage Rating (only for AC Cable) */}
