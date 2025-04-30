@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -9,96 +9,284 @@ import {
   Select,
   Option,
   FormLabel,
-  Input
-} from '@mui/joy';
-import axios from 'axios';
-import Img1 from '../../Assets/Add New Module.png';
+  Input,
+} from "@mui/joy";
+import axios from "axios";
+import Img1 from "../../Assets/Add New Module.png";
 
-const dropdownOptions = {
-  category: ['Module Materials', 'Inverter Materials', 'Tranfo Materials', 'LT Panel', 'HT Panel', 'AC Cable', 'DC Cable'],
-  itemName: ['MC4 Connector', 'Module Mounting Structure', 'Cable Tie', 'ACDB', 'DCDB'],
-  make: ['Slnko', 'Client', 'Other'],
-  rating: ['1kW', '2kW', '5kW'],
-  voltageRating: ['110V', '230V', '415V'],
-  uom: ['Nos', 'Mtr', 'Set'],
-  quantity: Array.from({ length: 100 }, (_, i) => (i + 1).toString())
+
+
+const itemNameOptionsByCategory = {
+  "Module Materials": ["Module", "MC4 Connector", "Module Mounting Structure"],
+  "Inverter Materials": ["Inverter"],
+  "Tranfo Materials": ["Transformer"],
+  "LT Panel": ["LT Panel"],
+  "HT Panel": ["HT Panel"],
+  "AC Cable": ["AC Cable"],
+  "DC Cable": ["DC Cable"],
 };
 
 const AddBOMForm = () => {
   const [formData, setFormData] = useState({
-    category: '',
-    itemName: '',
-    make: '',
-    rating: '',
-    voltageRating: '',
-    core: '',
-    size: '',
-    quantity: '',
-    uom: ''
+    category: "",
+    itemName: "",
+    make: "",
+    rating: "",
+    voltageRating: "",
+    core: "",
+    size: "",
+    quantity: "",
+    uom: "",
   });
 
   const [makeOptions, setMakeOptions] = useState([]);
+  const [dropdownOptions, setDropdownOptions] = useState({
+    category: [
+      "Module Materials",
+      "Inverter Materials",
+      "Tranfo Materials",
+      "LT Panel",
+      "HT Panel",
+      "AC Cable",
+      "DC Cable",
+    ],
+    make: ["Slnko", "Client", "Other"],
+    rating: ["1kW", "2kW", "5kW"],
+    voltageRating: [],
+    uom: ["Nos", "Mtr", "Set"],
+    core: [],
+    size: [],
+    quantity: Array.from({ length: 100 }, (_, i) => (i + 1).toString()),
+  });
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    if (field === 'category') {
-      if (value === 'Module Materials') {
-        fetchMakeOptionsByCategory();
+    if (field === "category") {
+      setFormData((prev) => ({ ...prev, itemName: "" })); // reset itemName on category change
+
+      if (value === "Module Materials") {
+        fetchMakeOptionsFromModule();
+      } else if (value === "Inverter Materials") {
+        fetchMakeOptionsFromInverter();
+      } else if (value === "DC Cable") {
+        fetchMakeOptionsFromDCCable();
+      } else if (value === "AC Cable") {
+        fetchMakeOptionsFromACCable();
+      } else if (value === "Tranfo Materials") {
+        fetchMakeOptionsFromTransformer();
+      } else if (value === "HT Panel") {
+        fetchMakeOptionsFromHTPanel();
+      } else if (value === "LT Panel") {
+        fetchMakeOptionsFromLTPanel();
       } else {
         setMakeOptions([]);
       }
     }
   };
 
-  const fetchMakeOptionsByCategory = async () => {
+  const fetchMakeOptionsFromModule = async () => {
     try {
-      const response = await axios.get('https://api.slnkoprotrac.com/v1/get-module-master');
-      const makes = [...new Set(response.data.data.map(item => item.make).filter(Boolean))];
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-module-master"
+      );
+      const makes = [
+        ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
+      ];
       setMakeOptions(makes);
     } catch (error) {
-      console.error('Error fetching make options:', error);
+      console.error("Error fetching module make options:", error);
+      setMakeOptions([]);
+    }
+  };
+
+  const fetchMakeOptionsFromInverter = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-master-inverter"
+      );
+      const makes = [
+        ...new Set(
+          response.data.data.map((item) => item.inveter_make).filter(Boolean)
+        ),
+      ];
+      setMakeOptions(makes);
+    } catch (error) {
+      console.error("Error fetching inverter make options:", error);
+      setMakeOptions([]);
+    }
+  };
+
+  const fetchMakeOptionsFromDCCable = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-dc-cabel-master"
+      );
+      const data = response.data.data;
+  
+      const makes = [...new Set(data.map(item => item.make).filter(Boolean))];
+      const cores = [...new Set(data.map(item => item.core).filter(Boolean))];
+      const sizes = [...new Set(data.map(item => item.size).filter(Boolean))];
+  
+      setMakeOptions(makes);
+      setDropdownOptions(prev => ({
+        ...prev,
+        core: cores,
+        size: sizes,
+      }));
+    } catch (error) {
+      console.error("Error fetching DC cable make options:", error);
+      setMakeOptions([]);
+    }
+  };
+  
+
+  const fetchMakeOptionsFromACCable = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-accabel-master"
+      );
+      const data = response.data.data;
+  
+      const makes = [...new Set(data.map(item => item.make).filter(Boolean))];
+      const cores = [...new Set(data.map(item => item.core).filter(Boolean))];
+      const sizes = [...new Set(data.map(item => item.size).filter(Boolean))];
+      const voltageRatings = [...new Set(data.map(item => item.voltage_rating).filter(Boolean))];
+  
+      setMakeOptions(makes);
+      setDropdownOptions(prev => ({
+        ...prev,
+        core: cores,
+        size: sizes,
+        voltageRating: voltageRatings,
+      }));
+    } catch (error) {
+      console.error("Error fetching AC cable make options:", error);
+      setMakeOptions([]);
+    }
+  };
+  
+
+  const fetchMakeOptionsFromTransformer = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-transformer"
+      );
+      const makes = [
+        ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
+      ];
+      setMakeOptions(makes);
+    } catch (error) {
+      console.error("Error fetching Transformer make options:", error);
+      setMakeOptions([]);
+    }
+  };
+  
+
+  const fetchMakeOptionsFromHTPanel = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-htpanel-master"
+      );
+      const makes = [
+        ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
+      ];
+      setMakeOptions(makes);
+    } catch (error) {
+      console.error("Error fetching HT Panel make options:", error);
+      setMakeOptions([]);
+    }
+  };
+
+  const fetchMakeOptionsFromLTPanel = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.slnkoprotrac.com/v1/get-ltpanel-master"
+      );
+      const makes = [
+        ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
+      ];
+      setMakeOptions(makes);
+    } catch (error) {
+      console.error("Error fetching LT Panel make options:", error);
       setMakeOptions([]);
     }
   };
 
   const handleSubmit = async () => {
     try {
-      const payload = {
-        bom: [formData]
-      };
-      const response = await axios.post('https://api.slnkoprotrac.com/v1/add-bom-master', payload);
-      console.log('BOM submitted:', response.data);
+      const payload = { bom: [formData] };
+      const response = await axios.post(
+        "https://api.slnkoprotrac.com/v1/add-bom-master",
+        payload
+      );
+      console.log("BOM submitted:", response.data);
     } catch (error) {
-      console.error('Error submitting BOM:', error);
+      console.error("Error submitting BOM:", error);
     }
   };
 
   const { category } = formData;
-  const isDCCable = category === 'DC Cable';
-  const isACCable = category === 'AC Cable';
+  const isDCCable = category === "DC Cable";
+  const isACCable = category === "AC Cable";
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" sx={{ bgcolor: 'background.body' }}>
-      <Card variant="outlined" sx={{ p: 4, width: '100%', maxWidth: 800 }}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      sx={{ bgcolor: "background.body" }}
+    >
+      <Card variant="outlined" sx={{ p: 4, width: "100%", maxWidth: 800 }}>
         <Box display="flex" justifyContent="center" mb={3}>
           <Typography level="h4">Add Bill of Materials (BOM)</Typography>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-          <img
-            src={Img1}
-            width="30px"
-            height="30px"
-            alt="Module"
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+          <img src={Img1} width="30px" height="30px" alt="Module" />
         </Box>
         <CardContent>
           <Grid container spacing={2}>
-            {/* Static fields excluding "make" */}
-            {['category', 'itemName', 'quantity', 'uom'].map((field) => (
+            {/* Category Dropdown */}
+            <Grid xs={12} sm={6}>
+              <FormLabel>Category</FormLabel>
+              <Select
+                value={formData.category}
+                onChange={(e, val) => handleChange("category", val)}
+                placeholder="Select Category"
+                required
+              >
+                {dropdownOptions.category.map((option, i) => (
+                  <Option key={i} value={option}>
+                    {option}
+                  </Option>
+                ))}
+              </Select>
+            </Grid>
+
+            {/* Dynamic Item Name based on Category */}
+            <Grid xs={12} sm={6}>
+              <FormLabel>Item Name</FormLabel>
+              <Select
+                value={formData.itemName}
+                onChange={(e, val) => handleChange("itemName", val)}
+                placeholder="Select Item Name"
+                required
+              >
+                {(itemNameOptionsByCategory[category] || []).map(
+                  (option, i) => (
+                    <Option key={i} value={option}>
+                      {option}
+                    </Option>
+                  )
+                )}
+              </Select>
+            </Grid>
+
+            {/* Quantity and UOM */}
+            {["quantity", "uom"].map((field) => (
               <Grid xs={12} sm={6} key={field}>
-                <FormLabel>{field === 'uom' ? 'Unit of Measurement (UOM)' : field.charAt(0).toUpperCase() + field.slice(1)}</FormLabel>
+                <FormLabel>{field.toUpperCase()}</FormLabel>
                 <Select
                   value={formData[field]}
                   onChange={(e, val) => handleChange(field, val)}
@@ -106,112 +294,117 @@ const AddBOMForm = () => {
                   required
                 >
                   {dropdownOptions[field].map((option, i) => (
-                    <Option key={i} value={option}>{option}</Option>
+                    <Option key={i} value={option}>
+                      {option}
+                    </Option>
                   ))}
                 </Select>
               </Grid>
             ))}
 
-            {/* Dynamic Make field */}
+            {/* Make */}
             <Grid xs={12} sm={6}>
               <FormLabel>Make</FormLabel>
               <Select
                 value={formData.make}
-                onChange={(e, val) => handleChange('make', val)}
+                onChange={(e, val) => handleChange("make", val)}
                 placeholder="Select Make"
                 required
               >
-                {(makeOptions.length > 0 ? makeOptions : dropdownOptions.make).map((option, i) => (
-                  <Option key={i} value={option}>{option}</Option>
+                {(makeOptions.length > 0
+                  ? makeOptions
+                  : dropdownOptions.make
+                ).map((option, i) => (
+                  <Option key={i} value={option}>
+                    {option}
+                  </Option>
                 ))}
               </Select>
             </Grid>
 
-            {/* Rating (only for non DC/AC cable) */}
+            {/* Rating */}
             {!isDCCable && !isACCable && (
               <Grid xs={12} sm={6}>
                 <FormLabel>Rating</FormLabel>
                 <Select
                   value={formData.rating}
-                  onChange={(e, val) => handleChange('rating', val)}
+                  onChange={(e, val) => handleChange("rating", val)}
                   placeholder="Select Rating"
                 >
                   {dropdownOptions.rating.map((option, i) => (
-                    <Option key={i} value={option}>{option}</Option>
+                    <Option key={i} value={option}>
+                      {option}
+                    </Option>
                   ))}
                 </Select>
               </Grid>
             )}
 
-            {/* Core and Size for DC/AC Cable */}
+            {/* Core & Size for DC/AC Cable */}
             {(isDCCable || isACCable) && (
               <>
                 <Grid xs={12} sm={6}>
                   <FormLabel>Core</FormLabel>
-                  <Input
+                  <Select
                     value={formData.core}
-                    onChange={(e) => handleChange('core', e.target.value)}
-                    placeholder="Enter Core"
-                  />
+                    onChange={(e, val) => handleChange("core", val)}
+                    placeholder="Select Core"
+                    required
+                  >
+                    {dropdownOptions.core.map((option, i) => (
+                      <Option key={i} value={option}>
+                        {option}
+                      </Option>
+                    ))}
+                  </Select>
                 </Grid>
+
                 <Grid xs={12} sm={6}>
                   <FormLabel>Size</FormLabel>
-                  <Input
+                  <Select
                     value={formData.size}
-                    onChange={(e) => handleChange('size', e.target.value)}
-                    placeholder="Enter Size"
-                  />
+                    onChange={(e, val) => handleChange("size", val)}
+                    placeholder="Select Size"
+                    required
+                  >
+                    {dropdownOptions.size.map((option, i) => (
+                      <Option key={i} value={option}>
+                        {option}
+                      </Option>
+                    ))}
+                  </Select>
                 </Grid>
               </>
             )}
 
-            {/* Voltage Rating (only for AC Cable) */}
+            {/* Voltage Rating for AC Cable only */}
             {isACCable && (
               <Grid xs={12} sm={6}>
                 <FormLabel>Voltage Rating</FormLabel>
                 <Select
                   value={formData.voltageRating}
-                  onChange={(e, val) => handleChange('voltageRating', val)}
+                  onChange={(e, val) => handleChange("voltageRating", val)}
                   placeholder="Select Voltage Rating"
                 >
                   {dropdownOptions.voltageRating.map((option, i) => (
-                    <Option key={i} value={option}>{option}</Option>
+                    <Option key={i} value={option}>
+                      {option}
+                    </Option>
                   ))}
                 </Select>
               </Grid>
             )}
 
+            {/* Buttons */}
             <Grid xs={12} display="flex" justifyContent="space-between" gap={2}>
-              <Button
-                variant="outlined"
-                color="neutral"
-                sx={{
-                  width: '48%',
-                  fontWeight: 'bold',
-                  borderRadius: '12px',
-                  padding: '10px 20px',
-                  backgroundColor: '#f2f2f2',
-                  '&:hover': {
-                    backgroundColor: '#e0e0e0'
-                  }
-                }}
-              >
+              <Button variant="outlined" color="neutral" sx={{ width: "48%" }}>
                 Back
               </Button>
               <Button
                 onClick={handleSubmit}
                 variant="solid"
                 color="success"
-                sx={{
-                  width: '48%',
-                  fontWeight: 'bold',
-                  borderRadius: '12px',
-                  padding: '10px 20px',
-                  backgroundColor: '#4caf50',
-                  '&:hover': {
-                    backgroundColor: '#45a049'
-                  }
-                }}
+                sx={{ width: "48%" }}
               >
                 Submit BOM
               </Button>
