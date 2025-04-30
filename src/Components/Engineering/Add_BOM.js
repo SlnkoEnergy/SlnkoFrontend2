@@ -24,6 +24,8 @@ const itemNameOptionsByCategory = {
   "HT Panel": ["HT Panel"],
   "AC Cable": ["AC Cable"],
   "DC Cable": ["DC Cable"],
+  "MMS": ["Module Mounting Structure"],
+  "Fastener": ["Module Mounting & MMS Hardware"],
 };
 
 const AddBOMForm = () => {
@@ -49,6 +51,8 @@ const AddBOMForm = () => {
       "HT Panel",
       "AC Cable",
       "DC Cable",
+      "MMS",
+      "Fastener"
     ],
     make: ["Slnko", "Client", "Other"],
     rating: ["1kW", "2kW", "5kW"],
@@ -263,7 +267,7 @@ const AddBOMForm = () => {
                 ))}
               </Select>
             </Grid>
-
+  
             {/* Dynamic Item Name based on Category */}
             <Grid xs={12} sm={6}>
               <FormLabel>Item Name</FormLabel>
@@ -273,48 +277,7 @@ const AddBOMForm = () => {
                 placeholder="Select Item Name"
                 required
               >
-                {(itemNameOptionsByCategory[category] || []).map(
-                  (option, i) => (
-                    <Option key={i} value={option}>
-                      {option}
-                    </Option>
-                  )
-                )}
-              </Select>
-            </Grid>
-
-            {/* Quantity and UOM */}
-            {["quantity", "uom"].map((field) => (
-              <Grid xs={12} sm={6} key={field}>
-                <FormLabel>{field.toUpperCase()}</FormLabel>
-                <Select
-                  value={formData[field]}
-                  onChange={(e, val) => handleChange(field, val)}
-                  placeholder={`Select ${field}`}
-                  required
-                >
-                  {dropdownOptions[field].map((option, i) => (
-                    <Option key={i} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-                </Select>
-              </Grid>
-            ))}
-
-            {/* Make */}
-            <Grid xs={12} sm={6}>
-              <FormLabel>Make</FormLabel>
-              <Select
-                value={formData.make}
-                onChange={(e, val) => handleChange("make", val)}
-                placeholder="Select Make"
-                required
-              >
-                {(makeOptions.length > 0
-                  ? makeOptions
-                  : dropdownOptions.make
-                ).map((option, i) => (
+                {(itemNameOptionsByCategory[category] || []).map((option, i) => (
                   <Option key={i} value={option}>
                     {option}
                   </Option>
@@ -322,24 +285,90 @@ const AddBOMForm = () => {
               </Select>
             </Grid>
 
+            {/* Make */}
+            <Grid xs={12} sm={6}>
+              <FormLabel>Make</FormLabel>
+              {(category === "MMS" || category === "Fastener") ? (
+                <Input
+                  value={formData.make}
+                  onChange={(e) => handleChange("make", e.target.value)}
+                  placeholder="Enter Make"
+                  required
+                />
+              ) : (
+                <Select
+                  value={formData.make}
+                  onChange={(e, val) => handleChange("make", val)}
+                  placeholder="Select Make"
+                  required
+                >
+                  {(makeOptions.length > 0 ? makeOptions : dropdownOptions.make).map(
+                    (option, i) => (
+                      <Option key={i} value={option}>
+                        {option}
+                      </Option>
+                    )
+                  )}
+                </Select>
+              )}
+            </Grid>
+  
             {/* Rating */}
             {!isDCCable && !isACCable && (
               <Grid xs={12} sm={6}>
                 <FormLabel>Rating</FormLabel>
-                <Select
-                  value={formData.rating}
-                  onChange={(e, val) => handleChange("rating", val)}
-                  placeholder="Select Rating"
-                >
-                  {dropdownOptions.rating.map((option, i) => (
-                    <Option key={i} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-                </Select>
+                {(category === "MMS" || category === "Fastener") ? (
+                  <Input
+                    value={formData.rating}
+                    onChange={(e) => handleChange("rating", e.target.value)}
+                    placeholder="Enter Rating"
+                  />
+                ) : (
+                  <Select
+                    value={formData.rating}
+                    onChange={(e, val) => handleChange("rating", val)}
+                    placeholder="Select Rating"
+                  >
+                    {dropdownOptions.rating.map((option, i) => (
+                      <Option key={i} value={option}>
+                        {option}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
               </Grid>
             )}
-
+  
+            {/* Quantity and UOM */}
+            {["quantity", "uom"].map((field) => (
+              <Grid xs={12} sm={6} key={field}>
+                <FormLabel>{field.toUpperCase()}</FormLabel>
+                {(category === "MMS" || category === "Fastener") && field === "quantity" ? (
+                  <Input
+                    value={formData[field]}
+                    onChange={(e) => handleChange(field, e.target.value)}
+                    placeholder={`Enter ${field}`}
+                    required
+                  />
+                ) : (
+                  <Select
+                    value={formData[field]}
+                    onChange={(e, val) => handleChange(field, val)}
+                    placeholder={`Select ${field}`}
+                    required
+                  >
+                    {dropdownOptions[field].map((option, i) => (
+                      <Option key={i} value={option}>
+                        {option}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </Grid>
+            ))}
+  
+            
+  
             {/* Core & Size for DC/AC Cable */}
             {(isDCCable || isACCable) && (
               <>
@@ -358,7 +387,7 @@ const AddBOMForm = () => {
                     ))}
                   </Select>
                 </Grid>
-
+  
                 <Grid xs={12} sm={6}>
                   <FormLabel>Size</FormLabel>
                   <Select
@@ -376,7 +405,7 @@ const AddBOMForm = () => {
                 </Grid>
               </>
             )}
-
+  
             {/* Voltage Rating for AC Cable only */}
             {isACCable && (
               <Grid xs={12} sm={6}>
@@ -394,7 +423,7 @@ const AddBOMForm = () => {
                 </Select>
               </Grid>
             )}
-
+  
             {/* Buttons */}
             <Grid xs={12} display="flex" justifyContent="space-between" gap={2}>
               <Button variant="outlined" color="neutral" sx={{ width: "48%" }}>
