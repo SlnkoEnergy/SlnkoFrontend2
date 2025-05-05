@@ -42,7 +42,7 @@ const AddNewTransformerForm = () => {
       alert('Transformer added successfully!');
       setFormData({
         make: '',
-        size: '',
+        size: '',   
         type: '',
         vector_group: '',
         cooling_type: '',

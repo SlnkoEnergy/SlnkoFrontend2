@@ -14,8 +14,6 @@ import {
 import axios from "axios";
 import Img1 from "../../Assets/Add New Module.png";
 
-
-
 const itemNameOptionsByCategory = {
   "Module Materials": ["Module", "MC4 Connector", "Module Mounting Structure"],
   "Inverter Materials": ["Inverter"],
@@ -40,8 +38,13 @@ const AddBOMForm = () => {
     quantity: "",
     uom: "",
   });
+  const [inverterData, setInverterData] = useState([]); // Add this line to define inverterData
 
   const [makeOptions, setMakeOptions] = useState([]);
+  const [moduleData, setModuleData] = useState([]); // NEW: Stores full module master data
+  const [transformerData, setTransformerData] = useState([]);
+  const [ltPanelData, setLtPanelData] = useState([]);
+  const [htPanelData, setHtPanelData] = useState([]); // NEW: Stores full HT Panel data
   const [dropdownOptions, setDropdownOptions] = useState({
     category: [
       "Module Materials",
@@ -65,10 +68,11 @@ const AddBOMForm = () => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-
+  
+    // Reset dependent fields when category changes
     if (field === "category") {
-      setFormData((prev) => ({ ...prev, itemName: "" })); // reset itemName on category change
-
+      setFormData((prev) => ({ ...prev, itemName: "", make: "", rating: "" }));
+  
       if (value === "Module Materials") {
         fetchMakeOptionsFromModule();
       } else if (value === "Inverter Materials") {
@@ -87,17 +91,100 @@ const AddBOMForm = () => {
         setMakeOptions([]);
       }
     }
+  
+    // Populate rating dropdown when Make is selected under Module Materials
+    if (field === "make" && formData.category === "Module Materials") {
+      const filteredRatings = moduleData
+        .filter((item) => item.make === value)
+        .map((item) => item.power)
+        .filter(Boolean);
+      const uniqueRatings = [...new Set(filteredRatings)];
+  
+      setDropdownOptions((prev) => ({
+        ...prev,
+        rating: uniqueRatings.length > 0 ? uniqueRatings : ["No Ratings Found"],
+      }));
+    }
+  
+    // ✅ NEW: Populate rating dropdown when Make is selected under Inverter Materials
+    if (field === "make" && formData.category === "Inverter Materials") {
+      const filteredRatings = inverterData
+        .filter((item) => item.inveter_make === value)
+        .map((item) => item.inveter_size)
+        .filter(Boolean);
+      const uniqueRatings = [...new Set(filteredRatings)];
+  
+      setDropdownOptions((prev) => ({
+        ...prev,
+        rating: uniqueRatings.length > 0 ? uniqueRatings : ["No Ratings Found"],
+      }));
+    }
+
+    //Transformer//
+ // Transformer → Use size as Rating
+if (field === "make" && formData.category === "Tranfo Materials") {
+  const filteredRatings = transformerData
+    .filter((item) => item.make === value)
+    .map((item) => item.size)
+    .filter(Boolean);
+  const uniqueRatings = [...new Set(filteredRatings)];
+
+  setDropdownOptions((prev) => ({
+    ...prev,
+    rating: uniqueRatings.length > 0 ? uniqueRatings : ["No Ratings Found"],
+  }));
+}
+
+
+   //LT Panel//
+  // LT Panel //
+if (field === "make" && formData.category === "LT Panel") {
+  const filteredTypes = ltPanelData
+    .filter((item) => item.make === value)
+    .map((item) => item.type) // Use `type` as per your data model
+    .filter(Boolean);
+  const uniqueTypes = [...new Set(filteredTypes)];
+
+  setDropdownOptions((prev) => ({
+    ...prev,
+    rating: uniqueTypes.length > 0 ? uniqueTypes : ["No Types Found"], // Use rating instead of type for dropdown
+  }));
+}
+
+// HT Panel //
+if (field === "make" && formData.category === "HT Panel") {
+  const filteredTypes = htPanelData
+    .filter((item) => item.make === value)
+    .map((item) => item.type) // Use `type` as per your data model
+    .filter(Boolean);
+  const uniqueTypes = [...new Set(filteredTypes)];
+
+  setDropdownOptions((prev) => ({
+    ...prev,
+    rating: uniqueTypes.length > 0 ? uniqueTypes : ["No Types Found"], // Use rating dropdown for `type` values
+  }));
+}
+
+
   };
+      
+  
+ 
+  
 
   const fetchMakeOptionsFromModule = async () => {
     try {
       const response = await axios.get(
         "https://api.slnkoprotrac.com/v1/get-module-master"
       );
+      const data = response.data.data;
+
       const makes = [
-        ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
+        ...new Set(data.map((item) => item.make).filter(Boolean)),
       ];
+
       setMakeOptions(makes);
+      setModuleData(data); // Store full module data for later filtering
     } catch (error) {
       console.error("Error fetching module make options:", error);
       setMakeOptions([]);
@@ -109,12 +196,15 @@ const AddBOMForm = () => {
       const response = await axios.get(
         "https://api.slnkoprotrac.com/v1/get-master-inverter"
       );
+      const data = response.data.data;
+
       const makes = [
         ...new Set(
           response.data.data.map((item) => item.inveter_make).filter(Boolean)
         ),
       ];
       setMakeOptions(makes);
+      setInverterData(data); // ✅ This is what's missing
     } catch (error) {
       console.error("Error fetching inverter make options:", error);
       setMakeOptions([]);
@@ -127,11 +217,11 @@ const AddBOMForm = () => {
         "https://api.slnkoprotrac.com/v1/get-dc-cabel-master"
       );
       const data = response.data.data;
-  
+
       const makes = [...new Set(data.map(item => item.make).filter(Boolean))];
       const cores = [...new Set(data.map(item => item.core).filter(Boolean))];
       const sizes = [...new Set(data.map(item => item.size).filter(Boolean))];
-  
+
       setMakeOptions(makes);
       setDropdownOptions(prev => ({
         ...prev,
@@ -143,7 +233,6 @@ const AddBOMForm = () => {
       setMakeOptions([]);
     }
   };
-  
 
   const fetchMakeOptionsFromACCable = async () => {
     try {
@@ -151,12 +240,12 @@ const AddBOMForm = () => {
         "https://api.slnkoprotrac.com/v1/get-accabel-master"
       );
       const data = response.data.data;
-  
+
       const makes = [...new Set(data.map(item => item.make).filter(Boolean))];
       const cores = [...new Set(data.map(item => item.core).filter(Boolean))];
       const sizes = [...new Set(data.map(item => item.size).filter(Boolean))];
       const voltageRatings = [...new Set(data.map(item => item.voltage_rating).filter(Boolean))];
-  
+
       setMakeOptions(makes);
       setDropdownOptions(prev => ({
         ...prev,
@@ -169,29 +258,31 @@ const AddBOMForm = () => {
       setMakeOptions([]);
     }
   };
-  
 
   const fetchMakeOptionsFromTransformer = async () => {
     try {
       const response = await axios.get(
         "https://api.slnkoprotrac.com/v1/get-transformer"
       );
+      const data = response.data.data;
+
       const makes = [
         ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
       ];
       setMakeOptions(makes);
+      setTransformerData(data);
     } catch (error) {
       console.error("Error fetching Transformer make options:", error);
       setMakeOptions([]);
     }
   };
-  
 
   const fetchMakeOptionsFromHTPanel = async () => {
     try {
       const response = await axios.get(
         "https://api.slnkoprotrac.com/v1/get-htpanel-master"
       );
+      const data = response.data.data;
       const makes = [
         ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
       ];
@@ -207,10 +298,13 @@ const AddBOMForm = () => {
       const response = await axios.get(
         "https://api.slnkoprotrac.com/v1/get-ltpanel-master"
       );
+      const data = response.data.data; // ✅ define it like this
+
       const makes = [
         ...new Set(response.data.data.map((item) => item.make).filter(Boolean)),
       ];
       setMakeOptions(makes);
+      setLtPanelData(data);
     } catch (error) {
       console.error("Error fetching LT Panel make options:", error);
       setMakeOptions([]);
@@ -251,7 +345,6 @@ const AddBOMForm = () => {
         </Box>
         <CardContent>
           <Grid container spacing={2}>
-            {/* Category Dropdown */}
             <Grid xs={12} sm={6}>
               <FormLabel>Category</FormLabel>
               <Select
@@ -267,8 +360,7 @@ const AddBOMForm = () => {
                 ))}
               </Select>
             </Grid>
-  
-            {/* Dynamic Item Name based on Category */}
+
             <Grid xs={12} sm={6}>
               <FormLabel>Item Name</FormLabel>
               <Select
@@ -312,7 +404,7 @@ const AddBOMForm = () => {
                 </Select>
               )}
             </Grid>
-  
+
             {/* Rating */}
             {!isDCCable && !isACCable && (
               <Grid xs={12} sm={6}>
@@ -338,8 +430,7 @@ const AddBOMForm = () => {
                 )}
               </Grid>
             )}
-  
-            {/* Quantity and UOM */}
+
             {["quantity", "uom"].map((field) => (
               <Grid xs={12} sm={6} key={field}>
                 <FormLabel>{field.toUpperCase()}</FormLabel>
@@ -366,10 +457,7 @@ const AddBOMForm = () => {
                 )}
               </Grid>
             ))}
-  
-            
-  
-            {/* Core & Size for DC/AC Cable */}
+
             {(isDCCable || isACCable) && (
               <>
                 <Grid xs={12} sm={6}>
@@ -387,7 +475,7 @@ const AddBOMForm = () => {
                     ))}
                   </Select>
                 </Grid>
-  
+
                 <Grid xs={12} sm={6}>
                   <FormLabel>Size</FormLabel>
                   <Select
@@ -405,8 +493,7 @@ const AddBOMForm = () => {
                 </Grid>
               </>
             )}
-  
-            {/* Voltage Rating for AC Cable only */}
+
             {isACCable && (
               <Grid xs={12} sm={6}>
                 <FormLabel>Voltage Rating</FormLabel>
@@ -423,8 +510,7 @@ const AddBOMForm = () => {
                 </Select>
               </Grid>
             )}
-  
-            {/* Buttons */}
+
             <Grid xs={12} display="flex" justifyContent="space-between" gap={2}>
               <Button variant="outlined" color="neutral" sx={{ width: "48%" }}>
                 Back
