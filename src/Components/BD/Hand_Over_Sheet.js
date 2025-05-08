@@ -72,7 +72,7 @@ const HandoverSheetForm = ({ onBack }) => {
       submitted_by_BD: "",
     },
     invoiving_details: {
-      invoice_recipient: "",
+      invoice_to: "",
       invoicing_GST_no: "",
       invoicing_address: "",
       delivery_address: "",
@@ -414,16 +414,16 @@ useEffect(() => {
                       level="body1"
                       sx={{ fontWeight: "bold", marginBottom: 0.5 }}
                     >
-                      Invoice Recipient
+                      Invoice To
                     </Typography>
                     <Input
                       fullWidth
-                      placeholder="Invoice Recipient"
-                      value={formData.invoiving_details.invoice_recipient}
+                      placeholder="Invoice To Party Name"
+                      value={formData.invoiving_details.invoice_to}
                       onChange={(e) =>
                         handleChange(
                           "invoiving_details",
-                          "invoice_recipient",
+                          "invoice_to",
                           e.target.value
                         )
                       }
