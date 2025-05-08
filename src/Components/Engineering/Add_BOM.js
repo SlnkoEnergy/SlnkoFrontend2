@@ -121,7 +121,6 @@ const AddBOMForm = () => {
     }
 
     //Transformer//
- // Transformer → Use size as Rating
 if (field === "make" && formData.category === "Tranfo Materials") {
   const filteredRatings = transformerData
     .filter((item) => item.make === value)
@@ -136,7 +135,7 @@ if (field === "make" && formData.category === "Tranfo Materials") {
 }
 
 
-   //LT Panel//
+ 
   // LT Panel //
 if (field === "make" && formData.category === "LT Panel") {
   const filteredTypes = ltPanelData

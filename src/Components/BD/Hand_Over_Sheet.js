@@ -71,6 +71,12 @@ const HandoverSheetForm = ({ onBack }) => {
       ppa_number: "",
       submitted_by_BD: "",
     },
+    invoiving_details: {
+      invoice_recipient: "",
+      invoicing_GST_no: "",
+      invoicing_address: "",
+      delivery_address: "",
+    },
   });
   const [moduleMakeOptions, setModuleMakeOptions] = useState([]);
 const [moduleTypeOptions, setModuleTypeOptions] = useState([]);
@@ -169,6 +175,10 @@ useEffect(() => {
       fields: [],
     },
     {
+      name: "Invoicing Details",
+      fields: [],
+    },
+    {
       name: "Order Details",
       fields: [],
     },
@@ -184,6 +194,7 @@ useEffect(() => {
       name: "Attached Details",
       fields: [],
     },
+    
   ];
 
   return (
@@ -393,6 +404,92 @@ useEffect(() => {
                       }
                     />
                   </Grid>
+                </>
+              )}
+               {/* Handle special case for "Invoicing Details" section  */}
+               {section.name === "Invoicing Details" && (
+                <>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      level="body1"
+                      sx={{ fontWeight: "bold", marginBottom: 0.5 }}
+                    >
+                      Invoice Recipient
+                    </Typography>
+                    <Input
+                      fullWidth
+                      placeholder="Invoice Recipient"
+                      value={formData.invoiving_details.invoice_recipient}
+                      onChange={(e) =>
+                        handleChange(
+                          "invoiving_details",
+                          "invoice_recipient",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      level="body1"
+                      sx={{ fontWeight: "bold", marginBottom: 0.5 }}
+                    >
+                      Invoicing GST No.
+                    </Typography>
+                    <Input
+                      fullWidth
+                      placeholder="Invoicing GST No."
+                      value={formData.invoiving_details.invoicing_GST_no}
+                      onChange={(e) =>
+                        handleChange(
+                          "invoiving_details",
+                          "invoicing_GST_no",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      level="body1"
+                      sx={{ fontWeight: "bold", marginBottom: 0.5 }}
+                    >
+                     Invoicing Address
+                    </Typography>
+                    <Input
+                      fullWidth
+                      placeholder="Invoicing Address"
+                      value={formData.invoiving_details.invoicing_address}
+                      onChange={(e) =>
+                        handleChange(
+                          "invoiving_details",
+                          "invoicing_address",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      level="body1"
+                      sx={{ fontWeight: "bold", marginBottom: 0.5 }}
+                    >
+                      Delivery Address
+                    </Typography>
+                    <Input
+                      fullWidth
+                      placeholder="Delivery Address"
+                      value={formData.invoiving_details.delivery_address}
+                      onChange={(e) =>
+                        handleChange(
+                          "invoiving_details",
+                          "delivery_address",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
+                  
                 </>
               )}
               {/* Handle special case for "Type of Business" dropdown */}
