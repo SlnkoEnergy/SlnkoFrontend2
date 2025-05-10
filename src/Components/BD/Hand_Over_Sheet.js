@@ -71,7 +71,7 @@ const HandoverSheetForm = ({ onBack }) => {
       ppa_number: "",
       submitted_by_BD: "",
     },
-    invoiving_details: {
+    invoice_detail: {
       invoice_to: "",
       invoicing_GST_no: "",
       invoicing_address: "",
@@ -419,10 +419,10 @@ useEffect(() => {
                     <Input
                       fullWidth
                       placeholder="Invoice To Party Name"
-                      value={formData.invoiving_details.invoice_to}
+                      value={formData.invoice_detail.invoice_to}
                       onChange={(e) =>
                         handleChange(
-                          "invoiving_details",
+                          "invoice_detail",
                           "invoice_to",
                           e.target.value
                         )
@@ -439,10 +439,10 @@ useEffect(() => {
                     <Input
                       fullWidth
                       placeholder="Invoicing GST No."
-                      value={formData.invoiving_details.invoicing_GST_no}
+                      value={formData.invoice_detail.invoicing_GST_no}
                       onChange={(e) =>
                         handleChange(
-                          "invoiving_details",
+                          "invoice_detail",
                           "invoicing_GST_no",
                           e.target.value
                         )
@@ -459,10 +459,10 @@ useEffect(() => {
                     <Input
                       fullWidth
                       placeholder="Invoicing Address"
-                      value={formData.invoiving_details.invoicing_address}
+                      value={formData.invoice_detail.invoicing_address}
                       onChange={(e) =>
                         handleChange(
-                          "invoiving_details",
+                          "invoice_detail",
                           "invoicing_address",
                           e.target.value
                         )
@@ -479,10 +479,10 @@ useEffect(() => {
                     <Input
                       fullWidth
                       placeholder="Delivery Address"
-                      value={formData.invoiving_details.delivery_address}
+                      value={formData.invoice_detail.delivery_address}
                       onChange={(e) =>
                         handleChange(
-                          "invoiving_details",
+                          "invoice_detail",
                           "delivery_address",
                           e.target.value
                         )
