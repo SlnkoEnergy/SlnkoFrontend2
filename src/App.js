@@ -46,7 +46,7 @@ import './App.css';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
 // import CreateLead from './Components/BD/create_lead';
 import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
-import DynamicBOMForm from './Components/Engineering/Master_form';
+// import DynamicBOMForm from './Components/Engineering/Master_form';
 import HandOverApproval from './Components/CAM/Handover_approval';
 // import FollowUpHistory from './Components/BD/client_followup_history';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
@@ -109,7 +109,7 @@ function App() {
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
      {/* <CreateLead/> */}
-     {/* <HandoverSheetForm/> */}
+     <HandoverSheetForm/>
      {/* <TaskDashboard/> */}
      {/* <FormComponent/> */}
      {/* <EditCommercialForm/> */}

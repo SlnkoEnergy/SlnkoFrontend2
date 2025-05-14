@@ -24,6 +24,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import HandoverData from "../../Data/handover.json"; // Assuming you have a JSON file with the data
 
 const HandOverApproval = () => {
   const [search, setSearch] = useState("");
@@ -32,36 +33,51 @@ const HandOverApproval = () => {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [comment, setComment] = useState("");
 
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [rowToApprove, setRowToApprove] = useState(null);
+  console.log("Handover Data:", HandoverData);
 
   useEffect(() => {
     axios
-      .get("https://api.slnkoprotrac.com/v1/get-all-handover-sheet")
+      .get(
+        "https://849f-103-248-94-60.ngrok-free.app/v1/get-all-handover-sheet?page=1"
+      )
       .then((response) => {
-        const rawData = response.data.Data;
+        console.log("API Response of the new api:", response);
 
-        const apiData = rawData.map((item, index) => ({
-          id: item.id || item._id || index + 1,
-          submitted: false,
-          status: "Pending",
-          projectId: item.customer_details?.code || "-",
-          customer: item.customer_details?.name || "-",
-          mobile: item.customer_details?.number || "-",
-          state: item.customer_details?.state || "-",
-          type: item.project_detail?.project_type || "-",
-          capacity: item.project_detail?.project_kwp
-            ? `${item.project_detail.project_kwp} kWp`
-            : "-",
-          charges: item.commercial_details?.subsidy_amount || "N/A",
-        }));
+        const rawData = HandoverData;
+        console.log("API RawData of the new api:", rawData);
 
-        setData(apiData);
+        if (rawData && Array.isArray(rawData)) {
+          const apiData = rawData.map((item, index) => ({
+            id: item.id || item._id || index + 1,
+            submitted: false,
+            status: "Pending",
+            projectId: item.customer_details?.code || "-",
+            customer: item.customer_details?.name || "-",
+            mobile: item.customer_details?.number || "-",
+            state: item.customer_details?.state || "-",
+            type: item.project_detail?.project_type || "-",
+            capacity: item.project_detail?.project_kwp
+              ? `${item.project_detail.project_kwp} kWp`
+              : "-",
+            charges: item.commercial_details?.subsidy_amount || "N/A",
+          }));
+
+          setData(apiData);
+        } else {
+          console.error("Data is empty or not an array:", rawData);
+        }
       })
       .catch((error) => {
         console.error("❌ Error fetching data:", error);
       });
   }, []);
+
+  const handleSubmit = (id) => {
+    const updated = data.map((row) =>
+      row.id === id ? { ...row, submitted: true } : row
+    );
+    setData(updated);
+  };
 
   const handleDisapproveClick = (id) => {
     setSelectedRowId(id);
@@ -87,15 +103,11 @@ const HandOverApproval = () => {
     setComment("");
   };
 
-  const handleConfirmApprove = () => {
+  const handleApprove = (id) => {
     const updated = data.map((row) =>
-      row.id === rowToApprove
-        ? { ...row, status: "Approved", submitted: true }
-        : row
+      row.id === id ? { ...row, status: "Approved" } : row
     );
     setData(updated);
-    setConfirmationOpen(false);
-    setRowToApprove(null);
   };
 
   const filteredData = data.filter((row) => {
@@ -123,7 +135,7 @@ const HandOverApproval = () => {
       >
         <TextField
           fullWidth
-          placeholder="Search by Project ID, Customer, State, or Status"
+          placeholder="Search by Project ID, Customer, or Name"
           variant="outlined"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -160,8 +172,9 @@ const HandOverApproval = () => {
                 "Type",
                 "Capacity (AC/DC)",
                 "Service Charges (with GST)",
-                "Approval Status",
+                "Approval Status", // ✅ Added
                 "Action",
+                "Submit",
               ].map((head) => (
                 <TableCell
                   key={head}
@@ -176,32 +189,7 @@ const HandOverApproval = () => {
           <TableBody>
             {filteredData.map((row) => (
               <TableRow key={row.id} hover>
-                <TableCell>
-                  <Button
-                    onClick={() =>
-                      window.open(
-                        `https://api.slnkoprotrac.com/v1/handover-sheet/${row.id}`,
-                        "_blank"
-                      )
-                    }
-                    sx={{
-                      textTransform: "none",
-                      padding: 0,
-                      minWidth: "auto",
-                      color: "#1976d2",
-                      textDecoration: "underline",
-                      fontWeight: "bold",
-                      fontSize: "0.9rem",
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                        textDecoration: "underline",
-                      },
-                    }}
-                  >
-                    {row.projectId}
-                  </Button>
-                </TableCell>
-
+                <TableCell>{row.projectId}</TableCell>
                 <TableCell>{row.customer}</TableCell>
                 <TableCell>{row.mobile}</TableCell>
                 <TableCell>{row.state}</TableCell>
@@ -238,10 +226,7 @@ const HandOverApproval = () => {
                   <Tooltip title="Approve">
                     <IconButton
                       color="success"
-                      onClick={() => {
-                        setRowToApprove(row.id);
-                        setConfirmationOpen(true);
-                      }}
+                      onClick={() => handleApprove(row.id)}
                     >
                       <CheckCircleIcon />
                     </IconButton>
@@ -255,12 +240,24 @@ const HandOverApproval = () => {
                     </IconButton>
                   </Tooltip>
                 </TableCell>
+
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color={row.submitted ? "success" : "primary"}
+                    disabled={row.submitted || row.status === "Disapproved"}
+                    onClick={() => handleSubmit(row.id)}
+                    size="small"
+                  >
+                    {row.submitted ? "Submitted" : "Submit"}
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
 
             {filteredData.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} align="center">
+                <TableCell colSpan={10} align="center">
                   No records found.
                 </TableCell>
               </TableRow>
@@ -297,33 +294,6 @@ const HandOverApproval = () => {
             variant="contained"
           >
             Submit Reason
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirm Approve Dialog */}
-      <Dialog
-        open={confirmationOpen}
-        onClose={() => setConfirmationOpen(false)}
-        maxWidth="xs"
-        fullWidth
-      >
-        <DialogTitle>Confirm Submission</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to submit this handover?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <IconButton onClick={() => setConfirmationOpen(false)} color="error">
-            <CancelIcon />
-          </IconButton>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={handleConfirmApprove}
-          >
-            Confirm
           </Button>
         </DialogActions>
       </Dialog>

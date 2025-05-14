@@ -19,65 +19,99 @@ import Img1 from "../../Assets/HandOverSheet_Icon.jpeg";
 const HandoverSheetForm = ({ onBack }) => {
   const [expanded, setExpanded] = useState(null);
   const [formData, setFormData] = useState({
-    customer_details: {
-      project_id: "",
-      project_name: "",
-      epc_developer: "",
-      site_address_pincode: "",
-      site_google_coordinates: "",
-      contact_no: "",
-      gst_no: "",
-      billing_address: "",
+  id: "",
+  p_id: "",
+  status_of_handoversheet: "draft",
+  submitted_by: "",
+
+  customer_details: {
+    code: "",
+    name: "",
+    customer: "",
+    epc_developer: "",
+    site_google_coordinates: "",
+    number: "",
+    gst_no: "",
+    gender_of_Loa_holder: "",
+    email: "",
+    pan_no: "",
+    adharNumber_of_loa_holder: "",
+    alt_number: "",
+    p_group: "",
+    billing_address: {
+      village_name: "",
+      district_name: ""
     },
-    order_details: {
-      type_business: "",
-      tender_name: "",
-      discom_name: "",
-      design_date: "",
+    site_address: {
+      village_name: "",
+      district_name: ""
     },
-    project_detail: {
-      project_type: "",
-      module_make_capacity: "",
-      module_make: "",
-      module_capacity: "",
-      module_tye: "",
-      modeule_model_no: "",
-      evacuation_voltage: "",
-      inverter_make_capacity: "",
-      inverter_make: "",
-      inverter_type: "",
-      inverter_size: "",
-      inverter_model_no: "",
-      work_by_slnko: "",
-      topography_survey: "",
-      soil_test: "",
-      purchase_supply_net_meter: "",
-      liaisoning_net_metering: "",
-      ceig_ceg: "",
-      project_completion_date: "",
-      proposed_dc_capacity: "",
-      transmission_line: "",
-      substation_name: "",
-      overloading: "",
-    },
-    commercial_details: {
-      type: "",
-      subsidy_amount: "",
-    },
-    attached_details: {
-      taken_over_by: "",
-      cam_member_name: "",
-      loa_number: "",
-      ppa_number: "",
-      submitted_by_BD: "",
-    },
-    invoice_detail: {
-      invoice_to: "",
-      invoicing_GST_no: "",
-      invoicing_address: "",
-      delivery_address: "",
-    },
-  });
+    state: ""
+  },
+
+  order_details: {
+    type_business: "",
+    tender_name: "",
+    discom_name: "",
+    design_date: "",
+    feeder_code: "",
+    feeder_name: ""
+  },
+
+  project_detail: {
+    project_type: "",
+    module_make_capacity: "",
+    module_make: "",
+    module_capacity: "",
+    module_type: "",
+    module_model_no: "",
+    evacuation_voltage: "",
+    inverter_make_capacity: "",
+    inverter_make: "",
+    inverter_type: "",
+    inverter_size: "",
+    inverter_model_no: "",
+    work_by_slnko: "",
+    topography_survey: "",
+    soil_test: "",
+    purchase_supply_net_meter: "",
+    liaisoning_net_metering: "",
+    ceig_ceg: "",
+    project_completion_date: "",
+    proposed_dc_capacity: "",
+    project_kwp: "",
+    distance: "",
+    tarrif: "",
+    land: "",
+    substation_name: "",
+    overloading: "",
+    agreement_date: ""
+  },
+
+  commercial_details: {
+    type: "",
+    subsidy_amount: ""
+  },
+
+  attached_details: {
+    taken_over_by: "",
+    cam_member_name: "",
+    loa_number: "",
+    ppa_number: "",
+    submitted_by_BD: "",
+    service: "",
+    billing_type: "",
+    project_status: ""
+  },
+
+  invoice_detail: {
+    invoice_recipient: "",
+    invoicing_GST_no: "",
+    invoicing_address: "",
+    delivery_address: ""
+  }
+});
+
   const [moduleMakeOptions, setModuleMakeOptions] = useState([]);
 const [moduleTypeOptions, setModuleTypeOptions] = useState([]);
 const [moduleModelOptions, setModuleModelOptions] = useState([]);
@@ -158,7 +192,7 @@ useEffect(() => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://api.slnkoprotrac.com/v1/create-hand-over-sheet",
+        "https://849f-103-248-94-60.ngrok-free.app/v1/create-hand-over-sheet",
         formData
       );
       console.log("Form submitted successfully:", response.data);
