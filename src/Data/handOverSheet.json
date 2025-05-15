@@ -1,0 +1,518 @@
+[
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "Vill- Sarda",
+                    "district_name": "Teh- Aklera jhalawar326036"
+                },
+                "code": "RJK-C/Naveen/1250/383",
+                "name": "Ratlai Solar",
+                "customer": "",
+                "epc_developer": "",
+                "site_google_coordinates": "",
+                "number": 9828361716,
+                "gst_no": "",
+                "gender_of_Loa_holder": "",
+                "email": "naveenmeena97@gmail.com",
+                "p_group": "",
+                "pan_no": "",
+                "adharNumber_of_loa_holder": "",
+                "state": "Rajasthan",
+                "alt_number": null
+            },
+            "order_details": {
+                "type_business": "",
+                "tender_name": "",
+                "discom_name": "JVVNL",
+                "design_date": "",
+                "feeder_code": "",
+                "feeder_name": ""
+            },
+            "project_detail": {
+                "project_type": "On-Grid",
+                "module_make_capacity": "",
+                "module_make": "",
+                "module_capacity": "",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": "",
+                "inverter_make_capacity": "",
+                "inverter_make": "",
+                "inverter_type": "",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": "",
+                "topography_survey": "",
+                "soil_test": "",
+                "purchase_supply_net_meter": "",
+                "liaisoning_net_metering": "",
+                "ceig_ceg": "",
+                "project_completion_date": "",
+                "proposed_dc_capacity": "",
+                "distance": "1 Km",
+                "tarrif": "3.19",
+                "substation_name": "",
+                "overloading": "20%",
+                "project_kwp": "1.25",
+                "land": "{\"type\":\"Owned\",\"acres\":\"\"}",
+                "agreement_date": ""
+            },
+            "commercial_details": {
+                "type": "",
+                "subsidy_amount": ""
+            },
+            "attached_details": {
+                "taken_over_by": "CAM",
+                "cam_member_name": "",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete",
+                "loa_number": "",
+                "ppa_number": "",
+                "submitted_by_BD": "IT Team"
+            },
+            "invoice_detail": {
+                "invoice_recipient": "",
+                "invoicing_GST_no": "",
+                "invoicing_address": "",
+                "delivery_address": ""
+            },
+            "_id": "681c954866a603766504241f",
+            "p_id": 244,
+            "status_of_handoversheet": "done",
+            "submitted_by": "IT Team",
+            "createdAt": "2025-05-08T11:28:08.047Z",
+            "updatedAt": "2025-05-09T07:03:34.245Z",
+            "__v": 0
+        },
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "code": "JH/PVUNL-Jainagar/0/548",
+                "name": "",
+                "customer": "",
+                "epc_developer": "",
+                "site_google_coordinates": "",
+                "number": null,
+                "gst_no": "",
+                "gender_of_Loa_holder": "",
+                "email": "",
+                "pan_no": "",
+                "adharNumber_of_loa_holder": "",
+                "alt_number": null,
+                "p_group": "",
+                "state": "Jharkhand"
+            },
+            "order_details": {
+                "type_business": "Tender",
+                "tender_name": "",
+                "discom_name": "",
+                "design_date": "",
+                "feeder_code": "",
+                "feeder_name": ""
+            },
+            "project_detail": {
+                "project_type": null,
+                "module_make_capacity": null,
+                "module_make": "",
+                "module_capacity": "",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": null,
+                "inverter_make_capacity": null,
+                "inverter_make": "",
+                "inverter_type": "",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": null,
+                "topography_survey": null,
+                "soil_test": null,
+                "purchase_supply_net_meter": null,
+                "liaisoning_net_metering": null,
+                "ceig_ceg": null,
+                "project_completion_date": "",
+                "proposed_dc_capacity": "",
+                "project_kwp": "",
+                "distance": "",
+                "tarrif": "",
+                "land": "{\"type\":\"\",\"acres\":\"\"}",
+                "substation_name": "",
+                "overloading": "",
+                "agreement_date": ""
+            },
+            "commercial_details": {
+                "type": "CapEx",
+                "subsidy_amount": ""
+            },
+            "attached_details": {
+                "taken_over_by": "CAM",
+                "cam_member_name": "",
+                "loa_number": "",
+                "ppa_number": "",
+                "submitted_by_BD": "IT Team",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete"
+            },
+            "_id": "681c9ad366a60376650424b8",
+            "p_id": 245,
+            "status_of_handoversheet": "done",
+            "submitted_by": "IT Team",
+            "createdAt": "2025-05-08T11:51:47.140Z",
+            "updatedAt": "2025-05-08T11:51:47.140Z",
+            "__v": 0
+        },
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "code": "JH/PVUNL-Gegda/0/549",
+                "name": "",
+                "customer": "",
+                "epc_developer": "",
+                "site_google_coordinates": "",
+                "number": null,
+                "gst_no": "",
+                "gender_of_Loa_holder": "",
+                "email": "",
+                "pan_no": "",
+                "adharNumber_of_loa_holder": "",
+                "alt_number": null,
+                "p_group": "",
+                "state": "Jharkhand"
+            },
+            "order_details": {
+                "type_business": "Tender",
+                "tender_name": "",
+                "discom_name": "",
+                "design_date": "",
+                "feeder_code": "",
+                "feeder_name": ""
+            },
+            "project_detail": {
+                "project_type": null,
+                "module_make_capacity": null,
+                "module_make": "",
+                "module_capacity": "",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": null,
+                "inverter_make_capacity": null,
+                "inverter_make": "",
+                "inverter_type": "",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": null,
+                "topography_survey": null,
+                "soil_test": null,
+                "purchase_supply_net_meter": null,
+                "liaisoning_net_metering": null,
+                "ceig_ceg": null,
+                "project_completion_date": "",
+                "proposed_dc_capacity": "",
+                "project_kwp": "",
+                "distance": "",
+                "tarrif": "",
+                "land": "{\"type\":\"\",\"acres\":\"\"}",
+                "substation_name": "",
+                "overloading": "",
+                "agreement_date": ""
+            },
+            "commercial_details": {
+                "type": null,
+                "subsidy_amount": ""
+            },
+            "attached_details": {
+                "taken_over_by": null,
+                "cam_member_name": "",
+                "loa_number": "",
+                "ppa_number": "",
+                "submitted_by_BD": "IT Team",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete"
+            },
+            "_id": "681c9b2366a60376650424cb",
+            "p_id": 246,
+            "status_of_handoversheet": "done",
+            "submitted_by": "IT Team",
+            "createdAt": "2025-05-08T11:53:07.913Z",
+            "updatedAt": "2025-05-08T11:53:07.913Z",
+            "__v": 0
+        },
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "code": "JH/PVUNL-Sahitand/0/550",
+                "name": "",
+                "customer": "",
+                "epc_developer": "",
+                "site_google_coordinates": "",
+                "number": 8377845570,
+                "gst_no": "",
+                "gender_of_Loa_holder": "",
+                "email": "",
+                "p_group": "",
+                "pan_no": "",
+                "adharNumber_of_loa_holder": "",
+                "state": "",
+                "alt_number": null
+            },
+            "order_details": {
+                "type_business": "Tender",
+                "tender_name": "",
+                "discom_name": "",
+                "design_date": "",
+                "feeder_code": "",
+                "feeder_name": ""
+            },
+            "project_detail": {
+                "project_type": null,
+                "module_make_capacity": null,
+                "module_make": "",
+                "module_capacity": "",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": null,
+                "inverter_make_capacity": null,
+                "inverter_make": "",
+                "inverter_type": "",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": null,
+                "topography_survey": null,
+                "soil_test": null,
+                "purchase_supply_net_meter": null,
+                "liaisoning_net_metering": null,
+                "ceig_ceg": null,
+                "project_completion_date": "",
+                "proposed_dc_capacity": "",
+                "distance": "",
+                "tarrif": "",
+                "substation_name": "",
+                "overloading": "",
+                "project_kwp": "",
+                "land": "{\"type\":\"\",\"acres\":\"\"}",
+                "agreement_date": ""
+            },
+            "commercial_details": {
+                "type": null,
+                "subsidy_amount": ""
+            },
+            "attached_details": {
+                "taken_over_by": null,
+                "cam_member_name": "",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete",
+                "loa_number": "",
+                "ppa_number": "",
+                "submitted_by_BD": "IT Team"
+            },
+            "_id": "681c9b6f66a60376650424d4",
+            "p_id": 247,
+            "status_of_handoversheet": "done",
+            "submitted_by": "IT Team",
+            "createdAt": "2025-05-08T11:54:23.376Z",
+            "updatedAt": "2025-05-08T12:10:11.385Z",
+            "__v": 0
+        },
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "",
+                    "district_name": ""
+                },
+                "code": "JH/PVUNL-Patratu/0/551",
+                "name": "",
+                "customer": "",
+                "epc_developer": "",
+                "site_google_coordinates": "",
+                "number": null,
+                "gst_no": "",
+                "gender_of_Loa_holder": "",
+                "email": "",
+                "pan_no": "",
+                "adharNumber_of_loa_holder": "",
+                "alt_number": null,
+                "p_group": "",
+                "state": ""
+            },
+            "order_details": {
+                "type_business": "Tender",
+                "tender_name": "",
+                "discom_name": "",
+                "design_date": "",
+                "feeder_code": "",
+                "feeder_name": ""
+            },
+            "project_detail": {
+                "project_type": null,
+                "module_make_capacity": null,
+                "module_make": "",
+                "module_capacity": "",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": null,
+                "inverter_make_capacity": null,
+                "inverter_make": "",
+                "inverter_type": "",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": null,
+                "topography_survey": null,
+                "soil_test": null,
+                "purchase_supply_net_meter": null,
+                "liaisoning_net_metering": null,
+                "ceig_ceg": null,
+                "project_completion_date": "",
+                "proposed_dc_capacity": "",
+                "project_kwp": "",
+                "distance": "",
+                "tarrif": "",
+                "land": "{\"type\":\"\",\"acres\":\"\"}",
+                "substation_name": "",
+                "overloading": "",
+                "agreement_date": ""
+            },
+            "commercial_details": {
+                "type": null,
+                "subsidy_amount": ""
+            },
+            "attached_details": {
+                "taken_over_by": null,
+                "cam_member_name": "",
+                "loa_number": "",
+                "ppa_number": "",
+                "submitted_by_BD": "IT Team",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete"
+            },
+            "_id": "681c9b8866a60376650424df",
+            "p_id": 248,
+            "status_of_handoversheet": "done",
+            "submitted_by": "IT Team",
+            "createdAt": "2025-05-08T11:54:48.382Z",
+            "updatedAt": "2025-05-08T11:54:48.382Z",
+            "__v": 0
+        },
+        {
+            "customer_details": {
+                "billing_address": {
+                    "village_name": "not confirmed",
+                    "district_name": ""
+                },
+                "site_address": {
+                    "village_name": "Chandpura",
+                    "district_name": "Meerut 119200"
+                },
+                "code": "UPNEDA/Jatin/1800/554",
+                "name": "",
+                "customer": "Jatin",
+                "epc_developer": "Slnko/Jatin",
+                "site_google_coordinates": "Not received",
+                "number": 9716613100,
+                "gst_no": "N.A.",
+                "gender_of_Loa_holder": "Male",
+                "email": "N.A.",
+                "pan_no": "BCVPJ5720J",
+                "adharNumber_of_loa_holder": "Jatin",
+                "alt_number": 9716613100,
+                "p_group": "",
+                "state": ""
+            },
+            "order_details": {
+                "type_business": "Tender",
+                "tender_name": "03/UPNEDA-PM KUSUM-C2/FLS/2024,",
+                "discom_name": "Kharkhoda New",
+                "design_date": "",
+                "feeder_code": "N.A.",
+                "feeder_name": "N.A."
+            },
+            "project_detail": {
+                "project_type": "On-Grid",
+                "module_make_capacity": "Slnko",
+                "module_make": "INA SOLAR",
+                "module_capacity": "580",
+                "module_type": "",
+                "module_model_no": "",
+                "evacuation_voltage": "11 KV",
+                "inverter_make_capacity": "Slnko",
+                "inverter_make": "SUNGROW",
+                "inverter_type": "STRING INVERTER",
+                "inverter_size": "",
+                "inverter_model_no": "",
+                "work_by_slnko": "EPMC",
+                "topography_survey": "Yes",
+                "soil_test": "Yes",
+                "purchase_supply_net_meter": "Yes",
+                "liaisoning_net_metering": "Yes",
+                "ceig_ceg": "Yes",
+                "project_completion_date": "",
+                "proposed_dc_capacity": "2160",
+                "project_kwp": "1800",
+                "distance": "3.05 km",
+                "tarrif": "",
+                "land": "{\"type\":\"\",\"acres\":\"\"}",
+                "substation_name": "Kharkhoda New",
+                "overloading": "20",
+                "agreement_date": "2025-05-12"
+            },
+            "commercial_details": {
+                "type": "Resco",
+                "subsidy_amount": "27900000"
+            },
+            "attached_details": {
+                "taken_over_by": "CAM",
+                "cam_member_name": "SOM NARAYAN JHA",
+                "loa_number": "7529",
+                "ppa_number": "N.A.",
+                "submitted_by_BD": "Geeta",
+                "service": "",
+                "billing_type": "",
+                "project_status": "incomplete"
+            },
+            "invoice_detail": {
+                "invoice_recipient": "N.A.",
+                "invoicing_GST_no": "N.A.",
+                "invoicing_address": "N.A.",
+                "delivery_address": "N.A."
+            },
+            "_id": "6822f810330b5ebf1969a005",
+            "p_id": 249,
+            "status_of_handoversheet": "done",
+            "submitted_by": "Geeta",
+            "createdAt": "2025-05-13T07:43:12.122Z",
+            "updatedAt": "2025-05-13T07:43:12.122Z",
+            "__v": 0
+        }
+    ]

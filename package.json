@@ -36,6 +36,8 @@
       "react-app/jest"
     ]
   },
+  "proxy": "https://35f5-103-198-173-57.ngrok-free.app",
+
   "browserslist": {
     "production": [
       ">0.2%",
@@ -47,5 +49,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+    
+
   }
 }

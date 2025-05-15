@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import {
@@ -24,7 +23,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import HandoverData from "../../Data/handover.json"; // Assuming you have a JSON file with the data
+import HandoverData from "../../Data/handover.json";
+import axios from "axios";
 
 const HandOverApproval = () => {
   const [search, setSearch] = useState("");
@@ -32,52 +32,34 @@ const HandOverApproval = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [comment, setComment] = useState("");
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [approveRowId, setApproveRowId] = useState(null);
 
-  console.log("Handover Data:", HandoverData);
+useEffect(() => {
+  const rawData = HandoverData;
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://849f-103-248-94-60.ngrok-free.app/v1/get-all-handover-sheet?page=1"
-      )
-      .then((response) => {
-        console.log("API Response of the new api:", response);
+  if (Array.isArray(rawData)) {
+    const apiData = rawData.map((item, index) => ({
+      id: item.id || item._id || index + 1,
+      submitted: false,
+      status: "Pending",
+      projectId: item.customer_details?.code || "-",
+      customer: item.customer_details?.name || "-",
+      mobile: item.customer_details?.number || "-",
+      state: item.customer_details?.state || "-",
+      type: item.project_detail?.project_type || "-",
+      capacity: item.project_detail?.project_kwp
+        ? `${item.project_detail.project_kwp} kWp`
+        : "-",
+      charges: item.commercial_details?.subsidy_amount || "N/A",
+    }));
 
-        const rawData = HandoverData;
-        console.log("API RawData of the new api:", rawData);
+    setData(apiData);
+  } else {
+    console.error("❌ Local JSON data is not an array:", rawData);
+  }
+}, []);
 
-        if (rawData && Array.isArray(rawData)) {
-          const apiData = rawData.map((item, index) => ({
-            id: item.id || item._id || index + 1,
-            submitted: false,
-            status: "Pending",
-            projectId: item.customer_details?.code || "-",
-            customer: item.customer_details?.name || "-",
-            mobile: item.customer_details?.number || "-",
-            state: item.customer_details?.state || "-",
-            type: item.project_detail?.project_type || "-",
-            capacity: item.project_detail?.project_kwp
-              ? `${item.project_detail.project_kwp} kWp`
-              : "-",
-            charges: item.commercial_details?.subsidy_amount || "N/A",
-          }));
-
-          setData(apiData);
-        } else {
-          console.error("Data is empty or not an array:", rawData);
-        }
-      })
-      .catch((error) => {
-        console.error("❌ Error fetching data:", error);
-      });
-  }, []);
-
-  const handleSubmit = (id) => {
-    const updated = data.map((row) =>
-      row.id === id ? { ...row, submitted: true } : row
-    );
-    setData(updated);
-  };
 
   const handleDisapproveClick = (id) => {
     setSelectedRowId(id);
@@ -103,11 +85,20 @@ const HandOverApproval = () => {
     setComment("");
   };
 
-  const handleApprove = (id) => {
+  const handleApproveClick = (id) => {
+    setApproveRowId(id);
+    setApproveDialogOpen(true);
+  };
+
+  const handleApproveConfirm = () => {
     const updated = data.map((row) =>
-      row.id === id ? { ...row, status: "Approved" } : row
+      row.id === approveRowId
+        ? { ...row, status: "Approved", submitted: true }
+        : row
     );
     setData(updated);
+    setApproveDialogOpen(false);
+    setApproveRowId(null);
   };
 
   const filteredData = data.filter((row) => {
@@ -126,13 +117,7 @@ const HandOverApproval = () => {
         HandOver Approval
       </Typography>
 
-      <Box
-        sx={{
-          mb: 3,
-          display: "flex",
-          justifyContent: "flex-start",
-        }}
-      >
+      <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-start" }}>
         <TextField
           fullWidth
           placeholder="Search by Project ID, Customer, or Name"
@@ -172,9 +157,8 @@ const HandOverApproval = () => {
                 "Type",
                 "Capacity (AC/DC)",
                 "Service Charges (with GST)",
-                "Approval Status", // ✅ Added
+                "Approval Status",
                 "Action",
-                "Submit",
               ].map((head) => (
                 <TableCell
                   key={head}
@@ -189,7 +173,18 @@ const HandOverApproval = () => {
           <TableBody>
             {filteredData.map((row) => (
               <TableRow key={row.id} hover>
-                <TableCell>{row.projectId}</TableCell>
+                <TableCell>
+                  <Typography
+                    sx={{
+                      color: "#1976d2",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => alert(`Project ID: ${row.projectId}`)}
+                  >
+                    {row.projectId}
+                  </Typography>
+                </TableCell>
                 <TableCell>{row.customer}</TableCell>
                 <TableCell>{row.mobile}</TableCell>
                 <TableCell>{row.state}</TableCell>
@@ -226,7 +221,8 @@ const HandOverApproval = () => {
                   <Tooltip title="Approve">
                     <IconButton
                       color="success"
-                      onClick={() => handleApprove(row.id)}
+                      onClick={() => handleApproveClick(row.id)}
+                      disabled={row.submitted || row.status === "Disapproved"}
                     >
                       <CheckCircleIcon />
                     </IconButton>
@@ -240,24 +236,12 @@ const HandOverApproval = () => {
                     </IconButton>
                   </Tooltip>
                 </TableCell>
-
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color={row.submitted ? "success" : "primary"}
-                    disabled={row.submitted || row.status === "Disapproved"}
-                    onClick={() => handleSubmit(row.id)}
-                    size="small"
-                  >
-                    {row.submitted ? "Submitted" : "Submit"}
-                  </Button>
-                </TableCell>
               </TableRow>
             ))}
 
             {filteredData.length === 0 && (
               <TableRow>
-                <TableCell colSpan={10} align="center">
+                <TableCell colSpan={9} align="center">
                   No records found.
                 </TableCell>
               </TableRow>
@@ -294,6 +278,31 @@ const HandOverApproval = () => {
             variant="contained"
           >
             Submit Reason
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Approve Confirmation Dialog */}
+      <Dialog
+        open={approveDialogOpen}
+        onClose={() => setApproveDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Confirm Approval</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to submit this approval?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setApproveDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleApproveConfirm}
+            color="success"
+            variant="contained"
+          >
+            Yes, Submit
           </Button>
         </DialogActions>
       </Dialog>

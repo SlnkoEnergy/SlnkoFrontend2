@@ -15,20 +15,35 @@ import {
 } from "@mui/joy";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Img1 from "../../Assets/HandOverSheet_Icon.jpeg";
+import HandOverSheet from '../../Data/handOverSheet.json'
 
 const EditHandoverSheetForm = ({ onBack }) => {
   const [expanded, setExpanded] = useState(null);
   const [formData, setFormData] = useState({
-    customer_details: {
-      project_id: "",
-      project_name: "",
-      epc_developer: "",
-      site_address_pincode: "",
-      site_google_coordinates: "",
-      contact_no: "",
-      gst_no: "",
-      billing_address: "",
+   customer_details: {
+    code: "",
+    name: "",
+    customer: "",
+    epc_developer: "",
+    site_google_coordinates: "",
+    number: "",
+    gst_no: "",
+    gender_of_Loa_holder: "",
+    email: "",
+    pan_no: "",
+    adharNumber_of_loa_holder: "",
+    alt_number: "",
+    p_group: "",
+    billing_address: {
+      village_name: "",
+      district_name: ""
     },
+    site_address: {
+      village_name: "",
+      district_name: ""
+    },
+    state: ""
+  },
     order_details: {
       type_business: "",
       tender_name: "",
@@ -135,74 +150,108 @@ useEffect(() => {
 }, []);
 
 
-
+console.log("HandOverSheet Data:", HandOverSheet[0]);
 
 
 useEffect(() => {
-  const fetchHandoverData = async () => {
-    try {
-      const { data } = await axios.get("https://api.slnkoprotrac.com/v1/get-all-handover-sheet");
+  const handoverData = HandOverSheet[0]; // Local static data
+  console.log("Static JSON HandOver Data:", handoverData);
 
-      console.log("Full API Response:", data);
+  const projectDetail = handoverData.project_detail || {};
+  const attachedDetails = handoverData.attached_details || {};
+  const customerDetails = handoverData.customer_details || {};
+  const orderDetails = handoverData.order_details || {};
+  const commercialDetails = handoverData.commercial_details || {};
+  const invoiceDetail = handoverData.invoice_detail || {};
 
-      const handoverData = data?.Data?.[33] || {};
-      console.log("Extracted Data Before State Update:", JSON.stringify(handoverData, null, 2));
-
-      // Debug: Log Project Details
-      console.log("Project Details:", handoverData?.project_detail);
-
-      const projectDetail = handoverData.project_detail || {};
-
-      setFormData((prev) => {
-        const projectDetail = handoverData.project_detail || {};
-        const attachedDetails = handoverData.attached_details || {}; // Ensure attachedDetails exists
-      
-        return {
-          ...prev,
-          customer_details: { ...prev.customer_details, ...handoverData.customer_details },
-          order_details: { ...prev.order_details, ...handoverData.order_details },
-          project_detail: {
-            project_type: projectDetail.project_type || "",
-            module_make_capacity: projectDetail.module_make_capacity || "",
-            module_make: projectDetail.module_make || "",
-            module_capacity: projectDetail.module_capacity || "",
-            module_type: projectDetail.module_type || "",
-            module_model_no: projectDetail.module_model_no || "",
-            evacuation_voltage: projectDetail.evacuation_voltage || "",
-            inverter_make_capacity: projectDetail.inverter_make_capacity || "",
-            inverter_make: projectDetail.inverter_make || "",
-            inverter_type: projectDetail.inverter_type || "",
-            inverter_size: projectDetail.inverter_size || "",
-            inverter_model_no: projectDetail.inverter_model_no || "",
-            work_by_slnko: projectDetail.work_by_slnko || "",
-            topography_survey: projectDetail.topography_survey || "",
-            soil_test: projectDetail.soil_test || "",
-            purchase_supply_net_meter: projectDetail.purchase_supply_net_meter || "",
-            liaisoning_net_metering: projectDetail.liaisoning_net_metering || "",
-            ceig_ceg: projectDetail.ceig_ceg || "",
-            project_completion_date: projectDetail.project_completion_date || "",
-            proposed_dc_capacity: projectDetail.proposed_dc_capacity || "",
-            transmission_line: projectDetail.transmission_line || "",
-            substation_name: projectDetail.substation_name || "",
-            overloading: projectDetail.overloading || "",
-          },
-          commercial_details: { ...prev.commercial_details, ...handoverData.commercial_details },
-          attached_details: {
-            ...prev.attached_details,
-            ...attachedDetails,
-            taken_over_by: attachedDetails.taken_over_by || "", 
-          },
-        };
-      });
-      
-
-    } catch (error) {
-      console.error("Failed to fetch handover data:", error);
-    }
-  };
-
-  fetchHandoverData();
+  setFormData((prev) => ({
+    ...prev,
+    customer_details: {
+      code: customerDetails.code || "",
+      name: customerDetails.name || "",
+      customer: customerDetails.customer || "",
+      epc_developer: customerDetails.epc_developer || "",
+      site_google_coordinates: customerDetails.site_google_coordinates || "",
+      number: customerDetails.number || "",
+      gst_no: customerDetails.gst_no || "",
+      gender_of_Loa_holder: customerDetails.gender_of_Loa_holder || "",
+      email: customerDetails.email || "",
+      p_group: customerDetails.p_group || "",
+      pan_no: customerDetails.pan_no || "",
+      adharNumber_of_loa_holder: customerDetails.adharNumber_of_loa_holder || "",
+      state: customerDetails.state || "",
+      alt_number: customerDetails.alt_number || "",
+      billing_address: {
+        village_name: customerDetails.billing_address?.village_name || "",
+        district_name: customerDetails.billing_address?.district_name || "",
+      },
+      site_address: {
+        village_name: customerDetails.site_address?.village_name || "",
+        district_name: customerDetails.site_address?.district_name || "",
+      },
+    },
+    order_details: {
+      type_business: orderDetails.type_business || "",
+      tender_name: orderDetails.tender_name || "",
+      discom_name: orderDetails.discom_name || "",
+      design_date: orderDetails.design_date || "",
+      feeder_code: orderDetails.feeder_code || "",
+      feeder_name: orderDetails.feeder_name || "",
+    },
+    project_detail: {
+      project_type: projectDetail.project_type || "",
+      module_make_capacity: projectDetail.module_make_capacity || "",
+      module_make: projectDetail.module_make || "",
+      module_capacity: projectDetail.module_capacity || "",
+      module_type: projectDetail.module_type || "",
+      module_model_no: projectDetail.module_model_no || "",
+      evacuation_voltage: projectDetail.evacuation_voltage || "",
+      inverter_make_capacity: projectDetail.inverter_make_capacity || "",
+      inverter_make: projectDetail.inverter_make || "",
+      inverter_type: projectDetail.inverter_type || "",
+      inverter_size: projectDetail.inverter_size || "",
+      inverter_model_no: projectDetail.inverter_model_no || "",
+      work_by_slnko: projectDetail.work_by_slnko || "",
+      topography_survey: projectDetail.topography_survey || "",
+      soil_test: projectDetail.soil_test || "",
+      purchase_supply_net_meter: projectDetail.purchase_supply_net_meter || "",
+      liaisoning_net_metering: projectDetail.liaisoning_net_metering || "",
+      ceig_ceg: projectDetail.ceig_ceg || "",
+      project_completion_date: projectDetail.project_completion_date || "",
+      proposed_dc_capacity: projectDetail.proposed_dc_capacity || "",
+      transmission_line: projectDetail.transmission_line || "",
+      substation_name: projectDetail.substation_name || "",
+      overloading: projectDetail.overloading || "",
+      distance: projectDetail.distance || "",
+      tarrif: projectDetail.tarrif || "",
+      project_kwp: projectDetail.project_kwp || "",
+      land: projectDetail.land || "",
+      agreement_date: projectDetail.agreement_date || "",
+    },
+    commercial_details: {
+      type: commercialDetails.type || "",
+      subsidy_amount: commercialDetails.subsidy_amount || "",
+    },
+    attached_details: {
+      taken_over_by: attachedDetails.taken_over_by || "",
+      cam_member_name: attachedDetails.cam_member_name || "",
+      service: attachedDetails.service || "",
+      billing_type: attachedDetails.billing_type || "",
+      project_status: attachedDetails.project_status || "",
+      loa_number: attachedDetails.loa_number || "",
+      ppa_number: attachedDetails.ppa_number || "",
+      submitted_by_BD: attachedDetails.submitted_by_BD || "",
+    },
+    invoice_detail: {
+      invoice_recipient: invoiceDetail.invoice_recipient || "",
+      invoicing_GST_no: invoiceDetail.invoicing_GST_no || "",
+      invoicing_address: invoiceDetail.invoicing_address || "",
+      delivery_address: invoiceDetail.delivery_address || "",
+    },
+  }));
 }, []);
+
+
 
 
 
@@ -230,7 +279,7 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://api.slnkoprotrac.com/v1/edit-hand-over-sheet/67e2744c5c891bb412838925`, formData);
+      await axios.put(`https://api.slnkoprotrac.com/v1/edit-hand-over-sheet/68258654309c43ebe485b0ba`, formData);
 
 
         alert('Handover Sheet updated successfully');
