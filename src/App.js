@@ -45,20 +45,20 @@ import './App.css';
 // import Page9 from './Components/Commercial_Offer/Page9';
 // import Rate_Offer from './Components/Commercial_Offer/Rate_Offer';
 // import CreateLead from './Components/BD/create_lead';
-import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
+// import HandoverSheetForm from './Components/BD/Hand_Over_Sheet';
 // import DynamicBOMForm from './Components/Engineering/Master_form';
-import HandOverApproval from './Components/CAM/Handover_approval';
+// import HandOverApproval from './Components/CAM/Handover_approval';
 // import FollowUpHistory from './Components/BD/client_followup_history';
 // import TaskDashboard from './Components/BD/Task_Dashboard';
 // import FormComponent from './Components/BD/nextfu';
-import EditHandoverSheetForm from './Components/CAM/edit_update_handOverSheet';
+// import EditHandoverSheetForm from './Components/CAM/edit_update_handOverSheet';
 // import AddNewModuleForm from './Components/Engineering/module_master_database';
 // import AddNewInverterForm from './Components/Engineering/inverter_master_database';
 // import AddNewTransformerForm from './Components/Engineering/transformer_master_database';
 // import AddNewModuleForm from './Components/Engineering/Module_Master';
 // import AddNewInverterForm from './Components/Engineering/Inverter_Master';
 // import AddNewTransformerForm from './Components/Engineering/Transformer_Master';
-// import AddBOMForm from './Components/Engineering/Add_BOM';
+import AddBOMForm from './Components/Engineering/Add_BOM';
 // import LTPannelForm from './Components/Engineering/LT_Panel_Master';
 // import HTPanelForm from './Components/Engineering/HT_Pannel_Master';
 // import DCCableForm from './Components/Engineering/DC_Cable_Master';
@@ -109,19 +109,19 @@ function App() {
      {/* <Page9/> */}
      {/* <Rate_Offer/> */}
      {/* <CreateLead/> */}
-     <HandoverSheetForm/>
+     {/* <HandoverSheetForm/> */}
      {/* <TaskDashboard/> */}
      {/* <FormComponent/> */}
      {/* <EditCommercialForm/> */}
      {/* <FollowUpHistory/> */}
-     <EditHandoverSheetForm/>
+     {/* <EditHandoverSheetForm/> */}
      {/* <AddNewModuleForm/> */}
      {/* <AddNewInverterForm/> */}
      {/* <AddNewTransformerForm/> */}
      {/* <AddNewModuleForm/> */}
      {/* <AddNewInverterForm/> */}
      {/* <AddNewTransformerForm/> */}
-     {/* <AddBOMForm/> */}
+     <AddBOMForm/>
      {/* <LTPannelForm/> */}
      {/* <HTPanelForm/> */}
      {/* <DCCableForm/> */}
@@ -129,7 +129,7 @@ function App() {
       {/* <AddNewBOSForm /> */}
       {/* <AddNewPoolingStationForm/> */}
       {/* <DynamicBOMForm/> */}
-      <HandOverApproval/>
+      {/* <HandOverApproval/> */}
     </div>
   );
 }
